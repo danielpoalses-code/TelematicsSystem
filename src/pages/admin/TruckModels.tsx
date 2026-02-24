@@ -832,9 +832,10 @@ const TruckHeroSVG: React.FC<{ model: TruckModel }> = ({ model }) => {
     const battRX     = battX + 58;
     const compY      = railTopY + 2;
     // Air system — split layout per spec:
-    //   AUX (wet) under cab, Air 1 & Air 2 side-by-side just after battery/ISO switch
+    //   AUX (wet) under cab, Air 1 left/near rail, Air 2 right/far rail
     const auxTankX   = Math.round((cabFX + axles[0]) / 2) - 12; // under cab, between seats
-    const mainAirX   = battRX + 20;                              // both tanks here — LHS near, RHS far (depth offset)
+    const mainAir1X  = battRX + 10;                              // left (near) chassis rail
+    const mainAir2X  = battRX + 46;                              // right (far) chassis rail
     const fuelStartX = firstRear - 150;
     const fuelEndX   = lastAxle + 18;
     const fuelMidX   = (fuelStartX + fuelEndX) / 2;
@@ -896,27 +897,27 @@ const TruckHeroSVG: React.FC<{ model: TruckModel }> = ({ model }) => {
 
             {/* ══ AIR SYSTEM ══════════════════════════════════════════════════════════════
                 AUX (wet) tank  — under cab, between seats, on chassis beneath cab floor
-                Main Air 1      — LHS (near) chassis rail  ─┐  both side-by-side
-                Main Air 2      — RHS (far) chassis rail   ─┘  just after battery
+                Main Air 1      — left (near) side chassis rail, behind battery box
+                Main Air 2      — right (far) side chassis rail (shown offset/dimmer)
             ═══════════════════════════════════════════════════════════════════════════ */}
 
             {/* AUX / Wet air tank — under cab between the seats */}
             <rect x={auxTankX} y={compY - 2} width={26} height={28} fill="#1e3040" rx="12" stroke="#2e4860" strokeWidth="0.9" />
             <text x={auxTankX + 13} y={compY + 7}  textAnchor="middle" fill="#6090b8" fontSize="5"   fontFamily="monospace" fontWeight="bold">AUX</text>
             <text x={auxTankX + 13} y={compY + 17} textAnchor="middle" fill="#486880" fontSize="4.5" fontFamily="monospace">WET</text>
-            {/* Dashed air line: aux → main air tanks */}
-            <line x1={auxTankX + 26} y1={compY + 12} x2={mainAirX} y2={compY + 11}
+            {/* Dashed air line connecting aux to main circuit */}
+            <line x1={auxTankX + 26} y1={compY + 12} x2={mainAir1X} y2={compY + 11}
                   stroke="#2e4860" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
 
-            {/* Main Air Tank 2 — RHS far rail (rendered first = behind LHS tank) */}
-            <rect x={mainAirX + 4} y={compY + 5} width={26} height={22} fill="#1e2c3c" rx="11" stroke="#2c3c4c" strokeWidth="0.8" opacity="0.75" />
-            <text x={mainAirX + 17} y={compY + 14} textAnchor="middle" fill="#50687a" fontSize="5"   fontFamily="monospace">AIR 2</text>
-            <text x={mainAirX + 17} y={compY + 22} textAnchor="middle" fill="#3a5060" fontSize="4.5" fontFamily="monospace">RHS</text>
+            {/* Main Air Tank 1 — LEFT (near/visible) side chassis rail */}
+            <rect x={mainAir1X} y={compY} width={28} height={24} fill="#283848" rx="12" stroke="#384e60" strokeWidth="0.9" />
+            <text x={mainAir1X + 14} y={compY + 9}  textAnchor="middle" fill="#7090aa" fontSize="5"   fontFamily="monospace" fontWeight="bold">AIR 1</text>
+            <text x={mainAir1X + 14} y={compY + 18} textAnchor="middle" fill="#506880" fontSize="4.5" fontFamily="monospace">LHS</text>
 
-            {/* Main Air Tank 1 — LHS near rail (rendered on top = in front) */}
-            <rect x={mainAirX} y={compY} width={28} height={24} fill="#283848" rx="12" stroke="#384e60" strokeWidth="0.9" />
-            <text x={mainAirX + 14} y={compY + 9}  textAnchor="middle" fill="#7090aa" fontSize="5"   fontFamily="monospace" fontWeight="bold">AIR 1</text>
-            <text x={mainAirX + 14} y={compY + 18} textAnchor="middle" fill="#506880" fontSize="4.5" fontFamily="monospace">LHS</text>
+            {/* Main Air Tank 2 — RIGHT (far) side chassis rail — slightly offset and dimmer to show it's on the other side */}
+            <rect x={mainAir2X} y={compY + 5} width={24} height={20} fill="#1e2c3c" rx="10" stroke="#2c3c4c" strokeWidth="0.8" opacity="0.82" />
+            <text x={mainAir2X + 12} y={compY + 13} textAnchor="middle" fill="#50687a" fontSize="5"   fontFamily="monospace">AIR 2</text>
+            <text x={mainAir2X + 12} y={compY + 21} textAnchor="middle" fill="#3a5060" fontSize="4.5" fontFamily="monospace">RHS</text>
 
             {/* ── FUEL TANKS (left / near side) ── */}
             <rect x={fuelStartX} y={compY + 1} width={fuelEndX - fuelStartX} height={fuelH} fill="#283848" rx="5" />
