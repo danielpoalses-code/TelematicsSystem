@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Snap-On ECU — Khulu Digital</title>
+<meta name="description" content="The Khulu snap-on ECU fits old Euro 2 trucks in hours, reads every native engine sensor the OEM built in, and protects to OEM spec. No rewiring. No warranty drama. No truck too old." />
+<link rel="icon" href="assets/brand/khulu-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/khulu.css" />
+<style>
+/* ================= page: ecu.html ================= */
+
+/* ---------- hero layout ---------- */
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,64px);align-items:center}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+@media(max-width:960px){
+  .hero-grid{grid-template-columns:1fr}
+  .ecu-scene-card{max-width:560px;margin:0 auto}
+}
+
+/* ---------- circuit scene ---------- */
+.ecu-scene-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);padding:18px 18px 12px;position:relative;
+}
+.ecu-scene-card .scene-cap{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);padding:4px 6px 10px;
+}
+.ecu-scene-card .scene-cap b{color:var(--red);font-weight:500}
+.ecu-svg{width:100%;height:auto}
+.ecu-svg text{font-family:var(--mono);letter-spacing:.08em}
+.ecu-svg .trace{stroke:var(--line-strong);stroke-width:2;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.ecu-svg .via{fill:var(--line-strong)}
+.ecu-svg .pulse{
+  stroke:var(--red);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:.2 1.8;stroke-dashoffset:.2;opacity:0;
+  animation:ecuPulse 8s linear var(--d,0s) infinite;
+}
+@keyframes ecuPulse{
+  0%{stroke-dashoffset:.2;opacity:1}
+  12%{stroke-dashoffset:-1;opacity:1}
+  12.6%,100%{stroke-dashoffset:-1;opacity:0}
+}
+.ecu-svg .node .halo{
+  fill:rgba(230,51,41,.16);opacity:0;
+  transform-box:fill-box;transform-origin:center;transform:scale(.4);
+  animation:ecuHalo 8s var(--ease) var(--d,0s) infinite;
+}
+@keyframes ecuHalo{
+  0%,10%{opacity:0;transform:scale(.4)}
+  14%{opacity:1;transform:scale(1)}
+  26%,100%{opacity:0;transform:scale(1.7)}
+}
+.ecu-svg .node .core{
+  fill:#fff;stroke:var(--ink);stroke-width:2;
+  animation:ecuCore 8s var(--ease) var(--d,0s) infinite;
+}
+@keyframes ecuCore{
+  0%,10%{stroke:#0C0A09;fill:#fff}
+  14%,20%{stroke:#E63329;fill:#FDEEED}
+  30%,100%{stroke:#0C0A09;fill:#fff}
+}
+.ecu-svg .node-label{font-size:10px;fill:var(--ink-3);text-anchor:middle;text-transform:uppercase}
+.ecu-svg .chip-body{fill:var(--ink);stroke:#292524;stroke-width:1.5}
+.ecu-svg .chip-inner{fill:none;stroke:rgba(250,250,249,.18);stroke-width:1;stroke-dasharray:3 4}
+.ecu-svg .chip-name{fill:#FAFAF9;font-weight:500;font-size:15px;text-anchor:middle;letter-spacing:.18em}
+.ecu-svg .chip-sub{fill:#A8A29E;font-size:9.5px;text-anchor:middle;letter-spacing:.26em}
+.ecu-svg .chip-dot{fill:var(--red);animation:ecuBlink 2s var(--ease) infinite}
+@keyframes ecuBlink{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ---------- table ---------- */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius)}
+.table-scroll .data-table{min-width:680px}
+
+/* ---------- dark band stats ---------- */
+.euro2-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(28px,5vw,60px);align-items:center}
+@media(max-width:880px){.euro2-grid{grid-template-columns:1fr}}
+.euro2-grid .lede{color:var(--dark-text-2);margin-top:16px;font-size:15.5px}
+.euro2-grid .lede strong{color:var(--dark-text);font-weight:700}
+.euro2-stats{display:grid;gap:16px}
+.euro2-stats .card{padding:8px 18px}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:780px;margin:0 auto}
+.faq details{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);
+  margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden;
+  transition:border-color .25s var(--ease),box-shadow .25s var(--ease);
+}
+.faq details:hover{border-color:var(--line-strong)}
+.faq details[open]{border-color:var(--line-strong);box-shadow:var(--shadow-lg)}
+.faq summary{
+  list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:20px 22px;font-weight:700;font-size:16px;cursor:pointer;user-select:none;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:focus-visible{outline:2px solid var(--red);outline-offset:-2px;border-radius:var(--radius-sm)}
+.faq summary .plus{
+  flex:none;width:30px;height:30px;border-radius:50%;background:var(--red-soft);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .3s var(--ease),background .3s var(--ease);
+}
+.faq summary .plus svg{width:15px;height:15px;color:var(--red)}
+.faq details[open] summary .plus{transform:rotate(45deg);background:var(--red);}
+.faq details[open] summary .plus svg{color:#fff}
+.faq .faq-a{padding:0 22px 22px;color:var(--ink-2);font-size:15px;max-width:64ch}
+</style>
+</head>
+<body>
+
+<nav class="site" aria-label="Main"><div class="nav-inner">
+<a href="index.html" class="brand" aria-label="Khulu Digital home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/><circle cx="5" cy="16" r="1.5"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/><circle cx="27" cy="16" r="1.5"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/><circle cx="16" cy="27" r="1.4"/></g></svg><span class="lockup">KHULU<em>DIGITAL</em></span></a>
+<div class="nav-links"><a href="why.html">Why Khulu</a><a href="ecu.html">Snap-On ECU</a><a href="protection.html">Protection</a><a href="platform.html">Platform</a><a href="store.html">Store</a><a href="demo.html">Live Demo</a></div>
+<a href="index.html#contact" class="btn btn-red nav-cta">Book a demo</a>
+<button class="nav-burger" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="hero-topo" data-topo="light"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="rv">
+        <p class="eyebrow">THE SNAP-ON ECU</p>
+        <h1>A smartwatch for <span class="accent">your truck.</span></h1>
+        <p class="sub" style="margin-top:18px">It snaps on in hours, reads every native sensor the OEM built into the engine, and never looks away. No rewiring. No warranty drama. No truck too old.</p>
+        <div class="hero-actions">
+          <a href="store.html" class="btn btn-red">See it in the store
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="protection.html" class="btn btn-ghost">How protection works
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-3.5 8-10V6l-8-3-8 3v6c0 6.5 8 10 8 10z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="rv rv-d2">
+        <div class="ecu-scene-card tilt">
+          <div class="scene-cap"><span>LIVE SENSOR BUS</span><b>8 CHANNELS &middot; NOMINAL</b></div>
+          <svg class="ecu-svg" viewBox="0 0 560 460" role="img" aria-label="Khulu ECU chip reading eight engine sensors: coolant, oil, turbo, fuel, air, gearbox, brakes and battery">
+            <defs>
+              <pattern id="pcb-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="10" cy="10" r=".9" fill="rgba(12,10,9,.07)"/>
+              </pattern>
+            </defs>
+            <rect x="0" y="0" width="560" height="460" rx="12" fill="url(#pcb-grid)"/>
+
+            <!-- traces (base copper) -->
+            <path class="trace" d="M245 175 V110 H100 V78"/>
+            <path class="trace" d="M315 175 V110 H455 V78"/>
+            <path class="trace" d="M215 205 H78"/>
+            <path class="trace" d="M345 205 H482"/>
+            <path class="trace" d="M215 255 H120 V310"/>
+            <path class="trace" d="M345 255 H440 V310"/>
+            <path class="trace" d="M245 285 V350 H160 V392"/>
+            <path class="trace" d="M315 285 V350 H400 V392"/>
+
+            <!-- vias at trace elbows -->
+            <circle class="via" cx="245" cy="110" r="2.4"/><circle class="via" cx="100" cy="110" r="2.4"/>
+            <circle class="via" cx="315" cy="110" r="2.4"/><circle class="via" cx="455" cy="110" r="2.4"/>
+            <circle class="via" cx="120" cy="255" r="2.4"/><circle class="via" cx="440" cy="255" r="2.4"/>
+            <circle class="via" cx="245" cy="350" r="2.4"/><circle class="via" cx="160" cy="350" r="2.4"/>
+            <circle class="via" cx="315" cy="350" r="2.4"/><circle class="via" cx="400" cy="350" r="2.4"/>
+
+            <!-- travelling data pulses (delays sequence the channels) -->
+            <path class="pulse" style="--d:0s"   pathLength="1" d="M245 175 V110 H100 V78"/>
+            <path class="pulse" style="--d:1s"   pathLength="1" d="M315 175 V110 H455 V78"/>
+            <path class="pulse" style="--d:2s"   pathLength="1" d="M215 205 H78"/>
+            <path class="pulse" style="--d:3s"   pathLength="1" d="M345 205 H482"/>
+            <path class="pulse" style="--d:4s"   pathLength="1" d="M215 255 H120 V310"/>
+            <path class="pulse" style="--d:5s"   pathLength="1" d="M345 255 H440 V310"/>
+            <path class="pulse" style="--d:6s"   pathLength="1" d="M245 285 V350 H160 V392"/>
+            <path class="pulse" style="--d:7s"   pathLength="1" d="M315 285 V350 H400 V392"/>
+
+            <!-- sensor nodes -->
+            <g class="node" style="--d:0s"><circle class="halo" cx="100" cy="70" r="17"/><circle class="core" cx="100" cy="70" r="8"/><text class="node-label" x="100" y="50">COOLANT</text></g>
+            <g class="node" style="--d:1s"><circle class="halo" cx="455" cy="70" r="17"/><circle class="core" cx="455" cy="70" r="8"/><text class="node-label" x="455" y="50">OIL</text></g>
+            <g class="node" style="--d:2s"><circle class="halo" cx="70" cy="205" r="17"/><circle class="core" cx="70" cy="205" r="8"/><text class="node-label" x="70" y="185">TURBO</text></g>
+            <g class="node" style="--d:3s"><circle class="halo" cx="490" cy="205" r="17"/><circle class="core" cx="490" cy="205" r="8"/><text class="node-label" x="490" y="185">FUEL</text></g>
+            <g class="node" style="--d:4s"><circle class="halo" cx="120" cy="318" r="17"/><circle class="core" cx="120" cy="318" r="8"/><text class="node-label" x="120" y="343">AIR</text></g>
+            <g class="node" style="--d:5s"><circle class="halo" cx="440" cy="318" r="17"/><circle class="core" cx="440" cy="318" r="8"/><text class="node-label" x="440" y="343">GEARBOX</text></g>
+            <g class="node" style="--d:6s"><circle class="halo" cx="160" cy="400" r="17"/><circle class="core" cx="160" cy="400" r="8"/><text class="node-label" x="160" y="425">BRAKES</text></g>
+            <g class="node" style="--d:7s"><circle class="halo" cx="400" cy="400" r="17"/><circle class="core" cx="400" cy="400" r="8"/><text class="node-label" x="400" y="425">BATTERY</text></g>
+
+            <!-- central chip -->
+            <g>
+              <rect class="chip-body" x="215" y="175" width="130" height="110" rx="14"/>
+              <rect class="chip-inner" x="226" y="186" width="108" height="88" rx="9"/>
+              <text class="chip-name" x="280" y="228">KHULU</text>
+              <text class="chip-sub" x="280" y="248">ECU</text>
+              <circle class="chip-dot" cx="330" cy="192" r="3.6"/>
+              <path d="M232 262 h22 M232 268 h34" stroke="rgba(250,250,249,.3)" stroke-width="1.6" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= WHAT IT READS ================= -->
+<section>
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow">WHAT IT READS</p>
+      <h2>Every sensor the OEM built in. <span class="accent">Nothing added, nothing missed.</span></h2>
+      <p class="sub">The snap-on ECU taps the truck&rsquo;s own native senders and signals — the same ones the factory gauges read — and turns them into live, alert-ready data.</p>
+    </div>
+    <div class="table-scroll gap-top rv rv-d1">
+      <table class="data-table">
+        <thead><tr><th>Channel</th><th>What we read</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td>Coolant temperature</td><td>Live temperature vs the OEM red line</td><td>The number-one engine killer. Watched against the OEM red line, not a guess.</td></tr>
+          <tr><td>Oil pressure</td><td>Pressure at idle and under load</td><td>Low oil gives you seconds. We catch the drop before the bearings do.</td></tr>
+          <tr><td>Turbo boost</td><td>Boost pressure and spool behaviour</td><td>Overboost and lag patterns flag a dying turbo weeks before it lets go.</td></tr>
+          <tr><td>Fuel rate &amp; level</td><td>Burn rate, refills and sudden drops</td><td>Theft, syphoning and heavy right feet all show up in the data the same day.</td></tr>
+          <tr><td>Air tanks</td><td>System air pressure on both circuits</td><td>No air, no brakes. We alert before the truck ever rolls on soft tanks.</td></tr>
+          <tr><td>Gearbox temperature</td><td>Transmission oil temperature trend</td><td>A cooking gearbox is a six-figure rebuild. The heat trend is your early warning.</td></tr>
+          <tr><td>Engine speed (RPM)</td><td>Revs against the OEM operating band</td><td>Over-revving on downhills wrecks engines quietly. Now it&rsquo;s on record.</td></tr>
+          <tr><td>Battery &amp; charging</td><td>Voltage and alternator output</td><td>Flat batteries strand trucks. Charging faults are visible in real time, not at 5 am.</td></tr>
+          <tr><td>Brake wear</td><td>Wear indicators and braking events</td><td>Brakes get replaced on evidence, not on guesswork — or on the side of the N3.</td></tr>
+          <tr><td>Engine hours</td><td>True hours run, not kilometres guessed</td><td>Service on real engine hours. Idling counts, even when the odometer doesn&rsquo;t move.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT INSTALLS ================= -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="rv center">
+      <p class="eyebrow">HOW IT INSTALLS</p>
+      <h2>On the truck before lunch. <span class="accent">On the platform by knock-off.</span></h2>
+    </div>
+    <div class="steps gap-top" data-stagger>
+      <div class="step">
+        <h3>Snap it on</h3>
+        <p>Fitment in hours, not days. The unit clips onto the truck&rsquo;s existing sender network — non-invasive, no cut looms, no drilled dashboards. Fully reversible.</p>
+      </div>
+      <div class="step">
+        <h3>Calibrate to OEM spec</h3>
+        <p>We load the manufacturer&rsquo;s thresholds for your exact engine — red lines, pressure floors, operating bands. The ECU protects to the spec the factory intended.</p>
+      </div>
+      <div class="step">
+        <h3>Live in one UI</h3>
+        <p>The unit appears on the Khulu platform alongside your cameras and sensors. One login, one screen, one source of truth for the whole fleet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EURO 2 DARK BAND ================= -->
+<section class="dark-band">
+  <div class="wrap">
+    <div class="euro2-grid">
+      <div class="rv">
+        <p class="eyebrow">BUILT FOR EURO 2 WORKHORSES</p>
+        <h2>Modern trucks broadcast. <span class="accent">Old trucks went blind.</span></h2>
+        <p class="lede">A new truck announces every parameter on a data bus. A Euro 2 workhorse has no factory electronics to speak of — the engine knows it&rsquo;s overheating, but nobody else does until the smoke.</p>
+        <p class="lede">The snap-on ECU closes that gap. It reads the <strong>native analogue and sensor signals directly</strong> — the same senders that drive the factory gauges — and gives a 25-year-old truck the digital voice it never had. <strong>Same platform, same protection, same UI</strong> as the newest unit in your yard.</p>
+      </div>
+      <div class="euro2-stats" data-stagger>
+        <div class="card stat">
+          <div class="num"><em data-count="40" data-suffix="+">0</em></div>
+          <p>Engine parameters monitored</p>
+        </div>
+        <div class="card stat">
+          <div class="num">&lt;<em data-count="60">0</em>&nbsp;s</div>
+          <p>Event to alert, anywhere</p>
+        </div>
+        <div class="card stat">
+          <div class="num"><em data-count="0">0</em></div>
+          <p>Warranty impact — snap-on, not splice-in</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section>
+  <div class="wrap">
+    <div class="rv center">
+      <p class="eyebrow">QUESTIONS, ANSWERED</p>
+      <h2>The things every fleet manager asks first.</h2>
+    </div>
+    <div class="faq gap-top rv rv-d1">
+      <details>
+        <summary>Does it work on any make?
+          <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <div class="faq-a">Yes. Because we read the native senders rather than a proprietary data bus, the ECU is make-agnostic — Mercedes, Hino, Isuzu, FAW, Nissan UD, you name it. We load a calibration profile for your exact engine so the thresholds match the manufacturer&rsquo;s spec, not a generic average.</div>
+      </details>
+      <details>
+        <summary>Will it void my warranty?
+          <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <div class="faq-a">No. It&rsquo;s snap-on, not splice-in. We don&rsquo;t cut looms, reflash controllers or interfere with anything the OEM warrants. The installation is fully reversible — take it off and the truck is exactly as it was.</div>
+      </details>
+      <details>
+        <summary>What if the truck already has a CAN bus?
+          <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <div class="faq-a">Even better. The same unit listens on CAN where it exists and reads native sensors where it doesn&rsquo;t — so your 2024 rigid and your 1998 workhorse land on the same platform with the same alerts. One fleet, one standard.</div>
+      </details>
+      <details>
+        <summary>How long does fitting take?
+          <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <div class="faq-a">Hours, not days. A typical fitment with calibration is done in three to five hours, and the truck is back on shift the same day. Cameras and extra sensors can go on in the same visit.</div>
+      </details>
+      <details>
+        <summary>What does the driver see?
+          <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <div class="faq-a">An in-cab dash display with live temperatures, pressures and clear red-line warnings — plus an audible alert before damage is done. The driver sees the same numbers the fleet manager sees, so there&rsquo;s no argument about what happened.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="cta-band">
+  <div class="hero-topo" data-topo="dark"></div>
+  <div class="cta-inner wrap">
+    <p class="eyebrow">READY WHEN YOU ARE</p>
+    <h2>Put a smartwatch on your <span class="accent">oldest truck.</span></h2>
+    <p class="sub">One fitment, one login, and the truck that&rsquo;s been blind for twenty years starts talking.</p>
+    <div class="cta-actions">
+      <a href="mailto:daniel@khuludigital.com?subject=Khulu%20ECU%20demo" class="btn btn-red">Book a demo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg></a>
+      <a href="demo.html" class="btn btn-ghost" style="border-color:var(--dark-line);color:var(--dark-text)">Try the live demo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<footer class="site"><div class="wrap foot">
+<a href="index.html" class="brand" aria-label="Khulu Digital home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/><circle cx="5" cy="16" r="1.5"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/><circle cx="27" cy="16" r="1.5"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/><circle cx="16" cy="27" r="1.4"/></g></svg><span class="lockup">KHULU<em>DIGITAL</em></span></a>
+<div class="foot-links"><a href="why.html">Why Khulu</a><a href="ecu.html">Snap-On ECU</a><a href="protection.html">Protection</a><a href="platform.html">Platform</a><a href="store.html">Store</a><a href="demo.html">Live Demo</a><a href="index.html#contact">Contact</a></div>
+<p>© <span data-year></span> Khulu Digital. Truck telematics, cameras &amp; sensors — one platform.</p>
+</div></footer>
+
+<script src="assets/khulu.js"></script>
+<script>
+/* ecu.html — FAQ: only one accordion open at a time */
+(function () {
+  const items = document.querySelectorAll('.faq details');
+  items.forEach(d => d.addEventListener('toggle', () => {
+    if (d.open) items.forEach(o => { if (o !== d) o.open = false; });
+  }));
+})();
+</script>
+</body>
+</html>

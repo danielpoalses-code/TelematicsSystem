@@ -1,346 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Khulu Digital — Telematics that reads the truck, not just the map</title>
-<meta name="description" content="Khulu Digital turns any truck — even Euro 2 workhorses — into a connected asset. Snap-on ECU reads native engine sensors and protects to OEM spec. Cameras, sensors and tracking in one platform, one login, one UI." />
-<link rel="icon" href="../public/khulu-logo.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<meta name="description" content="Khulu Digital turns any truck — even Euro 2 workhorses — into a connected asset. Snap-on ECU reads native engine sensors and protects to OEM spec. Cameras, sensors and tracking in one platform, one login, one UI."/>
+<link rel="icon" href="assets/brand/khulu-logo.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/khulu.css"/>
 <style>
-:root{
-  --bg:#0C0A09;          /* stone-950 */
-  --bg-raised:#161311;
-  --bg-card:#1C1917;     /* stone-900 */
-  --line:#2A2522;
-  --line-soft:#221E1B;
-  --text:#FAFAF9;        /* stone-50 */
-  --text-2:#A8A29E;      /* stone-400 */
-  --text-3:#78716C;      /* stone-500 */
-  --red:#E63329;
-  --red-soft:rgba(230,51,41,.12);
-  --green:#34D399;
-  --amber:#FBBF24;
-  --radius:18px;
-  --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,monospace;
-  --ease:cubic-bezier(.22,.61,.36,1);
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--font);background:var(--bg);color:var(--text);
-  line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
-::selection{background:var(--red);color:#fff}
-a{color:inherit;text-decoration:none}
-img,svg{display:block;max-width:100%}
-button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
-
-/* ---------- utilities ---------- */
-.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
-.eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--red);margin-bottom:18px;
-}
-.eyebrow::before{content:"";width:22px;height:1px;background:var(--red)}
-h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.12}
-h2{font-size:clamp(28px,4.2vw,46px);margin-bottom:16px}
-.sub{color:var(--text-2);max-width:62ch;font-size:clamp(16px,1.4vw,18px)}
-section{padding:clamp(72px,10vw,128px) 0;position:relative}
-
-/* scroll reveal */
-.rv{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
-.rv.in{opacity:1;transform:none}
-.rv-d1{transition-delay:.08s}.rv-d2{transition-delay:.16s}.rv-d3{transition-delay:.24s}.rv-d4{transition-delay:.32s}
-
-/* buttons */
-.btn{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:14px 26px;border-radius:999px;font-weight:700;font-size:15px;
-  transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease);
-  cursor:pointer;min-height:48px;
-}
-.btn svg{width:18px;height:18px;transition:transform .2s var(--ease)}
-.btn:hover svg{transform:translateX(3px)}
-.btn-red{background:var(--red);color:#fff}
-.btn-red:hover{background:#F04438}
-.btn-ghost{border:1px solid var(--line);color:var(--text)}
-.btn-ghost:hover{border-color:var(--text-3);background:rgba(255,255,255,.04)}
-.btn:focus-visible,a:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:6px}
-
-/* ---------- nav ---------- */
-nav{
-  position:fixed;top:16px;left:16px;right:16px;z-index:50;
-  display:flex;justify-content:center;pointer-events:none;
-}
-.nav-inner{
-  pointer-events:auto;display:flex;align-items:center;gap:8px;
-  width:100%;max-width:1132px;padding:10px 12px 10px 20px;border-radius:999px;
-  background:rgba(12,10,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border:1px solid var(--line-soft);
-  transition:background .3s var(--ease),border-color .3s var(--ease);
-}
-nav.scrolled .nav-inner{background:rgba(12,10,9,.9);border-color:var(--line)}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:.04em;margin-right:auto}
-.brand .dot-mark{width:30px;height:30px}
-.brand em{font-style:normal;color:var(--red);font-weight:600;font-size:11px;letter-spacing:.3em;display:block;line-height:1}
-.nav-links{display:flex;gap:4px;align-items:center}
-.nav-links a{
-  padding:9px 14px;border-radius:999px;font-size:14px;font-weight:600;color:var(--text-2);
-  transition:color .2s,background .2s;
-}
-.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.05)}
-.nav-cta{margin-left:8px;padding:10px 20px;min-height:40px;font-size:14px}
-@media(max-width:840px){.nav-links{display:none}}
-
 /* ---------- hero ---------- */
-.hero{
-  min-height:100svh;display:flex;align-items:center;
-  padding:140px 0 80px;overflow:hidden;
-}
-.hero-bg{position:absolute;inset:0;pointer-events:none}
-.hero-bg svg{position:absolute;right:-12%;top:-8%;width:min(900px,85vw);opacity:.5}
-.hero-glow{
-  position:absolute;width:640px;height:640px;border-radius:50%;
-  background:radial-gradient(circle,rgba(230,51,41,.14),transparent 65%);
-  right:-160px;top:-120px;filter:blur(10px);
-}
-.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
-@media(max-width:960px){.hero-grid{grid-template-columns:1fr}}
-.hero h1{font-size:clamp(38px,5.6vw,68px);margin-bottom:22px}
-.hero h1 .accent{color:var(--red)}
-.hero .sub{margin-bottom:34px}
-.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:42px}
-.hero-proof{display:flex;gap:28px;flex-wrap:wrap}
-.hero-proof div{font-family:var(--mono);font-size:13px;color:var(--text-3)}
-.hero-proof strong{display:block;font-family:var(--font);font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.01em}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}
+@media(max-width:980px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{margin-bottom:22px}
+.hero .sub{margin-bottom:32px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px}
+.hero-proof{display:flex;gap:30px;flex-wrap:wrap}
+.hero-proof>div{font-family:var(--mono);font-size:12.5px;color:var(--ink-3)}
+.hero-proof strong{display:block;font-family:var(--font);font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.01em}
 
-/* hero telemetry card */
-.tele-card{
-  background:linear-gradient(160deg,var(--bg-card),var(--bg-raised));
-  border:1px solid var(--line);border-radius:var(--radius);
-  padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.55);
-  max-width:430px;margin-left:auto;width:100%;
+/* platform preview card (dark app on light page) */
+.app-card{
+  background:linear-gradient(165deg,#181412,#0C0A09);
+  border:1px solid #2A2522;border-radius:20px;padding:20px;
+  box-shadow:var(--shadow-lg);max-width:470px;margin-left:auto;width:100%;color:var(--dark-text);
 }
-@media(max-width:960px){.tele-card{margin:0 auto}}
-.tele-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-.tele-head .pulse{width:9px;height:9px;border-radius:50%;background:var(--green);position:relative}
-.tele-head .pulse::after{
-  content:"";position:absolute;inset:-5px;border-radius:50%;
-  border:1px solid var(--green);animation:ring 2.2s ease-out infinite;
-}
+@media(max-width:980px){.app-card{margin:0 auto}}
+.app-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.app-head .pulse{width:8px;height:8px;border-radius:50%;background:var(--green);position:relative}
+.app-head .pulse::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--green);animation:ring 2.2s ease-out infinite}
 @keyframes ring{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.5);opacity:0}}
-.tele-head span{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--text-2);text-transform:uppercase}
-.tele-head .unit-id{margin-left:auto;color:var(--text-3)}
-.gauges{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-.gauge{background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:12px;padding:13px 12px}
-.gauge label{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--text-3);text-transform:uppercase;display:block;margin-bottom:6px}
-.gauge .val{font-family:var(--mono);font-size:21px;font-weight:500;color:var(--text);font-variant-numeric:tabular-nums}
-.gauge .val small{font-size:12px;color:var(--text-3);margin-left:2px}
-.gauge .bar{height:3px;border-radius:2px;background:var(--line);margin-top:9px;overflow:hidden}
-.gauge .bar i{display:block;height:100%;border-radius:2px;background:var(--green);transition:width 1.2s var(--ease)}
-.gauge.warn .bar i{background:var(--amber)}
-.tele-alert{
-  display:flex;gap:10px;align-items:flex-start;
-  background:var(--red-soft);border:1px solid rgba(230,51,41,.3);border-radius:12px;padding:12px 14px;
-}
-.tele-alert svg{width:17px;height:17px;color:var(--red);flex-shrink:0;margin-top:2px}
-.tele-alert p{font-size:13px;color:var(--text-2);line-height:1.5}
-.tele-alert p strong{color:var(--text)}
+.app-head span{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:#A8A29E;text-transform:uppercase}
+.app-head .uid{margin-left:auto;color:#78716C}
+.gauge-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.gauge-cell{background:rgba(255,255,255,.035);border:1px solid #221E1B;border-radius:14px;padding:12px 10px 8px;text-align:center}
+.gauge-cell svg{width:100%;max-width:150px;margin:0 auto}
+.gauge-cell .glab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#78716C;text-transform:uppercase}
+.chart-cell{background:rgba(255,255,255,.035);border:1px solid #221E1B;border-radius:14px;padding:14px 12px 8px}
+.chart-cell .clab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#78716C;text-transform:uppercase;margin-bottom:6px}
+.chart-cell .clab b{color:#A8A29E;font-weight:500}
 
-/* telemetry ticker */
-.ticker{
-  border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
-  padding:14px 0;overflow:hidden;background:var(--bg-raised);
+/* ---------- positioning ---------- */
+.pos-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+@media(max-width:980px){.pos-grid{grid-template-columns:1fr}}
+.strike{position:relative;white-space:nowrap}
+.strike i{
+  position:absolute;left:-2%;right:-2%;top:54%;height:4px;border-radius:2px;background:var(--red);
+  transform:scaleX(0);transform-origin:left center;transition:transform .7s var(--ease) .35s;
 }
-.ticker-track{display:flex;gap:48px;width:max-content;animation:scroll 42s linear infinite}
-@keyframes scroll{to{transform:translateX(-50%)}}
-.ticker span{font-family:var(--mono);font-size:12.5px;color:var(--text-3);white-space:nowrap;letter-spacing:.04em}
-.ticker b{color:var(--text-2);font-weight:500}
-.ticker i{font-style:normal;color:var(--green)}
+.strike.in i{transform:scaleX(1)}
+.pos-points{display:grid;gap:10px;margin-top:30px}
+.pos-points li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;color:var(--ink-2);list-style:none}
+.pos-points li svg{width:18px;height:18px;color:var(--red);flex-shrink:0;margin-top:3px}
+.pos-points li b{color:var(--ink)}
 
-/* ---------- differentiator ---------- */
-.diff{background:var(--bg)}
-.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
-@media(max-width:840px){.diff-grid{grid-template-columns:1fr}}
-.diff-card{border:1px solid var(--line);border-radius:var(--radius);padding:34px;position:relative;overflow:hidden}
-.diff-card.them{background:var(--bg-raised)}
-.diff-card.us{background:linear-gradient(160deg,#1E1412,var(--bg-card));border-color:rgba(230,51,41,.35)}
-.diff-card h3{font-size:21px;margin-bottom:8px}
-.diff-card .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px;display:inline-block}
-.diff-card.them .tag{color:var(--text-3)}
-.diff-card.us .tag{color:var(--red)}
-.diff-card ul{list-style:none;margin-top:18px;display:grid;gap:12px}
-.diff-card li{display:flex;gap:11px;align-items:flex-start;font-size:15px;color:var(--text-2)}
-.diff-card li svg{width:17px;height:17px;flex-shrink:0;margin-top:3px}
-.diff-card.them li svg{color:var(--text-3)}
-.diff-card.us li svg{color:var(--red)}
-.diff-card.us li{color:var(--text)}
-.diff-card.us li span{color:var(--text-2)}
+/* truck scene */
+.truck-scene{position:relative}
+.truck-scene svg{width:100%;height:auto}
+.wheel-spin{transform-origin:center;animation:spin 1.5s linear infinite;transform-box:fill-box}
+@keyframes spin{to{transform:rotate(360deg)}}
+.road-dash{stroke-dasharray:26 22;animation:road 1.1s linear infinite}
+@keyframes road{to{stroke-dashoffset:-48}}
+.sensor-ping{animation:ping 3.2s ease-in-out infinite}
+.sensor-ping.p2{animation-delay:.8s}.sensor-ping.p3{animation-delay:1.6s}.sensor-ping.p4{animation-delay:2.4s}
+@keyframes ping{0%,100%{opacity:.35}12%{opacity:1}24%{opacity:.35}}
+.uplink{stroke-dasharray:4 7;animation:up 1.6s linear infinite}
+@keyframes up{to{stroke-dashoffset:-22}}
 
-/* ---------- ECU section ---------- */
-.ecu{background:var(--bg-raised);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
-.ecu-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
-@media(max-width:960px){.ecu-grid{grid-template-columns:1fr;gap:48px}}
-.ecu-points{display:grid;gap:8px;margin-top:34px}
-.ecu-point{
-  display:flex;gap:16px;padding:18px;border-radius:14px;border:1px solid transparent;
-  transition:background .25s var(--ease),border-color .25s var(--ease);cursor:default;
-}
-.ecu-point:hover{background:rgba(255,255,255,.03);border-color:var(--line-soft)}
-.ecu-point .ic{
-  width:42px;height:42px;border-radius:11px;background:var(--red-soft);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
-.ecu-point .ic svg{width:20px;height:20px;color:var(--red)}
-.ecu-point h4{font-size:16.5px;font-weight:700;margin-bottom:3px}
-.ecu-point p{font-size:14.5px;color:var(--text-2)}
-.ecu-visual{position:relative;display:flex;justify-content:center}
-.ecu-visual svg{width:min(480px,100%);height:auto}
+/* ---------- ecosystem ---------- */
+.eco-link{display:block}
+.eco-link:hover .ic{background:var(--red);transition:background .25s}
+.eco-link:hover .ic svg{color:#fff;transition:color .25s}
 
-/* ---------- platform bento ---------- */
-.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;margin-top:52px}
-.bento-card{
-  border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-card);
-  padding:28px;position:relative;overflow:hidden;
-  transition:border-color .25s var(--ease),background .25s var(--ease);
-}
-.bento-card:hover{border-color:#3a332e;background:#201C19}
-.bento-card h3{font-size:18px;margin:16px 0 8px}
-.bento-card p{font-size:14.5px;color:var(--text-2)}
-.bento-card .ic{
-  width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.05);
-  border:1px solid var(--line-soft);display:flex;align-items:center;justify-content:center;
-}
-.bento-card .ic svg{width:21px;height:21px;color:var(--red)}
-.b-3{grid-column:span 3}.b-2{grid-column:span 2}.b-4{grid-column:span 4}
-@media(max-width:840px){.b-3,.b-2,.b-4{grid-column:span 6}}
-.one-login{
-  display:flex;align-items:center;gap:14px;margin-top:44px;justify-content:center;
-  font-family:var(--mono);font-size:13px;color:var(--text-2);letter-spacing:.06em;flex-wrap:wrap;
-}
-.one-login b{color:var(--text);font-weight:500}
-.one-login .sep{width:5px;height:5px;border-radius:50%;background:var(--red)}
+/* ---------- demo teaser ---------- */
+.demo-teaser{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:900px){.demo-teaser{grid-template-columns:1fr}}
+.mini-map{background:var(--dark-2);border:1px solid var(--dark-line);border-radius:18px;padding:18px;position:relative;overflow:hidden}
+.mini-map svg{width:100%}
+.route-flow{stroke-dasharray:5 8;animation:up 2.2s linear infinite}
 
-/* ---------- how it works ---------- */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px;counter-reset:step}
-@media(max-width:840px){.steps{grid-template-columns:1fr}}
-.step{border:1px solid var(--line);border-radius:var(--radius);padding:30px;background:var(--bg-raised);position:relative}
-.step::before{
-  counter-increment:step;content:"0" counter(step);
-  font-family:var(--mono);font-size:13px;color:var(--red);letter-spacing:.1em;
-  display:block;margin-bottom:18px;
-}
-.step h3{font-size:18px;margin-bottom:8px}
-.step p{font-size:14.5px;color:var(--text-2)}
-
-/* ---------- stats ---------- */
-.stats{background:var(--bg-raised);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-@media(max-width:840px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
-.stat{text-align:center;padding:28px 12px}
-.stat .num{font-size:clamp(34px,4.5vw,52px);font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.stat .num em{font-style:normal;color:var(--red)}
-.stat p{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-top:8px}
-
-/* ---------- CTA ---------- */
-.cta-box{
-  border:1px solid rgba(230,51,41,.3);border-radius:24px;
-  background:
-    radial-gradient(700px 320px at 85% -20%,rgba(230,51,41,.16),transparent),
-    linear-gradient(160deg,#1A1210,var(--bg-card));
-  padding:clamp(44px,6vw,80px);text-align:center;position:relative;overflow:hidden;
-}
-.cta-box h2{margin-bottom:14px}
-.cta-box .sub{margin:0 auto 36px}
-.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-
-/* ---------- footer ---------- */
-footer{border-top:1px solid var(--line-soft);padding:48px 0 40px;background:var(--bg)}
-.foot{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
-.foot .brand{font-size:15px}
-.foot p{font-size:13.5px;color:var(--text-3)}
-.foot-links{display:flex;gap:22px}
-.foot-links a{font-size:13.5px;color:var(--text-2);transition:color .2s}
-.foot-links a:hover{color:var(--text)}
-
-/* ---------- motion safety ---------- */
 @media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
-  html{scroll-behavior:auto}
-  .rv{opacity:1;transform:none}
+  .wheel-spin,.road-dash,.sensor-ping,.uplink,.route-flow{animation:none}
+  .strike i{transform:scaleX(1)}
 }
 </style>
 </head>
 <body>
 
-<nav id="nav" aria-label="Main">
+<nav class="site" aria-label="Main">
   <div class="nav-inner">
-    <a href="#top" class="brand" aria-label="Khulu Digital home">
-      <svg class="dot-mark" viewBox="0 0 32 32" aria-hidden="true">
-        <g fill="currentColor">
-          <circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/>
-          <circle cx="5" cy="16" r="1.5"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/>
-          <circle cx="27" cy="16" r="1.5"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/>
-          <circle cx="23" cy="22" r="1.7"/><circle cx="16" cy="27" r="1.4"/>
-        </g>
-      </svg>
-      <span>KHULU<em>DIGITAL</em></span>
+    <a href="index.html" class="brand" aria-label="Khulu Digital home">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/><circle cx="5" cy="16" r="1.5"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/><circle cx="27" cy="16" r="1.5"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/><circle cx="16" cy="27" r="1.4"/></g></svg>
+      <span class="lockup">KHULU<em>DIGITAL</em></span>
     </a>
     <div class="nav-links">
-      <a href="#why">Why Khulu</a>
-      <a href="#ecu">Snap-On ECU</a>
-      <a href="#platform">Platform</a>
-      <a href="#how">How it works</a>
+      <a href="why.html">Why Khulu</a>
+      <a href="ecu.html">Snap-On ECU</a>
+      <a href="protection.html">Protection</a>
+      <a href="platform.html">Platform</a>
+      <a href="store.html">Store</a>
+      <a href="demo.html">Live Demo</a>
     </div>
     <a href="#contact" class="btn btn-red nav-cta">Book a demo</a>
+    <button class="nav-burger" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
 </nav>
 
 <!-- ============ HERO ============ -->
-<header class="hero" id="top">
-  <div class="hero-bg" aria-hidden="true">
-    <div class="hero-glow"></div>
-    <svg id="dotGlobe" viewBox="0 0 600 600"></svg>
-  </div>
+<header class="hero">
+  <div class="hero-topo" data-topo="light" aria-hidden="true"></div>
   <div class="wrap hero-grid">
     <div>
       <p class="eyebrow rv">Telematics · Cameras · Sensors — One Platform</p>
       <h1 class="rv rv-d1">Your trucks have a lot to say.<br/><span class="accent">We make them talk.</span></h1>
       <p class="sub rv rv-d2">Khulu Digital reads native engine data from any truck — even Euro&nbsp;2 workhorses with no electronics worth mentioning — and protects every engine to OEM spec. Cameras, sensors and live tracking included. One login. One UI.</p>
       <div class="hero-ctas rv rv-d3">
-        <a href="#contact" class="btn btn-red">Book a demo
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a href="#ecu" class="btn btn-ghost">See the Snap-On ECU</a>
+        <a href="demo.html" class="btn btn-red">Play with the live demo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="ecu.html" class="btn btn-ghost">Meet the Snap-On ECU</a>
       </div>
       <!-- Adjust these proof numbers to your real figures -->
       <div class="hero-proof rv rv-d4">
-        <div><strong data-count="40" data-suffix="+">0</strong>native parameters read</div>
+        <div><strong><span data-count="40"></span>+</strong>native parameters read</div>
         <div><strong>OEM spec</strong>engine protection</div>
         <div><strong>1 login</strong>cameras + sensors + GPS</div>
       </div>
     </div>
     <div class="rv rv-d2">
-      <div class="tele-card" role="img" aria-label="Live telemetry preview showing coolant temperature, oil pressure and engine speed with an engine protection alert">
-        <div class="tele-head">
+      <div class="app-card tilt" role="img" aria-label="Live platform preview: coolant and oil pressure gauges with a live coolant chart and OEM thresholds">
+        <div class="app-head">
           <span class="pulse" aria-hidden="true"></span>
           <span>Live · Native ECU feed</span>
-          <span class="unit-id">UNIT&nbsp;4035</span>
+          <span class="uid">UNIT 4035 · 1996 POWERSTAR</span>
         </div>
-        <div class="gauges">
-          <div class="gauge"><label>Coolant</label><div class="val"><span id="gCool">87</span><small>°C</small></div><div class="bar"><i id="bCool" style="width:62%"></i></div></div>
-          <div class="gauge"><label>Oil press</label><div class="val"><span id="gOil">4.6</span><small>bar</small></div><div class="bar"><i id="bOil" style="width:71%"></i></div></div>
-          <div class="gauge warn"><label>Engine</label><div class="val"><span id="gRpm">1480</span><small>rpm</small></div><div class="bar"><i id="bRpm" style="width:55%"></i></div></div>
+        <div class="gauge-row">
+          <div class="gauge-cell"><svg id="gaugeCool" viewBox="0 0 160 100"></svg><div class="glab">Coolant °C</div></div>
+          <div class="gauge-cell"><svg id="gaugeOil" viewBox="0 0 160 100"></svg><div class="glab">Oil bar</div></div>
         </div>
-        <div class="tele-alert">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
-          <p><strong>Engine protection armed.</strong> If coolant breaches OEM threshold, the driver is warned on the dash — before the engine pays for it.</p>
+        <div class="chart-cell">
+          <div class="clab"><span>Coolant · last 60 min</span><b id="coolNow">86.4°C</b></div>
+          <svg id="coolChart" viewBox="0 0 420 130" aria-hidden="true"></svg>
         </div>
       </div>
     </div>
@@ -349,7 +150,7 @@ footer{border-top:1px solid var(--line-soft);padding:48px 0 40px;background:var(
 
 <!-- ============ TICKER ============ -->
 <div class="ticker" aria-hidden="true">
-  <div class="ticker-track" id="tickerTrack">
+  <div class="ticker-track">
     <span>COOLANT_TEMP <b>87°C</b> <i>OK</i></span>
     <span>OIL_PRESSURE <b>4.6 bar</b> <i>OK</i></span>
     <span>TURBO_BOOST <b>1.8 bar</b> <i>OK</i></span>
@@ -365,322 +166,360 @@ footer{border-top:1px solid var(--line-soft);padding:48px 0 40px;background:var(
   </div>
 </div>
 
-<!-- ============ DIFFERENTIATOR ============ -->
-<section id="why" class="diff">
-  <div class="wrap">
-    <p class="eyebrow rv">Why Khulu</p>
-    <h2 class="rv rv-d1">Anyone can put a dot on a map.</h2>
-    <p class="sub rv rv-d2">GPS tracking is table stakes — yes, we do it, and we do it well. But a dot tells you where the truck is, not whether it will still be running next month. That's the part everyone else leaves out.</p>
-    <div class="diff-grid">
-      <div class="diff-card them rv">
-        <span class="tag">Typical telematics</span>
-        <h3>The dot on the map</h3>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>Location, speed, ignition — and that's about it</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>Older trucks? "Sorry, no CAN bus, no data."</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>Engine failure is something you find out about afterwards</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>Cameras on one portal, tracking on another, sensors on a third</li>
-        </ul>
-      </div>
-      <div class="diff-card us rv rv-d1">
-        <span class="tag">Khulu Digital</span>
-        <h3>The truck's full story</h3>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Native engine data from every truck — <span>including Euro&nbsp;2 with zero factory electronics</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Engine protection to OEM spec — <span>warnings on the dash before damage is done</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Cameras, extra sensors and tracking — <span>one platform, one login, one UI</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>And yes — <span>the dot on the map is in there too</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ECU ============ -->
-<section id="ecu" class="ecu">
-  <div class="wrap ecu-grid">
+<!-- ============ POSITIONING ============ -->
+<section id="why">
+  <div class="wrap pos-grid">
     <div>
-      <p class="eyebrow rv">The Snap-On ECU</p>
-      <h2 class="rv rv-d1">A smartwatch for your truck.</h2>
-      <p class="sub rv rv-d2">Our snap-on ECU fits trucks that were never built to be connected. It clips on, reads every native sensor the OEM put in the engine, and watches them against factory thresholds — all day, every day.</p>
-      <div class="ecu-points">
-        <div class="ecu-point rv">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/><circle cx="12" cy="12" r="3"/></svg></div>
-          <div><h4>Reads all native sensors</h4><p>Coolant, oil pressure, turbo boost, fuel rate, air tanks, gearbox temp — straight from the engine, no guesswork.</p></div>
-        </div>
-        <div class="ecu-point rv rv-d1">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
-          <div><h4>Engine protection to OEM spec</h4><p>Thresholds set to the manufacturer's own limits. Breach one and the driver is warned on the dashboard, instantly.</p></div>
-        </div>
-        <div class="ecu-point rv rv-d2">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div>
-          <div><h4>Snaps on in hours, not days</h4><p>No rewiring the truck, no downtime drama. Fit it, calibrate it, and the truck is online.</p></div>
-        </div>
-        <div class="ecu-point rv rv-d3">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 3 5-6"/></svg></div>
-          <div><h4>Built for Euro 2 workhorses</h4><p>The trucks doing the hardest work are usually the blindest. Not anymore — your oldest unit reports like your newest.</p></div>
-        </div>
+      <p class="eyebrow rv">Why Khulu</p>
+      <h2 class="rv rv-d1">Anyone can put a <span class="strike rv" id="strike">dot on a map<i></i></span>.</h2>
+      <p class="sub rv rv-d2">Khulu tells you whether the engine behind that dot will make it home. GPS tracking is table stakes — we do it well, and then we do the part nobody else does.</p>
+      <ul class="pos-points rv rv-d3">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Native engine data from every truck</b> — including Euro&nbsp;2 units with zero factory electronics.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Engine protection to OEM spec</b> — the driver is warned on the dash before damage is done.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Cameras and sensors in the same UI</b> — one login for the whole operation.</span></li>
+      </ul>
+      <div class="gap-top-sm rv rv-d4" style="margin-top:34px">
+        <a href="why.html" class="btn btn-dark">The full case
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
-    <div class="ecu-visual rv rv-d2" aria-hidden="true">
-      <svg viewBox="0 0 480 480" id="ecuDiagram">
+    <div class="truck-scene rv rv-d2" aria-hidden="true">
+      <svg viewBox="0 0 560 300">
         <defs>
-          <radialGradient id="ecuGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#E63329" stop-opacity=".25"/>
-            <stop offset="100%" stop-color="#E63329" stop-opacity="0"/>
-          </radialGradient>
+          <linearGradient id="trailerG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3F3A36"/><stop offset=".12" stop-color="#57504B"/><stop offset=".3" stop-color="#2E2A27"/><stop offset="1" stop-color="#1C1917"/>
+          </linearGradient>
+          <linearGradient id="cabG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#F25549"/><stop offset=".25" stop-color="#E63329"/><stop offset="1" stop-color="#9E1F18"/>
+          </linearGradient>
+          <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#B8C4CC"/><stop offset=".5" stop-color="#7E8A92"/><stop offset="1" stop-color="#4A545B"/>
+          </linearGradient>
         </defs>
-        <circle cx="240" cy="240" r="150" fill="url(#ecuGlow)"/>
-        <!-- pulse rings -->
-        <circle cx="240" cy="240" r="60" fill="none" stroke="#E63329" stroke-opacity=".5" class="pulse-ring"/>
-        <circle cx="240" cy="240" r="60" fill="none" stroke="#E63329" stroke-opacity=".5" class="pulse-ring pr2"/>
-        <!-- spokes + sensor nodes drawn by JS -->
-        <g id="spokes"></g>
-        <!-- ECU body -->
-        <rect x="192" y="192" width="96" height="96" rx="22" fill="#1C1917" stroke="#3a332e"/>
-        <rect x="206" y="206" width="68" height="68" rx="14" fill="#0C0A09" stroke="#2A2522"/>
-        <text x="240" y="236" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#A8A29E">KHULU</text>
-        <text x="240" y="252" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#E63329">ECU</text>
-        <circle cx="240" cy="265" r="2.5" fill="#34D399" class="blink"/>
+        <!-- uplink arcs -->
+        <path class="uplink" d="M448 78 Q470 30 520 22" fill="none" stroke="#E63329" stroke-width="2"/>
+        <circle cx="520" cy="22" r="4" fill="#E63329"/>
+        <circle cx="520" cy="22" r="9" fill="none" stroke="#E63329" stroke-opacity=".4"><animate attributeName="r" values="6;14" dur="1.8s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".5;0" dur="1.8s" repeatCount="indefinite"/></circle>
+        <!-- trailer -->
+        <rect x="30" y="80" width="300" height="118" rx="8" fill="url(#trailerG)" stroke="#15110F"/>
+        <g stroke="#0C0A09" stroke-opacity=".35"><path d="M60 84v110M95 84v110M130 84v110M165 84v110M200 84v110M235 84v110M270 84v110M305 84v110"/></g>
+        <text x="180" y="148" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="800" font-size="30" letter-spacing="6" fill="#D6D3D1">KHULU</text>
+        <text x="180" y="172" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700" font-size="12" letter-spacing="8" fill="#E63329">DIGITAL</text>
+        <!-- chassis -->
+        <rect x="30" y="198" width="420" height="14" rx="4" fill="#292524"/>
+        <!-- cab -->
+        <path d="M352 198V96a12 12 0 0 1 12-12h44l34 36 8 30v48Z" fill="url(#cabG)" stroke="#7F1812"/>
+        <path d="M398 92h8l26 28h-34Z" fill="url(#glassG)"/>
+        <path d="M400 94l24 26" stroke="#E8EDF0" stroke-width="2" stroke-opacity=".55"/>
+        <rect x="358" y="130" width="34" height="40" rx="4" fill="#B8261D" stroke="#7F1812"/>
+        <rect x="430" y="150" width="20" height="48" rx="3" fill="#1C1917"/>
+        <g stroke="#44403C" stroke-width="2"><path d="M434 154v40M440 154v40M446 154v40"/></g>
+        <rect x="368" y="178" width="52" height="20" rx="9" fill="#57504B" stroke="#292524"/>
+        <path d="M448 84v-18" stroke="#1C1917" stroke-width="3"/>
+        <!-- wheels -->
+        <g id="wheels">
+          <g transform="translate(95,218)"><circle r="26" fill="#15110F"/><circle r="16" fill="#292524"/><g class="wheel-spin" stroke="#78716C" stroke-width="2.5"><path d="M0-13V13M-13 0H13M-9-9L9 9M-9 9L9-9"/></g><circle r="4" fill="#57504B"/></g>
+          <g transform="translate(160,218)"><circle r="26" fill="#15110F"/><circle r="16" fill="#292524"/><g class="wheel-spin" stroke="#78716C" stroke-width="2.5"><path d="M0-13V13M-13 0H13M-9-9L9 9M-9 9L9-9"/></g><circle r="4" fill="#57504B"/></g>
+          <g transform="translate(385,218)"><circle r="26" fill="#15110F"/><circle r="16" fill="#292524"/><g class="wheel-spin" stroke="#78716C" stroke-width="2.5"><path d="M0-13V13M-13 0H13M-9-9L9 9M-9 9L9-9"/></g><circle r="4" fill="#57504B"/></g>
+          <g transform="translate(440,218)"><circle r="26" fill="#15110F"/><circle r="16" fill="#292524"/><g class="wheel-spin" stroke="#78716C" stroke-width="2.5"><path d="M0-13V13M-13 0H13M-9-9L9 9M-9 9L9-9"/></g><circle r="4" fill="#57504B"/></g>
+        </g>
+        <!-- sensor pings -->
+        <g font-family="IBM Plex Mono,monospace" font-size="10">
+          <g class="sensor-ping"><circle cx="402" cy="186" r="4" fill="#E63329"/><path d="M402 186 L402 252" stroke="#E63329" stroke-width="1" stroke-opacity=".5"/><text x="402" y="266" text-anchor="middle" fill="#78716C">COOLANT 86°C</text></g>
+          <g class="sensor-ping p2"><circle cx="440" cy="172" r="4" fill="#E63329"/><path d="M440 172 L470 172 470 252" stroke="#E63329" stroke-width="1" stroke-opacity=".5" fill="none"/><text x="470" y="266" text-anchor="middle" fill="#78716C">OIL 4.6</text></g>
+          <g class="sensor-ping p3"><circle cx="128" cy="205" r="4" fill="#E63329"/><path d="M128 205 L128 252" stroke="#E63329" stroke-width="1" stroke-opacity=".5"/><text x="128" y="266" text-anchor="middle" fill="#78716C">HUB TEMP OK</text></g>
+          <g class="sensor-ping p4"><circle cx="330" cy="120" r="4" fill="#E63329"/><path d="M330 120 L330 60 296 60" stroke="#E63329" stroke-width="1" stroke-opacity=".5" fill="none"/><text x="290" y="63" text-anchor="end" fill="#78716C">DOOR CLOSED</text></g>
+        </g>
+        <!-- road -->
+        <path d="M0 246H560" stroke="#D6D3D1" stroke-width="3"/>
+        <path class="road-dash" d="M0 246H560" stroke="#A8A29E" stroke-width="3"/>
       </svg>
     </div>
   </div>
 </section>
 
-<!-- ============ PLATFORM ============ -->
-<section id="platform">
+<!-- ============ ECOSYSTEM ============ -->
+<section class="dark-band">
   <div class="wrap">
-    <p class="eyebrow rv">One Platform</p>
-    <h2 class="rv rv-d1">Everything your fleet does, on one screen.</h2>
-    <p class="sub rv rv-d2">No juggling portals. Cameras, engine data, extra sensors and tracking live in the same UI — so your team learns one system and sees the whole picture.</p>
-    <div class="bento">
-      <div class="bento-card b-3 rv">
+    <p class="eyebrow rv">The Ecosystem</p>
+    <h2 class="rv rv-d1">Everything clips into the same brain.</h2>
+    <p class="sub rv rv-d2">The Snap-On ECU is the hub. Cameras, probes and sensors are the add-ons — and every one of them lands on the same timeline, behind the same login.</p>
+    <div class="grid-3 gap-top" data-stagger>
+      <a class="card eco-link" href="ecu.html">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></div>
+        <h3>The Snap-On ECU</h3><p>Reads 40+ native channels on trucks that were never built to be connected. The heart of everything.</p>
+        <p class="feeds">FEEDS → EVERYTHING</p>
+      </a>
+      <a class="card eco-link" href="platform.html">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 10 6-3v10l-6-3"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></div>
-        <h3>Camera integration</h3>
-        <p>Road- and driver-facing cameras stream into the same platform as your engine data. Pull footage for any event — harsh braking, an alert, an incident — without leaving the page.</p>
-      </div>
-      <div class="bento-card b-3 rv rv-d1">
+        <h3>Cameras</h3><p>Road, driver, load-bay and reversing — event clips pinned to the exact telemetry of the moment.</p>
+        <p class="feeds">FEEDS → INCIDENT TIMELINE · LIVE VIEW</p>
+      </a>
+      <a class="card eco-link" href="store.html">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M4.9 19.1a10 10 0 0 1 0-14.2M7.8 16.2a6 6 0 0 1 0-8.4M19.1 4.9a10 10 0 0 1 0 14.2M16.2 7.8a6 6 0 0 1 0 8.4"/></svg></div>
-        <h3>Extra sensor ecosystem</h3>
-        <p>Temperature probes, door sensors, fuel probes, load sensors — if it matters to your operation, it clips into the same view as everything else.</p>
-      </div>
-      <div class="bento-card b-2 rv">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
-        <h3>Live tracking & geofencing</h3>
-        <p>The dot on the map — plus zones, routes and alerts when trucks stray.</p>
-      </div>
-      <div class="bento-card b-2 rv rv-d1">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg></div>
-        <h3>Driver behaviour</h3>
-        <p>Harsh events, idling and over-revving tied to real engine data, not just GPS maths.</p>
-      </div>
-      <div class="bento-card b-2 rv rv-d2">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></div>
-        <h3>Fleet health reports</h3>
-        <p>Condition, fuel and utilisation reports your workshop will actually use.</p>
+        <h3>Sensor add-ons</h3><p>Fuel probes, temperature, doors, axle load, TPMS, PTO hours — browse the whole catalogue in the store.</p>
+        <p class="feeds">FEEDS → ALERTS · REPORTS · COMPLIANCE</p>
+      </a>
+    </div>
+    <div class="one-login gap-top" style="display:flex;align-items:center;gap:14px;justify-content:center;font-family:var(--mono);font-size:13px;color:var(--dark-text-2);letter-spacing:.06em;flex-wrap:wrap">
+      <b style="color:var(--dark-text);font-weight:500">One login</b><span style="width:5px;height:5px;border-radius:50%;background:var(--red)"></span>
+      <b style="color:var(--dark-text);font-weight:500">One UI</b><span style="width:5px;height:5px;border-radius:50%;background:var(--red)"></span>
+      <span>Zero portal juggling</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROTECTION PREVIEW ============ -->
+<section>
+  <div class="wrap pos-grid">
+    <div>
+      <p class="eyebrow rv">Engine Protection</p>
+      <h2 class="rv rv-d1">We catch it before the dash light does.</h2>
+      <p class="sub rv rv-d2">Every reading is watched against the manufacturer's own limits, 24/7. Breach one and the driver sees it on the dashboard immediately — your ops team too. Monitor, warn, protect. We never cut an engine.</p>
+      <div class="gap-top-sm rv rv-d3" style="margin-top:30px">
+        <a href="protection.html" class="btn btn-dark">How protection works
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
-    <div class="one-login rv">
-      <b>One login</b><span class="sep"></span><b>One UI</b><span class="sep"></span><span>Zero portal juggling</span>
+    <div class="rv rv-d2">
+      <div class="grid-3" data-stagger style="gap:14px">
+        <div class="card center" style="padding:22px 14px"><span class="pill pill-green" style="margin:0 auto 12px">MONITOR</span><p style="font-size:13.5px">Sampled continuously against OEM spec</p></div>
+        <div class="card center" style="padding:22px 14px"><span class="pill pill-amber" style="margin:0 auto 12px">WARN</span><p style="font-size:13.5px">Driver warned on the dash, instantly</p></div>
+        <div class="card center" style="padding:22px 14px"><span class="pill pill-red" style="margin:0 auto 12px">PROTECT</span><p style="font-size:13.5px">Escalation before damage — never a cut engine</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEMO TEASER ============ -->
+<section class="dark-band">
+  <div class="wrap demo-teaser">
+    <div>
+      <p class="eyebrow rv">Try it yourself</p>
+      <h2 class="rv rv-d1">Build your fleet.<br/>Watch it come alive.</h2>
+      <p class="sub rv rv-d2">Name your units, kit them out with cameras and probes, then run real scenarios — an overheat on Van Reenen's, a fuel theft at 02:00 — and see exactly what the platform shows you. No signup. Just play.</p>
+      <div class="gap-top-sm rv rv-d3" style="margin-top:30px">
+        <a href="demo.html" class="btn btn-red">Open the live demo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+    <div class="mini-map rv rv-d2 tilt" aria-hidden="true">
+      <svg viewBox="0 0 420 300">
+        <g font-family="IBM Plex Mono,monospace" font-size="10" fill="#78716C">
+          <circle cx="70" cy="252" r="5" fill="#1C1917" stroke="#44403C"/><text x="70" y="274" text-anchor="middle">CPT</text>
+          <circle cx="305" cy="80" r="5" fill="#1C1917" stroke="#44403C"/><text x="305" y="66" text-anchor="middle">JHB</text>
+          <circle cx="356" cy="208" r="5" fill="#1C1917" stroke="#44403C"/><text x="356" y="230" text-anchor="middle">DBN</text>
+          <circle cx="208" cy="170" r="5" fill="#1C1917" stroke="#44403C"/><text x="208" y="192" text-anchor="middle">BFN</text>
+        </g>
+        <path d="M70 252 Q140 210 208 170 T305 80" fill="none" stroke="#2A2522" stroke-width="5"/>
+        <path d="M305 80 Q340 140 356 208" fill="none" stroke="#2A2522" stroke-width="5"/>
+        <path class="route-flow" d="M70 252 Q140 210 208 170 T305 80" fill="none" stroke="#E63329" stroke-width="1.6"/>
+        <path class="route-flow" d="M305 80 Q340 140 356 208" fill="none" stroke="#E63329" stroke-width="1.6" style="animation-delay:.6s"/>
+        <g><circle cx="0" cy="0" r="6" fill="#0E9F6E"><animateMotion dur="9s" repeatCount="indefinite" path="M70 252 Q140 210 208 170 T305 80"/></circle></g>
+        <g><circle cx="0" cy="0" r="6" fill="#D97706"><animateMotion dur="7s" repeatCount="indefinite" path="M305 80 Q340 140 356 208"/></circle></g>
+        <text x="330" y="135" font-family="IBM Plex Mono,monospace" font-size="9" fill="#E63329">VAN REENEN</text>
+      </svg>
     </div>
   </div>
 </section>
 
 <!-- ============ STATS ============ -->
-<section class="stats">
+<section style="padding-top:64px;padding-bottom:64px">
   <div class="wrap">
     <!-- Adjust these to your real figures before launch -->
-    <div class="stats-grid">
-      <div class="stat rv"><div class="num"><span data-count="40">0</span><em>+</em></div><p>Native parameters monitored</p></div>
-      <div class="stat rv rv-d1"><div class="num"><span data-count="24">0</span><em>/7</em></div><p>Engine protection watching</p></div>
-      <div class="stat rv rv-d2"><div class="num"><em>1</em></div><p>Login for the whole fleet</p></div>
-      <div class="stat rv rv-d3"><div class="num"><span data-count="0">0</span><em></em></div><p>Trucks too old to connect</p></div>
+    <div class="grid-4" data-stagger>
+      <div class="stat"><div class="num"><span data-count="40"></span><em>+</em></div><p>Native parameters monitored</p></div>
+      <div class="stat"><div class="num"><span data-count="24"></span><em>/7</em></div><p>Engine protection watching</p></div>
+      <div class="stat"><div class="num"><em>1</em></div><p>Login for the whole fleet</p></div>
+      <div class="stat"><div class="num"><span data-count="0"></span></div><p>Trucks too old to connect</p></div>
     </div>
   </div>
 </section>
 
 <!-- ============ HOW IT WORKS ============ -->
-<section id="how">
+<section style="padding-top:0">
   <div class="wrap">
     <p class="eyebrow rv">How it works</p>
     <h2 class="rv rv-d1">Old truck in. Connected asset out.</h2>
-    <div class="steps">
-      <div class="step rv">
-        <h3>Snap it on</h3>
-        <p>Our technicians fit the ECU and any cameras or extra sensors you need. No rewiring marathons, no fleet downtime.</p>
-      </div>
-      <div class="step rv rv-d1">
-        <h3>Calibrate to OEM spec</h3>
-        <p>We load the manufacturer's own thresholds for your exact engine. The truck is now watched against the standards it was built to.</p>
-      </div>
-      <div class="step rv rv-d2">
-        <h3>Protect & run</h3>
-        <p>Live data flows to one dashboard. Breach a limit and the driver sees it on the dash immediately — your ops team sees it too.</p>
-      </div>
+    <div class="steps gap-top" data-stagger>
+      <div class="step"><h3>Snap it on</h3><p>Our technicians fit the ECU and any cameras or sensors you need. No rewiring marathons, no fleet downtime.</p></div>
+      <div class="step"><h3>Calibrate to OEM spec</h3><p>We load the manufacturer's own thresholds for your exact engine. The truck is watched against the standards it was built to.</p></div>
+      <div class="step"><h3>Protect &amp; run</h3><p>Live data flows to one dashboard. Breach a limit and the driver sees it on the dash immediately — your ops team sees it too.</p></div>
     </div>
   </div>
 </section>
 
 <!-- ============ CTA ============ -->
-<section id="contact">
-  <div class="wrap">
-    <div class="cta-box rv">
-      <p class="eyebrow" style="justify-content:center">Get started</p>
-      <h2>Hear what your fleet<br/>has been trying to tell you.</h2>
-      <p class="sub">Book a demo and we'll show you live data from a working truck — engine, cameras and sensors in one UI. Bring your oldest Euro&nbsp;2; it's our favourite party trick.</p>
-      <div class="cta-actions">
-        <a class="btn btn-red" href="mailto:daniel@khuludigital.com?subject=Khulu%20Digital%20demo%20request">Book a demo
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a class="btn btn-ghost" href="mailto:daniel@khuludigital.com?subject=Khulu%20Digital%20enquiry">Talk to us</a>
-      </div>
+<section class="cta-band" id="contact" style="padding:0">
+  <div class="hero-topo" data-topo="dark" aria-hidden="true"></div>
+  <div class="cta-inner wrap">
+    <p class="eyebrow rv">Get started</p>
+    <h2 class="rv rv-d1">Hear what your fleet<br/>has been trying to tell you.</h2>
+    <p class="sub rv rv-d2">Book a demo and we'll show you live data from a working truck — engine, cameras and sensors in one UI. Bring your oldest Euro&nbsp;2; it's our favourite party trick.</p>
+    <div class="cta-actions rv rv-d3">
+      <a class="btn btn-red" href="mailto:daniel@khuludigital.com?subject=Khulu%20Digital%20demo%20request">Book a demo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" style="border-color:#44403C;color:#FAFAF9" href="demo.html">Or play with the demo first</a>
     </div>
   </div>
 </section>
 
-<footer>
+<footer class="site">
   <div class="wrap foot">
-    <a href="#top" class="brand">
-      <svg class="dot-mark" viewBox="0 0 32 32" aria-hidden="true" width="26" height="26">
-        <g fill="currentColor">
-          <circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/>
-          <circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/>
-          <circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/>
-        </g>
-      </svg>
-      <span>KHULU<em>DIGITAL</em></span>
+    <a href="index.html" class="brand">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true" width="26" height="26"><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/></g></svg>
+      <span class="lockup">KHULU<em>DIGITAL</em></span>
     </a>
     <div class="foot-links">
-      <a href="#why">Why Khulu</a>
-      <a href="#ecu">Snap-On ECU</a>
-      <a href="#platform">Platform</a>
-      <a href="#contact">Contact</a>
+      <a href="why.html">Why Khulu</a><a href="ecu.html">Snap-On ECU</a><a href="protection.html">Protection</a><a href="platform.html">Platform</a><a href="store.html">Store</a><a href="demo.html">Live Demo</a><a href="#contact">Contact</a>
     </div>
-    <p>© <span id="yr"></span> Khulu Digital. Truck telematics, cameras & sensors — one platform.</p>
+    <p>© <span data-year></span> Khulu Digital. Truck telematics, cameras &amp; sensors — one platform.</p>
   </div>
 </footer>
 
+<script src="assets/khulu.js"></script>
 <script>
-/* ---------- scroll reveal ---------- */
-const io=new IntersectionObserver(es=>{
-  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
-},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv').forEach(el=>io.observe(el));
-
-/* ---------- nav scrolled state ---------- */
-const nav=document.getElementById('nav');
-addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40),{passive:true});
-
-/* ---------- dot globe (echoes logo motif) ---------- */
-(function(){
-  const svg=document.getElementById('dotGlobe');if(!svg)return;
-  const NS='http://www.w3.org/2000/svg',R=250,cx=300,cy=300;
-  let dots=[];
-  for(let lat=-80;lat<=80;lat+=10){
-    const r=Math.cos(lat*Math.PI/180)*R, y=cy-Math.sin(lat*Math.PI/180)*R;
-    const n=Math.max(6,Math.round(r/9));
-    for(let i=0;i<n;i++){
-      const a=(i/n)*Math.PI;                 // front hemisphere only
-      const x=cx-r*Math.cos(a);
-      const depth=Math.sin(a);               // 0 edge → 1 centre
-      const c=document.createElementNS(NS,'circle');
-      c.setAttribute('cx',x.toFixed(1));c.setAttribute('cy',y.toFixed(1));
-      c.setAttribute('r',(0.9+depth*2.1).toFixed(2));
-      c.setAttribute('fill',Math.random()<0.02?'#E63329':'#FAFAF9');
-      c.setAttribute('opacity',(0.06+depth*0.22).toFixed(2));
-      svg.appendChild(c);dots.push(c);
-    }
-  }
-  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    setInterval(()=>{                        // subtle twinkle
-      for(let i=0;i<6;i++){
-        const d=dots[Math.floor(Math.random()*dots.length)];
-        const o=parseFloat(d.getAttribute('opacity'));
-        d.style.transition='opacity 1.6s ease';
-        d.style.opacity=Math.min(.5,o+.25);
-        setTimeout(()=>d.style.opacity='',1600);
-      }
-    },900);
-  }
-})();
-
-/* ---------- ECU diagram spokes ---------- */
-(function(){
-  const g=document.getElementById('spokes');if(!g)return;
-  const NS='http://www.w3.org/2000/svg',cx=240,cy=240;
-  const sensors=['COOLANT','OIL','TURBO','FUEL','AIR','GEARBOX','BRAKES','BATTERY'];
-  sensors.forEach((name,i)=>{
-    const a=(i/sensors.length)*Math.PI*2-Math.PI/2, R1=72,R2=170;
-    const x1=cx+Math.cos(a)*R1,y1=cy+Math.sin(a)*R1;
-    const x2=cx+Math.cos(a)*R2,y2=cy+Math.sin(a)*R2;
-    const line=document.createElementNS(NS,'line');
-    line.setAttribute('x1',x1);line.setAttribute('y1',y1);
-    line.setAttribute('x2',x2);line.setAttribute('y2',y2);
-    line.setAttribute('stroke','#2A2522');line.setAttribute('stroke-width','1.5');
-    g.appendChild(line);
-    const node=document.createElementNS(NS,'circle');
-    node.setAttribute('cx',x2);node.setAttribute('cy',y2);node.setAttribute('r','5');
-    node.setAttribute('fill','#1C1917');node.setAttribute('stroke','#44403C');node.setAttribute('stroke-width','1.5');
-    node.classList.add('sensor-node');node.style.setProperty('--i',i);
-    g.appendChild(node);
-    const t=document.createElementNS(NS,'text');
-    const tx=cx+Math.cos(a)*(R2+24), ty=cy+Math.sin(a)*(R2+24);
-    t.setAttribute('x',tx);t.setAttribute('y',ty+4);
-    t.setAttribute('text-anchor','middle');
-    t.setAttribute('font-family','IBM Plex Mono,monospace');
-    t.setAttribute('font-size','9.5');t.setAttribute('fill','#78716C');
-    t.textContent=name;g.appendChild(t);
-  });
-})();
-
-/* ---------- count-up stats ---------- */
-const cu=new IntersectionObserver(es=>{
-  es.forEach(e=>{
-    if(!e.isIntersecting)return;cu.unobserve(e.target);
-    const el=e.target,target=+el.dataset.count,suf=el.dataset.suffix||'';
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=target+suf;return;}
-    const t0=performance.now(),dur=1400;
-    (function tick(t){
-      const p=Math.min(1,(t-t0)/dur),eased=1-Math.pow(1-p,3);
-      el.textContent=Math.round(target*eased)+suf;
-      if(p<1)requestAnimationFrame(tick);
-    })(t0);
-  });
-},{threshold:.5});
-document.querySelectorAll('[data-count]').forEach(el=>cu.observe(el));
-
-/* ---------- live-ish hero gauges ---------- */
-(function(){
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const jitter=(id,bid,base,amp,dec,min,max,barMin,barMax)=>{
-    const v=document.getElementById(id),b=document.getElementById(bid);
-    if(!v||!b)return;
-    setInterval(()=>{
-      const nv=Math.min(max,Math.max(min,base+(Math.random()-.5)*amp));
-      v.textContent=dec?nv.toFixed(1):Math.round(nv);
-      b.style.width=(barMin+(nv-min)/(max-min)*(barMax-barMin))+'%';
-    },2200+Math.random()*800);
+/* ---------- zone gauges (SVG arc with ticks) ---------- */
+function buildGauge(svgId, min, max, zones, startVal) {
+  const svg = document.getElementById(svgId); if (!svg) return null;
+  const NS = 'http://www.w3.org/2000/svg', cx = 80, cy = 88, R = 64;
+  const a0 = Math.PI, a1 = 0; // 180° sweep
+  const ang = v => a0 + (v - min) / (max - min) * (a1 - a0);
+  const pt = (a, r) => [cx + Math.cos(a) * r, cy - Math.sin(a) * -1 * r * 0 + Math.sin(a) * 0 - 0]; // unused
+  const pos = (a, r) => [cx + Math.cos(Math.PI - (a - a0) / (a1 - a0) * Math.PI) * 0, 0]; // unused
+  const xy = (v, r) => {
+    const t = (v - min) / (max - min); // 0..1
+    const a = Math.PI - t * Math.PI;   // PI..0
+    return [cx + Math.cos(a) * r, cy - Math.sin(a) * r];
   };
-  jitter('gCool','bCool',87,3,false,82,94,55,75);
-  jitter('gOil','bOil',4.6,.4,true,4.0,5.2,60,80);
-  jitter('gRpm','bRpm',1480,180,false,1250,1750,45,70);
+  // zone arcs
+  zones.forEach(z => {
+    const [x1, y1] = xy(z.from, R), [x2, y2] = xy(z.to, R);
+    const large = (z.to - z.from) / (max - min) > .5 ? 1 : 0;
+    const p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', `M${x1} ${y1} A${R} ${R} 0 ${large} 1 ${x2} ${y2}`);
+    p.setAttribute('stroke', z.c); p.setAttribute('stroke-width', '7');
+    p.setAttribute('fill', 'none'); p.setAttribute('stroke-linecap', 'butt');
+    p.setAttribute('opacity', '.85');
+    svg.appendChild(p);
+  });
+  // ticks + labels
+  for (let v = min; v <= max; v += (max - min) / 6) {
+    const [x1, y1] = xy(v, R - 9), [x2, y2] = xy(v, R - 2);
+    const t = document.createElementNS(NS, 'line');
+    t.setAttribute('x1', x1); t.setAttribute('y1', y1); t.setAttribute('x2', x2); t.setAttribute('y2', y2);
+    t.setAttribute('stroke', '#78716C'); t.setAttribute('stroke-width', '1.5');
+    svg.appendChild(t);
+    const [lx, ly] = xy(v, R - 20);
+    const tx = document.createElementNS(NS, 'text');
+    tx.setAttribute('x', lx); tx.setAttribute('y', ly + 3); tx.setAttribute('text-anchor', 'middle');
+    tx.setAttribute('font-family', 'IBM Plex Mono,monospace'); tx.setAttribute('font-size', '8'); tx.setAttribute('fill', '#78716C');
+    tx.textContent = Math.round(v);
+    svg.appendChild(tx);
+  }
+  // needle
+  const needle = document.createElementNS(NS, 'line');
+  needle.setAttribute('stroke', '#FAFAF9'); needle.setAttribute('stroke-width', '2.5'); needle.setAttribute('stroke-linecap', 'round');
+  svg.appendChild(needle);
+  const hub = document.createElementNS(NS, 'circle');
+  hub.setAttribute('cx', cx); hub.setAttribute('cy', cy); hub.setAttribute('r', '5'); hub.setAttribute('fill', '#44403C');
+  svg.appendChild(hub);
+  // value text
+  const val = document.createElementNS(NS, 'text');
+  val.setAttribute('x', cx); val.setAttribute('y', cy - 22); val.setAttribute('text-anchor', 'middle');
+  val.setAttribute('font-family', 'IBM Plex Mono,monospace'); val.setAttribute('font-size', '17'); val.setAttribute('fill', '#FAFAF9');
+  svg.appendChild(val);
+  let cur = startVal;
+  function set(v) {
+    cur = v;
+    const [x2, y2] = xy(v, R - 16);
+    needle.setAttribute('x1', cx); needle.setAttribute('y1', cy);
+    needle.setAttribute('x2', x2); needle.setAttribute('y2', y2);
+    val.textContent = (max - min) > 50 ? Math.round(v) : v.toFixed(1);
+  }
+  set(startVal);
+  return { set, get: () => cur };
+}
+const gCool = buildGauge('gaugeCool', 60, 120, [
+  { from: 60, to: 96, c: '#0E9F6E' }, { from: 96, to: 103, c: '#D97706' }, { from: 103, to: 120, c: '#E63329' }
+], 86.4);
+const gOil = buildGauge('gaugeOil', 0, 8, [
+  { from: 0, to: 1.5, c: '#E63329' }, { from: 1.5, to: 2.5, c: '#D97706' }, { from: 2.5, to: 8, c: '#0E9F6E' }
+], 4.6);
+
+/* ---------- coolant chart with thresholds ---------- */
+(function () {
+  const svg = document.getElementById('coolChart'); if (!svg) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const W = 420, H = 130, padL = 30, padR = 8, padT = 8, padB = 20;
+  const tMin = 78, tMax = 110;
+  const y = v => padT + (1 - (v - tMin) / (tMax - tMin)) * (H - padT - padB);
+  const x = i => padL + i / 59 * (W - padL - padR);
+  // gridlines + y labels
+  [80, 90, 100, 110].forEach(v => {
+    const l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', padL); l.setAttribute('x2', W - padR);
+    l.setAttribute('y1', y(v)); l.setAttribute('y2', y(v));
+    l.setAttribute('stroke', '#221E1B'); svg.appendChild(l);
+    const t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', padL - 5); t.setAttribute('y', y(v) + 3); t.setAttribute('text-anchor', 'end');
+    t.setAttribute('font-family', 'IBM Plex Mono,monospace'); t.setAttribute('font-size', '8'); t.setAttribute('fill', '#57504B');
+    t.textContent = v; svg.appendChild(t);
+  });
+  // time labels
+  ['-60', '-45', '-30', '-15', 'now'].forEach((lab, i) => {
+    const t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', x(i * 14.75)); t.setAttribute('y', H - 6); t.setAttribute('text-anchor', 'middle');
+    t.setAttribute('font-family', 'IBM Plex Mono,monospace'); t.setAttribute('font-size', '8'); t.setAttribute('fill', '#57504B');
+    t.textContent = lab; svg.appendChild(t);
+  });
+  // thresholds
+  [{ v: 96, c: '#D97706', lab: 'WARN 96°' }, { v: 103, c: '#E63329', lab: 'OEM LIMIT 103°' }].forEach(th => {
+    const l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', padL); l.setAttribute('x2', W - padR);
+    l.setAttribute('y1', y(th.v)); l.setAttribute('y2', y(th.v));
+    l.setAttribute('stroke', th.c); l.setAttribute('stroke-dasharray', '4 4'); l.setAttribute('stroke-opacity', '.7');
+    svg.appendChild(l);
+    const t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', W - padR - 2); t.setAttribute('y', y(th.v) - 4); t.setAttribute('text-anchor', 'end');
+    t.setAttribute('font-family', 'IBM Plex Mono,monospace'); t.setAttribute('font-size', '8'); t.setAttribute('fill', th.c);
+    t.textContent = th.lab; svg.appendChild(t);
+  });
+  // data line
+  const data = [];
+  let v = 85;
+  for (let i = 0; i < 60; i++) { v += (Math.random() - .48) * 1.2; v = Math.max(82, Math.min(94, v)); data.push(v); }
+  const line = document.createElementNS(NS, 'polyline');
+  line.setAttribute('fill', 'none'); line.setAttribute('stroke', '#0E9F6E'); line.setAttribute('stroke-width', '1.8');
+  svg.appendChild(line);
+  const dot = document.createElementNS(NS, 'circle');
+  dot.setAttribute('r', '3'); dot.setAttribute('fill', '#0E9F6E'); svg.appendChild(dot);
+  const nowLab = document.getElementById('coolNow');
+  function render() {
+    line.setAttribute('points', data.map((d, i) => `${x(i)},${y(d)}`).join(' '));
+    dot.setAttribute('cx', x(59)); dot.setAttribute('cy', y(data[59]));
+    if (nowLab) nowLab.textContent = data[59].toFixed(1) + '°C';
+  }
+  render();
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    setInterval(() => {
+      let nv = data[59] + (Math.random() - .48) * 1.2;
+      nv = Math.max(82, Math.min(94, nv));
+      data.push(nv); data.shift();
+      render();
+      if (gCool) gCool.set(nv);
+      if (gOil) gOil.set(Math.max(4, Math.min(5.2, gOil.get() + (Math.random() - .5) * .2)));
+    }, 2200);
+  }
 })();
 
-/* ---------- ticker duplicate for seamless loop ---------- */
-(function(){const t=document.getElementById('tickerTrack');t.innerHTML+=t.innerHTML;})();
-
-document.getElementById('yr').textContent=new Date().getFullYear();
+/* ---------- strike-through trigger ---------- */
+(function () {
+  const s = document.getElementById('strike'); if (!s) return;
+  new IntersectionObserver((es, o) => {
+    es.forEach(e => { if (e.isIntersecting) { s.classList.add('in'); o.disconnect(); } });
+  }, { threshold: .6 }).observe(s);
+})();
 </script>
-<style>
-/* SVG animation classes (kept after JS-built nodes) */
-.pulse-ring{transform-origin:240px 240px;animation:ecuPulse 3s ease-out infinite}
-.pr2{animation-delay:1.5s}
-@keyframes ecuPulse{0%{transform:scale(1);opacity:.55}100%{transform:scale(2.6);opacity:0}}
-.sensor-node{animation:nodeGlow 4s ease-in-out infinite;animation-delay:calc(var(--i)*.5s)}
-@keyframes nodeGlow{0%,100%{fill:#1C1917;stroke:#44403C}12%{fill:#E63329;stroke:#E63329}24%{fill:#1C1917;stroke:#44403C}}
-.blink{animation:blink 1.8s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-@media(prefers-reduced-motion:reduce){.pulse-ring,.sensor-node,.blink{animation:none}}
-</style>
 </body>
 </html>
