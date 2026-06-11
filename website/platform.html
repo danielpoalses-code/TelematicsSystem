@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Platform — Khulu Digital</title>
+<meta name="description" content="One platform, one login, one UI. Live tracking, cameras, native engine data and add-on sensors for your whole fleet on a single screen — explore the interactive Khulu Digital platform mockup." />
+<link rel="icon" href="assets/brand/khulu-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/khulu.css" />
+<style>
+/* ============ platform.html page styles ============ */
+
+/* ---------- mockup browser frame ---------- */
+.mock-section{padding-top:clamp(20px,3vw,40px)}
+.browser{
+  border-radius:20px;background:#0C0A09;border:1px solid #2A2522;
+  box-shadow:0 40px 90px rgba(12,10,9,.28);overflow:hidden;
+}
+.browser-bar{
+  display:flex;align-items:center;gap:14px;padding:12px 18px;
+  background:#16120F;border-bottom:1px solid #28231F;
+}
+.tl-dots{display:flex;gap:7px;flex:none}
+.tl-dots span{width:11px;height:11px;border-radius:50%}
+.tl-dots span:nth-child(1){background:#B3473F}
+.tl-dots span:nth-child(2){background:#B08A3E}
+.tl-dots span:nth-child(3){background:#4E9460}
+.addr{
+  flex:1;max-width:420px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:8px;
+  background:#0C0A09;border:1px solid #2A2522;border-radius:999px;padding:6px 16px;
+  font-family:var(--mono);font-size:12px;color:#A8A29E;white-space:nowrap;overflow:hidden;
+}
+.addr svg{width:11px;height:11px;color:#0E9F6E;flex:none}
+.browser-bar .bspace{width:55px;flex:none}
+@media(max-width:560px){.browser-bar .bspace{display:none}.addr{font-size:11px;padding:5px 10px}}
+
+/* ---------- app shell (dark product UI) ---------- */
+.app{background:#100E0C;color:#FAFAF9;font-size:14px}
+.kpis{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid #28231F;overflow-x:auto;scrollbar-width:none}
+.kpis::-webkit-scrollbar{display:none}
+.kpi{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;color:#A8A29E;white-space:nowrap;
+  padding:7px 13px;border:1px solid #2A2522;border-radius:9px;background:#16120F;display:flex;align-items:center;gap:8px;
+}
+.kpi b{color:#FAFAF9;font-weight:500}
+.kpi i{font-style:normal;width:7px;height:7px;border-radius:50%;flex:none}
+.kpi .ok{background:#34D399}.kpi .warn{background:#FBBF24}.kpi .bad{background:#E63329}
+
+.app-body{display:flex;align-items:stretch;min-height:540px}
+.side{
+  width:196px;flex:none;background:#13100E;border-right:1px solid #28231F;
+  padding:12px 10px;display:flex;flex-direction:column;gap:2px;
+}
+.side button{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  padding:9px 12px;border-radius:9px;font-size:13px;font-weight:600;color:#A8A29E;
+  cursor:pointer;transition:background .18s var(--ease),color .18s var(--ease);
+  border-left:2px solid transparent;white-space:nowrap;
+}
+.side button svg{width:16px;height:16px;flex:none}
+.side button:hover{background:#1C1917;color:#FAFAF9}
+.side button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.side button.on{background:rgba(230,51,41,.14);color:#fff;border-left-color:var(--red)}
+.side .side-foot{margin-top:auto;padding:10px 12px 4px;font-family:var(--mono);font-size:10px;color:#57534E;letter-spacing:.08em}
+
+.main{flex:1;min-width:0;padding:16px;position:relative}
+.pview{display:none}
+.pview.on{display:block;animation:viewin .3s var(--ease)}
+@keyframes viewin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.vtitle{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.vtitle h4{font-size:14px;font-weight:700;letter-spacing:.01em}
+.vtitle .vmeta{font-family:var(--mono);font-size:10.5px;color:#78716C;letter-spacing:.06em}
+
+@media(max-width:880px){
+  .app-body{flex-direction:column;min-height:0}
+  .side{width:100%;flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid #28231F;padding:8px;scrollbar-width:none}
+  .side::-webkit-scrollbar{display:none}
+  .side button{width:auto;flex:none;border-left:none;border-bottom:2px solid transparent;border-radius:9px;padding:8px 11px;font-size:12.5px}
+  .side button.on{border-bottom-color:var(--red)}
+  .side .side-foot{display:none}
+  .main{padding:12px}
+}
+
+/* ---------- dark pills ---------- */
+.dp{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;white-space:nowrap}
+.dp-green{background:rgba(52,211,153,.13);color:#34D399}
+.dp-amber{background:rgba(251,191,36,.13);color:#FBBF24}
+.dp-red{background:rgba(230,51,41,.18);color:#FF7A72}
+.dp-grey{background:#221E1B;color:#A8A29E}
+
+/* ---------- live map ---------- */
+.map-box{position:relative;border-radius:12px;overflow:hidden;border:1px solid #28231F;background:#0D131B}
+.map-box svg{width:100%;height:auto;display:block}
+.map-legend{
+  position:absolute;left:10px;bottom:10px;display:flex;gap:10px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:10px;color:#A8A29E;background:rgba(13,17,24,.78);
+  border:1px solid #28231F;border-radius:8px;padding:6px 10px;backdrop-filter:blur(4px);
+}
+.map-legend i{font-style:normal;width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}
+.unit{cursor:pointer}
+.unit:focus{outline:none}
+.unit:focus-visible .uhit{stroke:#fff;stroke-width:1.5}
+.map-pop{
+  position:absolute;z-index:5;width:208px;transform:translate(-50%,calc(-100% - 16px));
+  background:#17130F;border:1px solid #3A332E;border-radius:12px;padding:12px 13px;
+  box-shadow:0 18px 40px rgba(0,0,0,.5);display:none;
+}
+.map-pop.show{display:block;animation:popfade .2s var(--ease)}
+@keyframes popfade{from{opacity:0}to{opacity:1}}
+.map-pop::after{content:"";position:absolute;left:50%;bottom:-6px;width:10px;height:10px;background:#17130F;border-right:1px solid #3A332E;border-bottom:1px solid #3A332E;transform:translateX(-50%) rotate(45deg)}
+.map-pop.below{transform:translate(-50%,18px)}
+.map-pop.below::after{bottom:auto;top:-6px;border:none;border-left:1px solid #3A332E;border-top:1px solid #3A332E}
+.map-pop .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.map-pop .ph b{font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.04em}
+.map-pop dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:12px;margin:0}
+.map-pop dt{color:#78716C;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;align-self:center}
+.map-pop dd{margin:0;color:#E7E5E4;font-family:var(--mono);font-size:12px;text-align:right}
+@media(max-width:560px){.map-pop{width:178px}}
+
+/* ---------- units table ---------- */
+.dtable{width:100%;font-family:var(--mono);font-size:12px;border:1px solid #28231F;border-radius:12px;overflow:hidden;display:block;overflow-x:auto}
+.dtable table{min-width:640px}
+.dtable th{
+  text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#78716C;font-weight:500;
+  padding:10px 14px;background:#16120F;border-bottom:1px solid #28231F;white-space:nowrap;
+}
+.dtable td{padding:10px 14px;border-bottom:1px solid #1F1B18;color:#D6D3D1;white-space:nowrap}
+.dtable tr:last-child td{border-bottom:none}
+.dtable td:first-child{color:#FAFAF9}
+.dtable tr:hover td{background:#16120F}
+.fuelbar{display:inline-block;width:56px;height:5px;border-radius:3px;background:#28231F;vertical-align:1px;margin-right:7px;overflow:hidden}
+.fuelbar i{display:block;height:100%;border-radius:3px;background:#34D399}
+
+/* ---------- cameras ---------- */
+.cam-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.cam-grid{grid-template-columns:1fr}}
+.cam{position:relative;border-radius:10px;overflow:hidden;border:1px solid #28231F;background:#000;aspect-ratio:16/10}
+.cam>svg{position:absolute;inset:0;width:100%;height:100%}
+.cam .hud{position:absolute;top:8px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;z-index:4;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.92);text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.cam .hud-b{position:absolute;bottom:8px;left:10px;right:10px;display:flex;justify-content:space-between;z-index:4;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.75);text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.rec{display:inline-flex;align-items:center;gap:5px}
+.rec i{width:7px;height:7px;border-radius:50%;background:#E63329;animation:blink 1.1s steps(2,start) infinite}
+@keyframes blink{50%{opacity:0}}
+.grain::after{
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.16;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
+  animation:grainShift .5s steps(3) infinite;
+}
+@keyframes grainShift{0%{transform:translate(0,0)}50%{transform:translate(-9px,6px)}100%{transform:translate(6px,-8px)}}
+.scanlines::before{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);
+}
+.breathe{animation:breathe 3.8s ease-in-out infinite alternate;transform-origin:50% 100%}
+@keyframes breathe{to{transform:scale(1.018)}}
+.dashline{animation:dashmove .42s linear infinite}
+@keyframes dashmove{to{stroke-dashoffset:-34}}
+.flick{position:absolute;inset:0;background:#fff;opacity:0;z-index:2;pointer-events:none;animation:camflick 7s steps(1) infinite}
+@keyframes camflick{0%,96.4%,97.4%,100%{opacity:0}96.8%{opacity:.07}97%{opacity:.02}97.2%{opacity:.05}}
+
+/* ---------- alerts ---------- */
+.alerts{border:1px solid #28231F;border-radius:12px;overflow:hidden}
+.alert-row{display:flex;gap:12px;padding:11px 14px;border-bottom:1px solid #1F1B18;align-items:flex-start;background:#13100E}
+.alert-row:nth-child(odd){background:#15110F}
+.alert-row:last-child{border-bottom:none}
+.alert-row time{font-family:var(--mono);font-size:11px;color:#78716C;width:46px;flex:none;padding-top:2px}
+.alert-row .ab{flex:1;min-width:0}
+.alert-row .ab b{display:block;font-size:13px;font-weight:700;margin-bottom:1px}
+.alert-row .ab span{display:block;font-family:var(--mono);font-size:10.5px;color:#78716C;letter-spacing:.02em}
+.alert-row .dp{flex:none;margin-top:2px}
+.clipchip{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:3px 9px;border:1px solid #3A332E;border-radius:6px;font-family:var(--mono);font-size:10px;color:#D6D3D1;cursor:pointer}
+.clipchip svg{width:10px;height:10px;color:var(--red)}
+.clipchip:hover{border-color:var(--red)}
+
+/* ---------- fuel chart ---------- */
+.chartbox{border:1px solid #28231F;border-radius:12px;background:#13100E;padding:14px}
+.chartbox svg{width:100%;height:auto}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-family:var(--mono);font-size:10.5px;color:#A8A29E}
+.chart-legend i{font-style:normal;display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:2px}
+
+/* ---------- protection events ---------- */
+.pcards{display:grid;gap:12px}
+.pcard{border:1px solid #28231F;border-radius:12px;background:#16120F;padding:14px 16px}
+.pcard .pch{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.pcard .pch b{font-family:var(--mono);font-size:12.5px;font-weight:500}
+.pcard .pch span{font-family:var(--mono);font-size:10.5px;color:#78716C}
+.pcard p{font-size:12.5px;color:#A8A29E;margin:8px 0 0}
+.pcard .outcome{font-family:var(--mono);font-size:11px;color:#34D399;letter-spacing:.04em;margin-top:8px}
+.pcard svg{width:100%;max-width:340px;height:auto}
+
+/* ---------- reports ---------- */
+.rep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.rep-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.rep-grid{grid-template-columns:1fr}}
+.rep{border:1px solid #28231F;border-radius:12px;background:#16120F;padding:14px;cursor:pointer;transition:border-color .2s}
+.rep:hover{border-color:#4A423B}
+.rep svg{width:100%;height:46px;margin-bottom:10px}
+.rep b{display:block;font-size:13px;margin-bottom:2px}
+.rep span{font-family:var(--mono);font-size:10px;color:#78716C;letter-spacing:.06em;text-transform:uppercase}
+
+/* ---------- fleet overview ---------- */
+.ov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.ov-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.ov-grid{grid-template-columns:1fr}}
+.ov{border:1px solid #28231F;border-radius:12px;background:#16120F;padding:14px;min-height:130px}
+.ov h5{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#78716C;font-weight:500;margin-bottom:10px}
+.ov .big{font-size:26px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ov .big em{font-style:normal;color:#78716C;font-size:15px;font-weight:600}
+.ov small{display:block;font-family:var(--mono);font-size:10.5px;color:#78716C;margin-top:4px}
+.ov-mapthumb{border-radius:8px;overflow:hidden;background:#0D131B;border:1px solid #28231F}
+.ov-bars{display:flex;gap:4px;align-items:flex-end;height:38px;margin-top:10px}
+.ov-bars i{flex:1;border-radius:3px 3px 0 0;background:#2A2522}
+.ov-bars i.g{background:#34D399}.ov-bars i.a{background:#FBBF24}.ov-bars i.r{background:#E63329}
+.ov-fuel{display:grid;gap:7px;margin-top:4px}
+.ov-fuel .fl{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:#A8A29E}
+.ov-fuel .fl b{width:56px;font-weight:500;color:#D6D3D1}
+.ov-fuel .bar{flex:1;height:5px;border-radius:3px;background:#28231F;overflow:hidden}
+.ov-fuel .bar i{display:block;height:100%;border-radius:3px;background:#34D399}
+.ov-fuel .bar i.low{background:#FBBF24}
+.ov-alerts{display:grid;gap:7px}
+.ov-alerts .al{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;color:#A8A29E}
+.ov-alerts .al i{width:7px;height:7px;border-radius:50%;flex:none}
+
+/* ---------- feeds cards (light section) ---------- */
+a.feed-card{display:block;cursor:pointer}
+a.feed-card:hover{border-color:var(--red)}
+a.feed-card:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+
+/* ---------- hub diagram ---------- */
+.hub-wrap{display:flex;flex-direction:column;align-items:center}
+.hub-wrap svg{width:100%;max-width:620px;height:auto}
+.equation{
+  font-family:var(--mono);font-size:clamp(11px,1.7vw,14px);letter-spacing:.12em;color:var(--dark-text-2);
+  margin-top:22px;text-align:center;text-transform:uppercase;
+}
+.equation b{color:var(--dark-text);font-weight:500}
+.equation em{font-style:normal;color:var(--red)}
+@keyframes hubPulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.45);opacity:0}}
+.hub-ring{transform-origin:320px 250px;animation:hubPulse 2.6s var(--ease) infinite}
+
+/* ---------- misc ---------- */
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+@media(prefers-reduced-motion:reduce){
+  .dashline,.breathe,.grain::after,.flick,.rec i,.hub-ring{animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<nav class="site" aria-label="Main"><div class="nav-inner">
+<a href="index.html" class="brand" aria-label="Khulu Digital home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/><circle cx="5" cy="16" r="1.5"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/><circle cx="27" cy="16" r="1.5"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/><circle cx="16" cy="27" r="1.4"/></g></svg><span class="lockup">KHULU<em>DIGITAL</em></span></a>
+<div class="nav-links"><a href="why.html">Why Khulu</a><a href="ecu.html">Snap-On ECU</a><a href="protection.html">Protection</a><a href="platform.html">Platform</a><a href="store.html">Store</a><a href="demo.html">Live Demo</a></div>
+<a href="index.html#contact" class="btn btn-red nav-cta">Book a demo</a>
+<button class="nav-burger" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></nav>
+
+<!-- shared SVG defs (SA landmass, reused by map + overview thumb) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<path id="sa-land" fill-rule="evenodd" d="M40,284 L96,292 L150,296 L180,268 L181,200 L181,136 L208,168 L252,196 L300,176 L352,168 L400,168 L436,128 L470,92 L500,56 L552,28 L600,40 L632,36 L650,90 L660,164 L636,186 L640,210 L664,212 L696,216 L676,268 L648,300 L622,336 L580,380 L532,420 L496,460 L450,480 L404,500 L340,508 L264,508 L220,520 L180,533 L150,524 L130,516 L116,512 L112,521 L105,512 L110,500 L117,497 L104,460 L100,440 L84,400 L72,380 L60,340 L56,320 L48,300 Z M460,324 L480,288 L524,284 L556,312 L548,348 L504,368 L476,352 Z"/>
+</defs></svg>
+
+<!-- ============ 1 · HERO ============ -->
+<header class="hero center">
+  <div class="hero-topo" data-topo="light"></div>
+  <div class="wrap">
+    <p class="eyebrow rv">ONE PLATFORM · ONE LOGIN · ONE UI</p>
+    <h1 class="rv rv-d1">The whole fleet on <span class="accent">one screen.</span></h1>
+    <p class="sub rv rv-d2" style="margin-top:18px">Cameras, native engine data, add-on sensors and live tracking land in a single timeline — no portal juggling, no second login, no “check the other system”.</p>
+    <div class="hero-ctas rv rv-d3">
+      <a class="btn btn-red" href="demo.html">Play with the live demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" href="mailto:daniel@khuludigital.com">Book the real thing</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 2 · PLATFORM MOCKUP ============ -->
+<section class="mock-section" aria-label="Interactive platform mockup">
+  <div class="wrap">
+    <div class="browser rv" id="appShell">
+      <div class="browser-bar">
+        <div class="tl-dots"><span></span><span></span><span></span></div>
+        <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>platform.khuludigital.com</div>
+        <div class="bspace"></div>
+      </div>
+
+      <div class="app">
+        <div class="kpis" aria-label="Fleet KPIs">
+          <span class="kpi"><i class="ok"></i>UNITS ONLINE <b>27/29</b></span>
+          <span class="kpi"><i class="warn"></i>ALERTS <b>3</b></span>
+          <span class="kpi">AVG FUEL <b>31.2 ℓ/100</b></span>
+          <span class="kpi"><i class="bad"></i>PROTECTION EVENTS TODAY <b>1</b></span>
+        </div>
+
+        <div class="app-body">
+          <div class="side" role="tablist" aria-label="Platform sections">
+            <button data-view="overview" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Fleet overview</button>
+            <button data-view="map" class="on" role="tab" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6-3-6 3z"/><path d="M9 7v13M15 4v13"/></svg>Live map</button>
+            <button data-view="units" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16V7a1 1 0 0 1 1-1h9v10"/><path d="M13 8h4l3 4v4h-2"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/></svg>Units</button>
+            <button data-view="cameras" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6.5" width="13" height="11" rx="2.5"/><path d="M15.5 10.5l6-3.5v10l-6-3.5"/></svg>Cameras</button>
+            <button data-view="alerts" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17h-19L12 3z"/><path d="M12 10v4M12 17.4v.1"/></svg>Alerts</button>
+            <button data-view="fuel" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16"/><path d="M3 21h14M15 9h2.5a2 2 0 0 1 2 2v6a1.5 1.5 0 0 0 3 0V9.5L19 6"/><path d="M7 7h6v4H7z"/></svg>Fuel</button>
+            <button data-view="protection" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 7.8-8 9-4.6-1.2-8-4.5-8-9V6l8-3z"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>Protection events</button>
+            <button data-view="reports" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Reports</button>
+            <div class="side-foot">KHULU OS v3.2 · SAST</div>
+          </div>
+
+          <div class="main">
+
+            <!-- ===== LIVE MAP (default) ===== -->
+            <div class="pview on" data-view="map">
+              <div class="vtitle"><h4>Live map — South Africa</h4><span class="vmeta" id="mapClock">UPDATED LIVE · SAST</span></div>
+              <div class="map-box" id="mapBox">
+                <svg viewBox="0 0 760 600" id="mapSvg" role="img" aria-label="Live fleet map of South Africa with moving unit markers">
+                  <rect width="760" height="600" fill="#0D131B"/>
+                  <g stroke="#FAFAF9" stroke-opacity=".035" stroke-width="1" id="graticule">
+                    <path d="M80,0V600M160,0V600M240,0V600M320,0V600M400,0V600M480,0V600M560,0V600M640,0V600M720,0V600"/>
+                    <path d="M0,75H760M0,150H760M0,225H760M0,300H760M0,375H760M0,450H760M0,525H760"/>
+                  </g>
+                  <use href="#sa-land" fill="#1D1A17" stroke="#46403A" stroke-width="1.6" stroke-linejoin="round"/>
+                  <text x="60" y="560" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="3" fill="#3D4B5E">ATLANTIC</text>
+                  <text x="600" y="480" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="3" fill="#3D4B5E">INDIAN</text>
+                  <text x="492" y="332" font-family="IBM Plex Mono,monospace" font-size="9" fill="#57534E">LESOTHO</text>
+
+                  <!-- roads: casing + centre -->
+                  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <g stroke="#0C0A09" stroke-width="5" opacity=".9">
+                      <path id="rdN1" d="M117,497 L160,470 L230,452 L284,432 L350,372 L390,340 L428,305 L455,265 L470,235 L490,205 L502,188 L508,170 L525,140 L558,96 L560,50 L557,30"/>
+                      <path id="rdN2" d="M117,497 L150,505 L200,512 L264,508 L290,506 L340,506 L404,500 L450,478 L496,460 L532,420 L585,370 L622,336 L640,300 L655,272 L664,232"/>
+                      <path id="rdN3" d="M502,188 L520,230 L544,268 L555,275 L571,282 L596,324 L622,336"/>
+                    </g>
+                    <g stroke="#6B6560" stroke-width="1.8">
+                      <path d="M117,497 L160,470 L230,452 L284,432 L350,372 L390,340 L428,305 L455,265 L470,235 L490,205 L502,188 L508,170 L525,140 L558,96 L560,50 L557,30"/>
+                      <path d="M117,497 L150,505 L200,512 L264,508 L290,506 L340,506 L404,500 L450,478 L496,460 L532,420 L585,370 L622,336 L640,300 L655,272 L664,232"/>
+                      <path d="M502,188 L520,230 L544,268 L555,275 L571,282 L596,324 L622,336"/>
+                    </g>
+                  </g>
+                  <g font-family="IBM Plex Mono,monospace" font-size="9" fill="#78716C">
+                    <text x="300" y="416">N1</text>
+                    <text x="330" y="525">N2</text>
+                    <text x="528" y="246">N3</text>
+                  </g>
+
+                  <!-- cities -->
+                  <g font-family="IBM Plex Mono,monospace" font-size="10" fill="#A8A29E">
+                    <circle cx="502" cy="188" r="3.2" fill="#D6D3D1"/><text x="488" y="180">JHB</text>
+                    <circle cx="508" cy="170" r="2.6" fill="#D6D3D1"/><text x="516" y="166">PTA</text>
+                    <circle cx="622" cy="336" r="3.2" fill="#D6D3D1"/><text x="632" y="340">DBN</text>
+                    <circle cx="117" cy="497" r="3.2" fill="#D6D3D1"/><text x="92" y="486">CPT</text>
+                    <circle cx="428" cy="305" r="2.6" fill="#D6D3D1"/><text x="398" y="299">BFN</text>
+                    <circle cx="404" cy="500" r="2.6" fill="#D6D3D1"/><text x="396" y="518">PE</text>
+                  </g>
+
+                  <g id="unitLayer"></g>
+                </svg>
+                <div class="map-legend"><span><i style="background:#34D399"></i>DRIVING</span><span><i style="background:#FBBF24"></i>IDLE / PARKED</span><span><i style="background:#E63329"></i>LIMP / ALERT</span></div>
+                <div class="map-pop" id="mapPop" role="dialog" aria-label="Unit detail"></div>
+              </div>
+            </div>
+
+            <!-- ===== UNITS ===== -->
+            <div class="pview" data-view="units">
+              <div class="vtitle"><h4>Units</h4><span class="vmeta">29 PAIRED · 8 SHOWN · FILTER: ACTIVE ROUTES</span></div>
+              <div class="dtable"><table id="unitsTable">
+                <thead><tr><th>Unit</th><th>Driver</th><th>Vehicle</th><th>Speed</th><th>Coolant</th><th>Fuel</th><th>Status</th></tr></thead>
+                <tbody></tbody>
+              </table></div>
+            </div>
+
+            <!-- ===== CAMERAS ===== -->
+            <div class="pview" data-view="cameras">
+              <div class="vtitle"><h4>Cameras — KD-0103 · S. Nkosi</h4><span class="vmeta">4 CHANNELS · H.265 · UPLINK OK</span></div>
+              <div class="cam-grid">
+                <!-- road POV -->
+                <div class="cam grain">
+                  <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-label="Road camera">
+                    <defs>
+                      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A3442"/><stop offset="1" stop-color="#4A4540"/></linearGradient>
+                      <linearGradient id="tar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#23211F"/><stop offset="1" stop-color="#131211"/></linearGradient>
+                    </defs>
+                    <rect width="320" height="92" fill="url(#sky)"/>
+                    <path d="M0,92 L60,80 L120,88 L190,76 L250,86 L320,79 L320,92 Z" fill="#1B1916"/>
+                    <rect y="92" width="320" height="108" fill="#15130F"/>
+                    <polygon points="138,92 182,92 320,200 0,200" fill="url(#tar)"/>
+                    <path d="M138,92 L0,200 M182,92 L320,200" stroke="#8A8378" stroke-width="2"/>
+                    <path class="dashline" d="M160,92 L160,200" stroke="#D9CFA8" stroke-width="3" stroke-dasharray="13 21"/>
+                    <g><rect x="150" y="78" width="20" height="15" rx="2" fill="#2E2A26"/><rect x="152" y="80" width="16" height="6" fill="#3A332E"/><circle cx="154" cy="91" r="1.6" fill="#E63329"/><circle cx="166" cy="91" r="1.6" fill="#E63329"/></g>
+                    <rect x="262" y="60" width="3" height="32" fill="#3A332E"/><rect x="252" y="58" width="24" height="13" rx="2" fill="#1E4B33"/>
+                  </svg>
+                  <div class="hud"><span class="rec"><i></i>REC · CH1 ROAD</span><span class="cam-time"></span></div>
+                  <div class="hud-b"><span>N1 NORTH · KM 412</span><span>82 KM/H</span></div>
+                </div>
+                <!-- driver IR -->
+                <div class="cam grain scanlines">
+                  <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-label="Driver camera, infrared">
+                    <defs><radialGradient id="ir" cx=".5" cy=".42" r=".85"><stop offset="0" stop-color="#0E3D22"/><stop offset="1" stop-color="#03130A"/></radialGradient></defs>
+                    <rect width="320" height="200" fill="url(#ir)"/>
+                    <rect x="14" y="14" width="120" height="80" rx="6" fill="none" stroke="#1E5C36" stroke-width="1.5" opacity=".5"/>
+                    <g class="breathe">
+                      <ellipse cx="160" cy="210" rx="92" ry="86" fill="#1F7A45" opacity=".75"/>
+                      <circle cx="160" cy="106" r="38" fill="#27914F" opacity=".85"/>
+                      <path d="M140,96 q6,-6 13,0 M168,96 q6,-6 13,0" stroke="#0A2E18" stroke-width="3" fill="none" stroke-linecap="round"/>
+                      <path d="M150,124 q10,6 20,0" stroke="#0A2E18" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    </g>
+                    <path d="M250,200 L320,128 L320,200 Z" fill="#0B2A17"/>
+                    <rect x="236" y="20" width="60" height="14" rx="3" fill="#06190E" stroke="#1E5C36" stroke-width="1"/>
+                    <text x="244" y="31" font-family="IBM Plex Mono,monospace" font-size="9" fill="#3FBF74">IR · NIGHT</text>
+                  </svg>
+                  <div class="hud"><span class="rec"><i></i>REC · CH2 DRIVER</span><span class="cam-time"></span></div>
+                  <div class="hud-b"><span>FATIGUE: CLEAR</span><span>DMS ACTIVE</span></div>
+                </div>
+                <!-- load bay -->
+                <div class="cam grain">
+                  <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-label="Load bay camera">
+                    <rect width="320" height="200" fill="#121110"/>
+                    <polygon points="40,0 280,0 320,200 0,200" fill="#1A1816"/>
+                    <path d="M40,0 L0,200 M280,0 L320,200 M70,40 L250,40 M55,100 L265,100" stroke="#2C2823" stroke-width="1.5" fill="none"/>
+                    <ellipse cx="160" cy="22" rx="60" ry="14" fill="#FBE8B8" opacity=".08"/>
+                    <g>
+                      <rect x="92" y="108" width="62" height="58" rx="2" fill="#3A322A" stroke="#4A4036" stroke-width="1.5"/>
+                      <rect x="158" y="116" width="54" height="50" rx="2" fill="#332C25" stroke="#4A4036" stroke-width="1.5"/>
+                      <rect x="120" y="66" width="52" height="44" rx="2" fill="#403729" stroke="#54483A" stroke-width="1.5"/>
+                      <path d="M92,134 h62 M158,140 h54 M120,86 h52" stroke="#C9A35B" stroke-width="2" opacity=".55"/>
+                    </g>
+                    <text x="96" y="158" font-family="IBM Plex Mono,monospace" font-size="8" fill="#6B6055" opacity=".9">FRAGILE</text>
+                  </svg>
+                  <div class="flick"></div>
+                  <div class="hud"><span class="rec"><i></i>REC · CH3 LOAD</span><span class="cam-time"></span></div>
+                  <div class="hud-b"><span>DOOR: SEALED</span><span>LOAD: 78%</span></div>
+                </div>
+                <!-- reversing -->
+                <div class="cam grain">
+                  <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-label="Reversing camera">
+                    <defs><linearGradient id="rv2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B1E22"/><stop offset="1" stop-color="#0E0F10"/></linearGradient></defs>
+                    <rect width="320" height="200" fill="url(#rv2)"/>
+                    <rect y="0" width="320" height="58" fill="#23262B"/>
+                    <rect x="20" y="14" width="90" height="44" fill="#2C3036"/><rect x="206" y="14" width="94" height="44" fill="#2C3036"/>
+                    <path d="M0,58 H320" stroke="#3A3F46" stroke-width="2"/>
+                    <path d="M70,190 L120,120 M250,190 L200,120" stroke="#E63329" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M120,120 L142,88 M200,120 L178,88" stroke="#FBBF24" stroke-width="3.5" stroke-linecap="round"/>
+                    <path d="M142,88 L155,68 M178,88 L165,68" stroke="#34D399" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M160,190 L160,70" stroke="#FAFAF9" stroke-width="1.5" stroke-dasharray="6 8" opacity=".4"/>
+                    <path d="M0,196 Q160,182 320,196" stroke="#0C0A09" stroke-width="9" fill="none"/>
+                    <text x="128" y="48" font-family="IBM Plex Mono,monospace" font-size="9" fill="#A8A29E">DOCK 4</text>
+                  </svg>
+                  <div class="hud"><span class="rec"><i></i>REC · CH4 REVERSE</span><span class="cam-time"></span></div>
+                  <div class="hud-b"><span>GUIDES ON</span><span>1.8 M TO DOCK</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== ALERTS ===== -->
+            <div class="pview" data-view="alerts">
+              <div class="vtitle"><h4>Alerts — last 24 h</h4><span class="vmeta">8 EVENTS · 3 OPEN</span></div>
+              <div class="alerts">
+                <div class="alert-row"><time>14:21</time><div class="ab"><b>Coolant warning → limp engaged</b><span>KD-0417 · T. MOKOENA · N3 VAN REENEN PASS · 109°C RISING</span></div><span class="dp dp-red">CRITICAL</span></div>
+                <div class="alert-row"><time>13:48</time><div class="ab"><b>Harsh braking 0.62g</b><span>KD-0905 · M. SITHOLE · N3 MOOI RIVER TOLL PLAZA</span><span class="clipchip"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg>CLIP · 00:12</span></div><span class="dp dp-amber">WARNING</span></div>
+                <div class="alert-row"><time>12:36</time><div class="ab"><b>TPMS slow leak — trailer axle 2</b><span>KD-0734 · A. BOTHA · 7.1 → 6.4 BAR OVER 3 H</span></div><span class="dp dp-amber">WARNING</span></div>
+                <div class="alert-row"><time>09:12</time><div class="ab"><b>Door opened outside geofence</b><span>KD-0628 · L. DLAMINI · R59 NEAR VEREENIGING · TRAILER REAR</span></div><span class="dp dp-red">CRITICAL</span></div>
+                <div class="alert-row"><time>06:40</time><div class="ab"><b>Refuel +201 ℓ</b><span>KD-0211 · J. VAN WYK · ENGEN 1-STOP MOSSEL BAY · SLIP MATCHED</span></div><span class="dp dp-green">RESOLVED</span></div>
+                <div class="alert-row"><time>05:55</time><div class="ab"><b>Geofence exit — on schedule</b><span>KD-0819 · K. PILLAY · CITY DEEP DEPOT, JHB</span></div><span class="dp dp-grey">INFO</span></div>
+                <div class="alert-row"><time>02:04</time><div class="ab"><b>Fuel drop −64 ℓ while parked</b><span>KD-0103 · DEPOT, CITY DEEP JHB · ENGINE OFF · PROBE CONFIRMED</span></div><span class="dp dp-red">CRITICAL</span></div>
+                <div class="alert-row"><time>22:17</time><div class="ab"><b>Reefer temp excursion −16 → −11°C</b><span>KD-0552 · P. NAIDOO · COLD CHAIN ZONE B · RECOVERED 22:41</span></div><span class="dp dp-amber">WARNING</span></div>
+              </div>
+            </div>
+
+            <!-- ===== FUEL ===== -->
+            <div class="pview" data-view="fuel">
+              <div class="vtitle"><h4>Fuel — KD-0103 tank level, 24 h</h4><span class="vmeta">PROBE: ROD-980 · ±2 ℓ RESOLUTION</span></div>
+              <div class="chartbox">
+                <svg viewBox="0 0 720 280" role="img" aria-label="24 hour fuel level chart showing a 64 litre theft drop at 02:04 and a 201 litre refuel at 06:40">
+                  <!-- night shading -->
+                  <rect x="50" y="30" width="149" height="200" fill="#94A3B8" opacity=".06"/>
+                  <rect x="565" y="30" width="135" height="200" fill="#94A3B8" opacity=".06"/>
+                  <text x="58" y="44" font-family="IBM Plex Mono,monospace" font-size="9" fill="#57534E">DEPOT · NIGHT</text>
+                  <!-- grid -->
+                  <g stroke="#28231F" stroke-width="1">
+                    <path d="M50,30H700M50,80H700M50,130H700M50,180H700M50,230H700"/>
+                  </g>
+                  <g font-family="IBM Plex Mono,monospace" font-size="10" fill="#78716C" text-anchor="end">
+                    <text x="44" y="34">800ℓ</text><text x="44" y="84">700ℓ</text><text x="44" y="134">600ℓ</text><text x="44" y="184">500ℓ</text><text x="44" y="234">400ℓ</text>
+                  </g>
+                  <g font-family="IBM Plex Mono,monospace" font-size="10" fill="#78716C" text-anchor="middle">
+                    <text x="50" y="252">00:00</text><text x="158" y="252">04:00</text><text x="267" y="252">08:00</text><text x="375" y="252">12:00</text><text x="483" y="252">16:00</text><text x="592" y="252">20:00</text><text x="700" y="252">24:00</text>
+                  </g>
+                  <!-- level line -->
+                  <path d="M50,124 L104,124 L107,156 L230,156 L237,55 L267,60 L321,79 L375,96 L429,114 L483,131 L538,147 L565,151 L700,151" fill="none" stroke="#FAFAF9" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M50,124 L104,124 L107,156 L230,156 L237,55 L267,60 L321,79 L375,96 L429,114 L483,131 L538,147 L565,151 L700,151 L700,230 L50,230 Z" fill="#FAFAF9" opacity=".035"/>
+                  <!-- theft annotation -->
+                  <path d="M106,30 V230" stroke="#E63329" stroke-width="1" stroke-dasharray="4 5"/>
+                  <circle cx="107" cy="156" r="4" fill="#E63329"/>
+                  <rect x="116" y="160" width="128" height="20" rx="5" fill="rgba(230,51,41,.14)"/>
+                  <text x="124" y="174" font-family="IBM Plex Mono,monospace" font-size="10" fill="#FF7A72">−64 ℓ · 02:04 · DEPOT</text>
+                  <!-- refuel annotation -->
+                  <path d="M237,30 V230" stroke="#34D399" stroke-width="1" stroke-dasharray="4 5"/>
+                  <circle cx="237" cy="55" r="4" fill="#34D399"/>
+                  <rect x="246" y="38" width="142" height="20" rx="5" fill="rgba(52,211,153,.12)"/>
+                  <text x="254" y="52" font-family="IBM Plex Mono,monospace" font-size="10" fill="#34D399">+201 ℓ · 06:40 · REFUEL</text>
+                </svg>
+                <div class="chart-legend">
+                  <span><i style="background:#FAFAF9"></i>TANK LEVEL (ℓ)</span>
+                  <span><i style="background:#E63329"></i>UNEXPLAINED DROP</span>
+                  <span><i style="background:#34D399"></i>VERIFIED REFUEL</span>
+                  <span><i style="background:#94A3B8;opacity:.5"></i>PARKED / NIGHT</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== PROTECTION EVENTS ===== -->
+            <div class="pview" data-view="protection">
+              <div class="vtitle"><h4>Protection events</h4><span class="vmeta">OEM-SPEC THRESHOLDS · LAST 7 DAYS</span></div>
+              <div class="pcards">
+                <div class="pcard">
+                  <div class="pch"><b>KD-0417 · Powerstar 2628</b><span>TODAY 14:21 · N3 VAN REENEN PASS</span><span class="dp dp-red">DERATE ACTIVE</span></div>
+                  <svg viewBox="0 0 340 56" aria-label="Coolant temperature sparkline rising into red then recovering">
+                    <path d="M8,40 L60,39 L96,33" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M96,33 L138,21" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M138,21 L172,10 L206,11" fill="none" stroke="#E63329" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M206,11 L262,28 L330,38" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M172,4 V52" stroke="#E63329" stroke-width="1" stroke-dasharray="3 4"/>
+                    <text x="178" y="50" font-family="IBM Plex Mono,monospace" font-size="8" fill="#FF7A72">DERATE 112°C</text>
+                  </svg>
+                  <p>Coolant climbed 96 → 112°C on the long pull. Torque limited to OEM limp map before the head gasket ever saw danger.</p>
+                  <div class="outcome">→ DRIVER EASED OFF. ENGINE SAVED.</div>
+                </div>
+                <div class="pcard">
+                  <div class="pch"><b>KD-0103 · Powerstar 2642</b><span>TUE 08:02 · DEPOT IDLE, CITY DEEP</span><span class="dp dp-green">RECOVERED</span></div>
+                  <svg viewBox="0 0 340 56" aria-label="Oil pressure sparkline dipping then recovering">
+                    <path d="M8,18 L84,19 L120,22" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M120,22 L150,34" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M150,34 L172,44 L190,42" fill="none" stroke="#E63329" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M190,42 L240,24 L330,18" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M172,4 V52" stroke="#E63329" stroke-width="1" stroke-dasharray="3 4"/>
+                    <text x="178" y="14" font-family="IBM Plex Mono,monospace" font-size="8" fill="#FF7A72">OIL 0.9 BAR</text>
+                  </svg>
+                  <p>Oil pressure dipped at cold idle. Shutdown countdown warned the yard, driver lifted revs, pressure recovered in 40 s.</p>
+                  <div class="outcome">→ SHUTDOWN AVOIDED. BEARINGS SAVED.</div>
+                </div>
+                <div class="pcard">
+                  <div class="pch"><b>KD-0628 · Powerstar 2642</b><span>MON 11:47 · N1 NEAR POLOKWANE</span><span class="dp dp-green">CLOSED</span></div>
+                  <svg viewBox="0 0 340 56" aria-label="Intake temperature sparkline rising into amber and red then recovering">
+                    <path d="M8,38 L70,36 L110,30" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M110,30 L156,18" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M156,18 L186,9 L210,12" fill="none" stroke="#E63329" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M210,12 L270,30 L330,40" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M186,4 V52" stroke="#E63329" stroke-width="1" stroke-dasharray="3 4"/>
+                    <text x="192" y="50" font-family="IBM Plex Mono,monospace" font-size="8" fill="#FF7A72">CRAWL MODE</text>
+                  </svg>
+                  <p>Intake + coolant both trending hot at 38°C ambient. ECU pulled torque and held a safe crawl until temps fell.</p>
+                  <div class="outcome">→ LIMPED TO SHADE. ZERO DAMAGE.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== REPORTS ===== -->
+            <div class="pview" data-view="reports">
+              <div class="vtitle"><h4>Reports</h4><span class="vmeta">SCHEDULED · PDF / CSV · EMAILED 06:00 SAST</span></div>
+              <div class="rep-grid">
+                <div class="rep" tabindex="0">
+                  <svg viewBox="0 0 120 46"><path d="M6,38 L26,30 L46,33 L66,22 L86,18 L114,8" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/><path d="M6,42 H114" stroke="#28231F" stroke-width="1"/></svg>
+                  <b>Fleet condition</b><span>Engine health · 29 units</span>
+                </div>
+                <div class="rep" tabindex="0">
+                  <svg viewBox="0 0 120 46"><path d="M6,24 H114" stroke="#28231F" stroke-width="1"/><rect x="12" y="24" width="9" height="12" fill="#E63329"/><rect x="28" y="14" width="9" height="10" fill="#34D399"/><rect x="44" y="24" width="9" height="6" fill="#E63329"/><rect x="60" y="10" width="9" height="14" fill="#34D399"/><rect x="76" y="24" width="9" height="15" fill="#E63329"/><rect x="92" y="17" width="9" height="7" fill="#34D399"/></svg>
+                  <b>Fuel variance</b><span>Probe vs slips · ℓ &amp; ZAR</span>
+                </div>
+                <div class="rep" tabindex="0">
+                  <svg viewBox="0 0 120 46"><rect x="6" y="8" width="86" height="6" rx="3" fill="#34D399"/><rect x="6" y="20" width="64" height="6" rx="3" fill="#34D399" opacity=".7"/><rect x="6" y="32" width="40" height="6" rx="3" fill="#FBBF24"/></svg>
+                  <b>Driver scorecard</b><span>Braking · idling · speed</span>
+                </div>
+                <div class="rep" tabindex="0">
+                  <svg viewBox="0 0 120 46"><rect x="6" y="14" width="108" height="14" fill="#34D399" opacity=".12"/><path d="M6,21 L30,20 L50,23 L66,21 L82,26 L98,22 L114,21" fill="none" stroke="#60A5FA" stroke-width="2.5" stroke-linecap="round"/></svg>
+                  <b>Cold chain</b><span>Reefer temps vs band</span>
+                </div>
+                <div class="rep" tabindex="0">
+                  <svg viewBox="0 0 120 46"><g><rect x="12" y="20" width="10" height="18" fill="#34D399"/><rect x="12" y="12" width="10" height="8" fill="#28231F"/><rect x="32" y="14" width="10" height="24" fill="#34D399"/><rect x="32" y="9" width="10" height="5" fill="#28231F"/><rect x="52" y="24" width="10" height="14" fill="#34D399"/><rect x="52" y="12" width="10" height="12" fill="#28231F"/><rect x="72" y="16" width="10" height="22" fill="#34D399"/><rect x="72" y="10" width="10" height="6" fill="#28231F"/><rect x="92" y="28" width="10" height="10" fill="#FBBF24"/><rect x="92" y="14" width="10" height="14" fill="#28231F"/></g></svg>
+                  <b>Utilisation</b><span>Hours worked vs parked</span>
+                </div>
+                <div class="rep" tabindex="0">
+                  <svg viewBox="0 0 120 46"><g fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="14" r="6" stroke="#34D399"/><path d="M13.5,14 l2,2 3.5,-4" stroke="#34D399"/><circle cx="16" cy="32" r="6" stroke="#34D399"/><path d="M13.5,32 l2,2 3.5,-4" stroke="#34D399"/><circle cx="62" cy="14" r="6" stroke="#FBBF24"/><path d="M62,10.5 v4 l2.5,2" stroke="#FBBF24"/><circle cx="62" cy="32" r="6" stroke="#E63329"/><path d="M62,28.5 v4 M62,35.4 v.1" stroke="#E63329"/></g><path d="M30,14 H50 M30,32 H50 M76,14 H110 M76,32 H110" stroke="#28231F" stroke-width="3" stroke-linecap="round"/></svg>
+                  <b>Service due</b><span>Hours-based, not guessed</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== FLEET OVERVIEW ===== -->
+            <div class="pview" data-view="overview">
+              <div class="vtitle"><h4>Fleet overview</h4><span class="vmeta">THU 11 JUN · 14:32 SAST</span></div>
+              <div class="ov-grid">
+                <div class="ov">
+                  <h5>Live positions</h5>
+                  <div class="ov-mapthumb"><svg viewBox="0 0 760 600" aria-hidden="true"><rect width="760" height="600" fill="#0D131B"/><use href="#sa-land" fill="#1D1A17" stroke="#46403A" stroke-width="2"/><circle cx="350" cy="372" r="9" fill="#34D399"/><circle cx="290" cy="506" r="9" fill="#34D399"/><circle cx="555" cy="275" r="11" fill="#E63329"/><circle cx="471" cy="232" r="9" fill="#FBBF24"/><circle cx="585" cy="370" r="9" fill="#34D399"/><circle cx="525" cy="140" r="9" fill="#34D399"/></svg></div>
+                  <small>8 ON ROUTE · 19 IN DEPOT · 2 OFFLINE</small>
+                </div>
+                <div class="ov">
+                  <h5>Units online</h5>
+                  <div class="big">27<em>/29</em></div>
+                  <div class="ov-bars" aria-hidden="true"><i class="g" style="height:70%"></i><i class="g" style="height:92%"></i><i class="g" style="height:60%"></i><i class="a" style="height:44%"></i><i class="g" style="height:84%"></i><i class="r" style="height:30%"></i><i class="g" style="height:76%"></i><i class="g" style="height:58%"></i><i class="g" style="height:88%"></i><i class="a" style="height:40%"></i></div>
+                  <small>2 OFFLINE: WORKSHOP, BLOEMFONTEIN</small>
+                </div>
+                <div class="ov">
+                  <h5>Open alerts</h5>
+                  <div class="big">3</div>
+                  <div class="ov-alerts" style="margin-top:8px">
+                    <div class="al"><i style="background:#E63329"></i>KD-0417 · COOLANT / LIMP</div>
+                    <div class="al"><i style="background:#E63329"></i>KD-0103 · FUEL −64ℓ 02:04</div>
+                    <div class="al"><i style="background:#FBBF24"></i>KD-0734 · TPMS AXLE 2</div>
+                  </div>
+                </div>
+                <div class="ov">
+                  <h5>Fuel on board</h5>
+                  <div class="ov-fuel">
+                    <div class="fl"><b>KD-0103</b><span class="bar"><i style="width:64%"></i></span>64%</div>
+                    <div class="fl"><b>KD-0211</b><span class="bar"><i style="width:71%"></i></span>71%</div>
+                    <div class="fl"><b>KD-0417</b><span class="bar"><i class="low" style="width:41%"></i></span>41%</div>
+                    <div class="fl"><b>KD-0552</b><span class="bar"><i style="width:58%"></i></span>58%</div>
+                    <div class="fl"><b>KD-0628</b><span class="bar"><i class="low" style="width:49%"></i></span>49%</div>
+                    <div class="fl"><b>KD-0905</b><span class="bar"><i style="width:83%"></i></span>83%</div>
+                  </div>
+                </div>
+                <div class="ov">
+                  <h5>Protection</h5>
+                  <div class="big">1 <em>EVENT TODAY</em></div>
+                  <small style="margin-top:8px">KD-0417 DERATE ACTIVE · VAN REENEN</small>
+                  <small>7-DAY: 3 EVENTS · 0 ENGINES LOST</small>
+                  <small>EST. AVOIDED COST: R 487 000</small>
+                </div>
+                <div class="ov">
+                  <h5>Cameras</h5>
+                  <div class="big">14<em>/16</em></div>
+                  <small style="margin-top:8px">2 CH OFFLINE: KD-0118 (WORKSHOP)</small>
+                  <small>CLIPS TODAY: 6 · STORAGE 62%</small>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.main -->
+        </div><!-- /.app-body -->
+      </div><!-- /.app -->
+    </div><!-- /.browser -->
+  </div>
+</section>
+
+<!-- ============ 3 · EVERYTHING FEEDS THE SAME TIMELINE ============ -->
+<section>
+  <div class="wrap">
+    <div class="center rv">
+      <p class="eyebrow">NO SECOND PORTAL · EVER</p>
+      <h2>Everything feeds the <span class="accent">same timeline.</span></h2>
+      <p class="sub">Every camera, probe and sensor you add snaps into the same incident timeline as the engine data — one searchable history per truck.</p>
+    </div>
+    <div class="grid-3 gap-top" data-stagger>
+      <a class="card feed-card tilt" href="store.html" aria-label="Road-facing camera — view in store">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6.5" width="13" height="11" rx="2.5"/><path d="M15.5 10.5l6-3.5v10l-6-3.5"/></svg></div>
+        <h3>Road-facing camera</h3>
+        <p>Every harsh-brake and collision claim arrives with its own video evidence — clipped, time-stamped, already attached.</p>
+        <div class="feeds">FEEDS → INCIDENT TIMELINE · LIVE VIEW</div>
+      </a>
+      <a class="card feed-card tilt" href="store.html" aria-label="Driver-facing camera — view in store">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="10" r="2.5"/><path d="M7.5 17c.8-2 2.4-3 4.5-3s3.7 1 4.5 3"/></svg></div>
+        <h3>Driver-facing camera</h3>
+        <p>Fatigue and distraction flagged before the lane departure — night-capable IR that coaches drivers instead of ambushing them.</p>
+        <div class="feeds">FEEDS → INCIDENT TIMELINE · DRIVER SCORECARD</div>
+      </a>
+      <a class="card feed-card tilt" href="store.html" aria-label="Load and reversing cameras — view in store">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16V7a1 1 0 0 1 1-1h9v10"/><path d="M13 8h4l3 4v4h-2"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/><path d="M6 9.5h4"/></svg></div>
+        <h3>Load &amp; reversing cameras</h3>
+        <p>See the load bay and the dock from the same screen as the map — disputes about damaged cargo end in one click.</p>
+        <div class="feeds">FEEDS → INCIDENT TIMELINE · LIVE VIEW</div>
+      </a>
+      <a class="card feed-card tilt" href="store.html" aria-label="Fuel probes — view in store">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16"/><path d="M3 21h14M15 9h2.5a2 2 0 0 1 2 2v6a1.5 1.5 0 0 0 3 0V9.5L19 6"/><path d="M7 7h6v4H7z"/></svg></div>
+        <h3>Fuel probes</h3>
+        <p>A −64 ℓ drop at 02:04 in your own depot stops being a rumour — it becomes a timestamped alert with a location.</p>
+        <div class="feeds">FEEDS → INCIDENT TIMELINE · FUEL VARIANCE</div>
+      </a>
+      <a class="card feed-card tilt" href="store.html" aria-label="Temperature probes — view in store">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 9v6"/></svg></div>
+        <h3>Temperature probes</h3>
+        <p>Cold-chain proof per trip, per zone — excursions alert in minutes, not when the customer rejects the load.</p>
+        <div class="feeds">FEEDS → INCIDENT TIMELINE · COLD CHAIN REPORT</div>
+      </a>
+      <a class="card feed-card tilt" href="store.html" aria-label="Door and cargo sensors — view in store">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M14 3v18M17 11.5v1"/></svg></div>
+        <h3>Door &amp; cargo sensors</h3>
+        <p>A trailer door opening outside a geofence pages your controller while the truck is still in sight of it.</p>
+        <div class="feeds">FEEDS → INCIDENT TIMELINE · GEOFENCE ALERTS</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 · HUB DIAGRAM ============ -->
+<section class="dark-band">
+  <div class="wrap center">
+    <p class="eyebrow rv">THE HUB</p>
+    <h2 class="rv rv-d1">One login. Six feeds. <span class="accent">Zero juggling.</span></h2>
+    <p class="sub rv rv-d2" style="margin:0 auto 40px">The snap-on ECU is the hub. Everything you bolt on talks to it — and it talks to one screen.</p>
+    <div class="hub-wrap rv rv-d2">
+      <svg viewBox="0 0 640 500" role="img" aria-label="Hub diagram: ECU at the centre with GPS, cameras, fuel, temperature, doors and load sensors orbiting it">
+        <defs>
+          <radialGradient id="hubGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E63329" stop-opacity=".22"/><stop offset="1" stop-color="#E63329" stop-opacity="0"/></radialGradient>
+        </defs>
+        <!-- orbit -->
+        <circle cx="320" cy="250" r="185" fill="none" stroke="#2A2522" stroke-width="1.5" stroke-dasharray="4 7"/>
+        <!-- spokes -->
+        <g stroke="#3A332E" stroke-width="1.5" stroke-dasharray="3 6">
+          <path d="M320,65 L320,250"/><path d="M480,158 L320,250"/><path d="M480,342 L320,250"/>
+          <path d="M320,435 L320,250"/><path d="M160,342 L320,250"/><path d="M160,158 L320,250"/>
+        </g>
+        <!-- traveling pulses -->
+        <g fill="#E63329">
+          <circle r="3.5"><animateMotion dur="2.4s" repeatCount="indefinite" path="M320,65 L320,250"/></circle>
+          <circle r="3.5"><animateMotion dur="2.8s" begin=".4s" repeatCount="indefinite" path="M480,158 L320,250"/></circle>
+          <circle r="3.5"><animateMotion dur="2.2s" begin=".9s" repeatCount="indefinite" path="M480,342 L320,250"/></circle>
+          <circle r="3.5"><animateMotion dur="3s" begin="1.3s" repeatCount="indefinite" path="M320,435 L320,250"/></circle>
+          <circle r="3.5"><animateMotion dur="2.6s" begin=".6s" repeatCount="indefinite" path="M160,342 L320,250"/></circle>
+          <circle r="3.5"><animateMotion dur="2.3s" begin="1.7s" repeatCount="indefinite" path="M160,158 L320,250"/></circle>
+        </g>
+        <!-- centre node -->
+        <circle cx="320" cy="250" r="120" fill="url(#hubGlow)"/>
+        <circle class="hub-ring" cx="320" cy="250" r="58" fill="none" stroke="#E63329" stroke-width="1" opacity=".5"/>
+        <circle cx="320" cy="250" r="56" fill="#1C1917" stroke="#E63329" stroke-width="2"/>
+        <text x="320" y="246" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="800" font-size="20" fill="#FAFAF9">ECU</text>
+        <text x="320" y="266" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" letter-spacing="2" fill="#A8A29E">ONE LOGIN</text>
+        <!-- satellites -->
+        <g font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="1.5" text-anchor="middle">
+          <g><circle cx="320" cy="65" r="26" fill="#16120F" stroke="#3A332E" stroke-width="1.5"/><path d="M320,55 a8,8 0 0 1 8,8 c0,6 -8,13 -8,13 s-8,-7 -8,-13 a8,8 0 0 1 8,-8z" fill="none" stroke="#FAFAF9" stroke-width="1.8"/><circle cx="320" cy="63" r="2.4" fill="#E63329"/><text x="320" y="26" fill="#A8A29E">GPS</text></g>
+          <g><circle cx="480" cy="158" r="26" fill="#16120F" stroke="#3A332E" stroke-width="1.5"/><g transform="translate(468,149)" fill="none" stroke="#FAFAF9" stroke-width="1.8" stroke-linejoin="round"><rect x="0" y="3" width="14" height="12" rx="2.5"/><path d="M14 7.5l8-4.5v12l-8-4.5"/></g><text x="524" y="136" fill="#A8A29E">CAMERAS</text></g>
+          <g><circle cx="480" cy="342" r="26" fill="#16120F" stroke="#3A332E" stroke-width="1.5"/><g transform="translate(470,331)" fill="none" stroke="#FAFAF9" stroke-width="1.8" stroke-linecap="round"><path d="M2 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16M0 21h15M13 9h2a2 2 0 0 1 2 2v6a1.4 1.4 0 0 0 2.8 0V9.4L17.5 6"/><path d="M4.5 6.5h6v4h-6z"/></g><text x="524" y="372" fill="#A8A29E">FUEL</text></g>
+          <g><circle cx="320" cy="435" r="26" fill="#16120F" stroke="#3A332E" stroke-width="1.5"/><g transform="translate(312,424)" fill="none" stroke="#FAFAF9" stroke-width="1.8" stroke-linecap="round"><path d="M10 12.5V4a2 2 0 0 0-4 0v8.5a4 4 0 1 0 4 0z"/><path d="M8 7v6"/></g><text x="320" y="486" fill="#A8A29E">TEMP</text></g>
+          <g><circle cx="160" cy="342" r="26" fill="#16120F" stroke="#3A332E" stroke-width="1.5"/><g transform="translate(151,331)" fill="none" stroke="#FAFAF9" stroke-width="1.8" stroke-linejoin="round"><rect x="1" y="1" width="16" height="20" rx="2"/><path d="M11 1v20M14 10v1.5"/></g><text x="116" y="372" fill="#A8A29E">DOORS</text></g>
+          <g><circle cx="160" cy="158" r="26" fill="#16120F" stroke="#3A332E" stroke-width="1.5"/><g transform="translate(149,147)" fill="none" stroke="#FAFAF9" stroke-width="1.8" stroke-linejoin="round"><path d="M11 1l10 5v10l-10 5L1 16V6l10-5z"/><path d="M1 6l10 5 10-5M11 11v10"/></g><text x="116" y="136" fill="#A8A29E">LOAD</text></g>
+        </g>
+      </svg>
+      <p class="equation rv rv-d3"><b>TRACKING</b> + <b>CAMERAS</b> + <b>SENSORS</b> + <b>ENGINE DATA</b> = <em>ONE UI</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 · CTA BAND ============ -->
+<section class="cta-band" style="padding:0">
+  <div class="hero-topo" data-topo="dark"></div>
+  <div class="cta-inner">
+    <p class="eyebrow rv">ONE PLATFORM · ONE LOGIN · ONE UI</p>
+    <h2 class="rv rv-d1">Stop juggling portals.</h2>
+    <p class="sub rv rv-d2">See your trucks, your cameras and your engines in one place — on your fleet, not a slideshow.</p>
+    <div class="cta-actions rv rv-d3">
+      <a class="btn btn-red" href="mailto:daniel@khuludigital.com">Book a demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" style="border-color:#3A332E;color:#FAFAF9" href="demo.html">Build your fleet in the demo</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site"><div class="wrap foot">
+<a href="index.html" class="brand" aria-label="Khulu Digital home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/><circle cx="5" cy="16" r="1.5"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/><circle cx="27" cy="16" r="1.5"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/><circle cx="16" cy="27" r="1.4"/></g></svg><span class="lockup">KHULU<em>DIGITAL</em></span></a>
+<div class="foot-links"><a href="why.html">Why Khulu</a><a href="ecu.html">Snap-On ECU</a><a href="protection.html">Protection</a><a href="platform.html">Platform</a><a href="store.html">Store</a><a href="demo.html">Live Demo</a><a href="index.html#contact">Contact</a></div>
+<p>© <span data-year></span> Khulu Digital. Truck telematics, cameras &amp; sensors — one platform.</p>
+</div></footer>
+
+<script src="assets/khulu.js"></script>
+<script>
+(function () {
+  'use strict';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ================= data ================= */
+  const ROUTES = {
+    n1: [[117,497],[160,470],[230,452],[284,432],[350,372],[390,340],[428,305],[455,265],[470,235],[490,205],[502,188],[508,170],[525,140],[558,96],[560,50],[557,30]],
+    n2: [[117,497],[150,505],[200,512],[264,508],[290,506],[340,506],[404,500],[450,478],[496,460],[532,420],[585,370],[622,336],[640,300],[655,272],[664,232]],
+    n3: [[502,188],[520,230],[544,268],[555,275],[571,282],[596,324],[622,336]]
+  };
+  function buildRoute(pts) {
+    const cum = [0];
+    let total = 0;
+    for (let i = 1; i < pts.length; i++) {
+      total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+      cum.push(total);
+    }
+    return { pts, cum, total };
+  }
+  const R = {}; for (const k in ROUTES) R[k] = buildRoute(ROUTES[k]);
+
+  // status: color + pill class
+  const STATUS = {
+    DRIVING: { col: '#34D399', dp: 'dp-green' },
+    IDLING:  { col: '#FBBF24', dp: 'dp-amber' },
+    PARKED:  { col: '#FBBF24', dp: 'dp-grey' },
+    LIMP:    { col: '#E63329', dp: 'dp-red' }
+  };
+  const UNITS = [
+    { id:'KD-0103', driver:'S. Nkosi',   veh:'Powerstar 2642 · Euro 2', route:'n1', frac:.30, dir: 1, spd:6.0, kmh:82, cool:89,  fuel:64, st:'DRIVING', loc:'N1 · Beaufort West' },
+    { id:'KD-0211', driver:'J. van Wyk', veh:'FAW 28.380FT',            route:'n2', frac:.28, dir: 1, spd:5.6, kmh:78, cool:86,  fuel:71, st:'DRIVING', loc:'N2 · Garden Route' },
+    { id:'KD-0417', driver:'T. Mokoena', veh:'Powerstar 2628 · Euro 2', route:'n3', frac:.52, dir: 1, spd:0.9, kmh:24, cool:109, fuel:41, st:'LIMP',    loc:'N3 · Van Reenen Pass' },
+    { id:'KD-0552', driver:'P. Naidoo',  veh:'Scania G460',             route:'n3', frac:.12, dir: 1, spd:6.6, kmh:91, cool:84,  fuel:58, st:'DRIVING', loc:'N3 · Heidelberg' },
+    { id:'KD-0628', driver:'L. Dlamini', veh:'Powerstar 2642 · Euro 2', route:'n1', frac:.82, dir: 1, spd:0,   kmh:0,  cool:76,  fuel:49, st:'IDLING',  loc:'N1 · Polokwane weighbridge' },
+    { id:'KD-0734', driver:'A. Botha',   veh:'Mercedes Actros 2645',    route:'n2', frac:.72, dir:-1, spd:6.1, kmh:84, cool:88,  fuel:77, st:'DRIVING', loc:'N2 · South Coast' },
+    { id:'KD-0819', driver:'K. Pillay',  veh:'Powerstar VX 2646 · Euro 2', route:'n1', frac:.58, dir:-1, spd:5.4, kmh:75, cool:87, fuel:66, st:'DRIVING', loc:'N1 · Kroonstad' },
+    { id:'KD-0905', driver:'M. Sithole', veh:'UD Quester GWE 440',      route:'n2', frac:.78, dir: 1, spd:0,   kmh:0,  cool:62,  fuel:83, st:'PARKED',  loc:'Durban harbour staging' }
+  ];
+  UNITS.forEach(u => { u.dist = R[u.route].total * u.frac; });
+
+  function posAt(route, d) {
+    const r = R[route];
+    d = Math.max(0, Math.min(r.total, d));
+    let i = 1;
+    while (i < r.cum.length - 1 && r.cum[i] < d) i++;
+    const a = r.pts[i - 1], b = r.pts[i];
+    const seg = r.cum[i] - r.cum[i - 1] || 1;
+    const t = (d - r.cum[i - 1]) / seg;
+    return {
+      x: a[0] + (b[0] - a[0]) * t,
+      y: a[1] + (b[1] - a[1]) * t,
+      ang: Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI + 90
+    };
+  }
+
+  /* ================= map markers ================= */
+  const NS = 'http://www.w3.org/2000/svg';
+  const layer = document.getElementById('unitLayer');
+  const mapBox = document.getElementById('mapBox');
+  const pop = document.getElementById('mapPop');
+
+  UNITS.forEach((u, i) => {
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'unit');
+    g.setAttribute('tabindex', '0');
+    g.setAttribute('role', 'button');
+    g.setAttribute('aria-label', u.id + ' ' + u.driver + ' ' + u.st);
+    const col = STATUS[u.st].col;
+    const limp = u.st === 'LIMP'
+      ? '<circle r="7" fill="none" stroke="#E63329" stroke-width="1.5"><animate attributeName="r" values="7;22" dur="1.3s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;0" dur="1.3s" repeatCount="indefinite"/></circle>'
+      : '';
+    g.innerHTML = limp +
+      '<circle class="uhit" r="11" fill="rgba(0,0,0,.01)" stroke="none"/>' +
+      '<g class="arrow"><path d="M0,-7.5 L5.5,6.5 L0,3.2 L-5.5,6.5 Z" fill="' + col + '" stroke="#0C0A09" stroke-width="1"/></g>';
+    layer.appendChild(g);
+    u.el = g;
+    u.arrow = g.querySelector('.arrow');
+    const show = (ev) => { ev.stopPropagation(); openPop(u); };
+    g.addEventListener('click', show);
+    g.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openPop(u); } });
+  });
+
+  function place(u) {
+    const p = posAt(u.route, u.dist);
+    u.x = p.x; u.y = p.y;
+    const rot = u.spd > 0 ? p.ang + (u.dir < 0 ? 180 : 0) : 0;
+    u.el.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ',' + p.y.toFixed(1) + ')');
+    u.arrow.setAttribute('transform', 'rotate(' + rot.toFixed(1) + ')');
+  }
+  UNITS.forEach(place);
+
+  let popUnit = null;
+  function openPop(u) {
+    popUnit = u;
+    const s = STATUS[u.st];
+    pop.innerHTML =
+      '<div class="ph"><b>' + u.id + '</b><span class="dp ' + s.dp + '">' + u.st + '</span></div>' +
+      '<dl><dt>Driver</dt><dd>' + u.driver + '</dd>' +
+      '<dt>Speed</dt><dd>' + u.kmh + ' km/h</dd>' +
+      '<dt>Coolant</dt><dd>' + u.cool + '°C</dd>' +
+      '<dt>Fuel</dt><dd>' + u.fuel + '%</dd></dl>' +
+      '<dl style="margin-top:6px"><dt>Where</dt><dd style="font-size:10.5px">' + u.loc + '</dd></dl>';
+    pop.classList.add('show');
+    positionPop();
+  }
+  function positionPop() {
+    if (!popUnit) return;
+    const topPct = popUnit.y / 600 * 100;
+    pop.classList.toggle('below', topPct < 34);
+    pop.style.left = Math.min(86, Math.max(14, popUnit.x / 760 * 100)) + '%';
+    pop.style.top = topPct + '%';
+  }
+  document.getElementById('mapSvg').addEventListener('click', () => { popUnit = null; pop.classList.remove('show'); });
+
+  /* ================= rAF movement (paused when offscreen / other view) ================= */
+  let appVisible = true, currentView = 'map', rafId = null, lastT = 0;
+  function tick(t) {
+    rafId = null;
+    if (!appVisible || currentView !== 'map') return;
+    const dt = Math.min(.1, (t - lastT) / 1000 || 0);
+    lastT = t;
+    UNITS.forEach(u => {
+      if (u.spd <= 0) return;
+      u.dist += u.spd * u.dir * dt;
+      const total = R[u.route].total;
+      if (u.dist >= total) { u.dist = total; u.dir = -1; }
+      if (u.dist <= 0) { u.dist = 0; u.dir = 1; }
+      place(u);
+    });
+    positionPop();
+    rafId = requestAnimationFrame(tick);
+  }
+  function ensureLoop() {
+    if (reduced) return;
+    if (appVisible && currentView === 'map' && rafId === null) {
+      lastT = performance.now();
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+  new IntersectionObserver(es => {
+    es.forEach(e => { appVisible = e.isIntersecting; ensureLoop(); });
+  }, { threshold: .05 }).observe(document.getElementById('appShell'));
+
+  /* ================= camera clock ================= */
+  let camTimer = null;
+  function tickCams() {
+    const d = new Date();
+    const p = n => String(n).padStart(2, '0');
+    const s = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds()) + ' SAST';
+    document.querySelectorAll('.cam-time').forEach(el => el.textContent = s);
+  }
+  function setCamClock(on) {
+    if (on && !camTimer) { tickCams(); camTimer = setInterval(tickCams, 1000); }
+    if (!on && camTimer) { clearInterval(camTimer); camTimer = null; }
+  }
+
+  /* ================= units table (rendered from live data) ================= */
+  const tbody = document.querySelector('#unitsTable tbody');
+  tbody.innerHTML = UNITS.map(u => {
+    const s = STATUS[u.st];
+    const fcol = u.fuel < 50 ? '#FBBF24' : '#34D399';
+    return '<tr><td>' + u.id + '</td><td>' + u.driver + '</td><td>' + u.veh + '</td>' +
+      '<td>' + u.kmh + ' km/h</td><td>' + (u.cool >= 105 ? '<span style="color:#FF7A72">' + u.cool + '°C</span>' : u.cool + '°C') + '</td>' +
+      '<td><span class="fuelbar"><i style="width:' + u.fuel + '%;background:' + fcol + '"></i></span>' + u.fuel + '%</td>' +
+      '<td><span class="dp ' + s.dp + '">' + u.st + '</span></td></tr>';
+  }).join('');
+
+  /* ================= view switching ================= */
+  const sideBtns = document.querySelectorAll('.side button[data-view]');
+  const views = document.querySelectorAll('.pview');
+  function setView(name) {
+    currentView = name;
+    sideBtns.forEach(b => {
+      const on = b.dataset.view === name;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    views.forEach(v => v.classList.toggle('on', v.dataset.view === name));
+    setCamClock(name === 'cameras');
+    ensureLoop();
+  }
+  sideBtns.forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+
+  ensureLoop();
+  if (reduced) { UNITS.forEach(place); }
+})();
+</script>
+</body>
+</html>
