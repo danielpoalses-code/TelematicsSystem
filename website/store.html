@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Store — Khulu Digital</title>
+<meta name="description" content="The Khulu ecosystem store — snap-on ECU, cameras, fuel probes, TPMS, load and temperature sensors. Every add-on clips into one platform, one login. Indicative pricing excl. VAT, formal quote on request." />
+<link rel="icon" href="assets/brand/khulu-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/khulu.css" />
+<style>
+/* ============ STORE PAGE ============ */
+.hero.compact{padding:clamp(128px,15vh,168px) 0 clamp(30px,4.5vw,48px)}
+#store{padding-top:clamp(18px,3vw,34px)}
+
+/* ---- layout ---- */
+.store-grid{display:grid;grid-template-columns:232px minmax(0,1fr);gap:34px;align-items:start}
+.rail{position:sticky;top:96px;display:flex;flex-direction:column;gap:26px;max-height:calc(100vh - 118px);overflow:auto;padding-right:4px}
+.rail-h{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+.cats{display:flex;flex-direction:column;gap:2px}
+.filter-btn{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;padding:10px 14px;border-radius:12px;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;text-align:left;transition:background .2s,color .2s}
+.filter-btn:hover{background:var(--bg-soft);color:var(--ink)}
+.filter-btn.on{background:var(--red-soft);color:var(--red)}
+.filter-btn .ct{font-family:var(--mono);font-size:11px;color:var(--ink-3);transition:color .2s}
+.filter-btn.on .ct{color:var(--red)}
+.ck-list{display:flex;flex-direction:column;gap:11px}
+label.ck{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:var(--ink-2);cursor:pointer}
+label.ck:hover{color:var(--ink)}
+label.ck input{accent-color:var(--red);width:16px;height:16px;cursor:pointer;flex:none}
+label.ck input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+/* ---- toolbar ---- */
+.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.search-box{position:relative;flex:1 1 220px;min-width:200px}
+.search-box svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-3);pointer-events:none}
+.search-box .input{padding-left:42px}
+.toolbar select.input{width:auto;flex:none;cursor:pointer;padding-right:34px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%2378716C' stroke-width='2' stroke-linecap='round'/></svg>");background-repeat:no-repeat;background-position:right 14px center}
+.res-count{font-family:var(--mono);font-size:12px;color:var(--ink-3);white-space:nowrap}
+.chips-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;min-height:0}
+.chip{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--red-soft);color:var(--red);font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;cursor:pointer;border:1px solid transparent;transition:border-color .2s}
+.chip:hover{border-color:var(--red)}
+.chip svg{width:10px;height:10px;flex:none}
+.chip:focus-visible,.filter-btn:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+/* ---- product grid / cards ---- */
+.p-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:18px}
+.p-card{padding:16px 16px 18px;display:flex;flex-direction:column;position:relative;overflow:hidden;animation:cardIn .45s var(--ease) both;cursor:default}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.p-card::before{content:"";position:absolute;inset:8px;z-index:4;pointer-events:none;opacity:0;transition:opacity .3s var(--ease);
+  background-image:linear-gradient(var(--red),var(--red)),linear-gradient(var(--red),var(--red)),linear-gradient(var(--red),var(--red)),linear-gradient(var(--red),var(--red)),linear-gradient(var(--red),var(--red)),linear-gradient(var(--red),var(--red)),linear-gradient(var(--red),var(--red)),linear-gradient(var(--red),var(--red));
+  background-position:top left,top left,top right,top right,bottom left,bottom left,bottom right,bottom right;
+  background-size:15px 2px,2px 15px,15px 2px,2px 15px,15px 2px,2px 15px,15px 2px,2px 15px;
+  background-repeat:no-repeat}
+.p-card:hover::before{opacity:.9}
+.p-card::after{content:"";position:absolute;left:-8%;right:-8%;top:0;height:32%;z-index:3;pointer-events:none;opacity:0;transform:translateY(-110%);
+  background:linear-gradient(180deg,transparent 0%,rgba(230,51,41,.05) 36%,rgba(230,51,41,.15) 50%,rgba(230,51,41,.05) 64%,transparent 100%)}
+.p-card:hover::after{opacity:1;animation:scan 2.3s linear infinite}
+@keyframes scan{from{transform:translateY(-110%)}to{transform:translateY(430%)}}
+.p-render{position:relative;margin-bottom:12px}
+.p-render .pill{position:absolute;top:10px;left:10px;z-index:2}
+.p-art{width:100%;height:auto;border-radius:14px}
+.p-sku{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;margin-top:8px}
+.p-card h3{font-size:16.5px;margin:6px 0 6px;line-height:1.25}
+.p-card .short{font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.compat-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;padding:3px 8px;border-radius:999px;background:var(--bg-soft);color:var(--ink-3);text-transform:uppercase;border:1px solid var(--line)}
+.p-price-row{display:flex;align-items:baseline;gap:10px;margin-top:auto;padding-top:14px}
+.p-price{font-family:var(--mono);font-size:19px;font-weight:600;letter-spacing:-.01em;white-space:nowrap}
+.p-vat{font-size:10.5px;color:var(--ink-3)}
+.p-card .feeds{margin-top:7px;font-size:10px}
+.p-actions{display:flex;gap:8px;margin-top:13px}
+.btn-sm{padding:9px 14px;min-height:38px;font-size:12.5px;letter-spacing:.04em;flex:1;justify-content:center}
+.empty{display:none;text-align:center;padding:70px 20px;border:1.5px dashed var(--line-strong);border-radius:var(--radius)}
+.empty.show{display:block}
+.empty svg{width:44px;height:44px;color:var(--ink-3);margin:0 auto 16px}
+.empty h3{margin-bottom:6px}
+.empty p{color:var(--ink-3);font-size:14px;margin-bottom:18px}
+
+/* ---- modal extras ---- */
+.m-top{display:grid;grid-template-columns:240px minmax(0,1fr);gap:22px;align-items:start;margin-bottom:20px}
+.m-art{width:100%;height:auto;border-radius:14px}
+.m-info .pill{margin-bottom:10px}
+.m-info h3{font-size:22px;margin-bottom:4px}
+.m-sku{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;margin-bottom:10px}
+.m-info .short{font-size:14.5px;color:var(--ink-2)}
+.m-price-row{display:flex;align-items:baseline;gap:10px;margin-top:14px}
+.m-price{font-family:var(--mono);font-size:24px;font-weight:600}
+.m-specs{margin:6px 0 0}
+.m-specs td:first-child{width:38%}
+.m-flag{display:flex;gap:12px;align-items:flex-start;background:var(--red-soft);border:1px solid rgba(230,51,41,.3);border-radius:12px;padding:13px 15px;margin-top:16px}
+.m-flag svg{width:19px;height:19px;color:var(--red);flex:none;margin-top:2px}
+.m-flag b{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--red)}
+.m-flag span{font-size:13px;color:var(--ink-2)}
+.m-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:20px}
+.m-demo{display:inline-block;margin-top:16px;font-weight:700;font-size:14px;color:var(--red);cursor:pointer}
+.m-demo:hover{text-decoration:underline}
+.qty{display:inline-flex;align-items:center;border:1.5px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--surface)}
+.qty button{width:36px;height:38px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;cursor:pointer;color:var(--ink-2);transition:background .15s,color .15s}
+.qty button:hover{background:var(--bg-soft);color:var(--red)}
+.qty button:focus-visible{outline:2px solid var(--red);outline-offset:-3px}
+.qty .qv{min-width:34px;text-align:center;font-family:var(--mono);font-size:14px;font-weight:500}
+@media(max-width:620px){.m-top{grid-template-columns:1fr}.m-art{max-width:300px;margin:0 auto}}
+
+/* ---- quote fab + drawer ---- */
+.qfab{position:fixed;right:20px;bottom:20px;z-index:72;display:none;box-shadow:0 14px 38px rgba(230,51,41,.4)}
+.qfab.show{display:inline-flex}
+.qfab .bubble{min-width:22px;height:22px;border-radius:999px;background:#fff;color:var(--red);font-family:var(--mono);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.qfab.pulse .bubble{animation:pop .4s var(--ease)}
+@keyframes pop{50%{transform:scale(1.4)}}
+.drawer-bg{position:fixed;inset:0;background:rgba(12,10,9,.5);backdrop-filter:blur(3px);z-index:78;opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+.drawer-bg.open{opacity:1;pointer-events:auto}
+.qdrawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,100vw);background:var(--surface);z-index:79;transform:translateX(105%);transition:transform .32s var(--ease);display:flex;flex-direction:column;box-shadow:-18px 0 50px rgba(12,10,9,.22)}
+.qdrawer.open{transform:none}
+.qd-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--line)}
+.qd-head h3{font-size:17px}
+.qd-head .modal-close{position:static}
+.qd-body{flex:1;overflow:auto;padding:8px 22px}
+.qd-empty{text-align:center;color:var(--ink-3);font-size:14px;padding:48px 10px}
+.qd-item{display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.qd-item:last-child{border-bottom:none}
+.qd-thumb{width:64px;flex:none}
+.qd-thumb svg{width:64px;height:48px;border-radius:8px}
+.qd-mid{flex:1;min-width:0}
+.qd-mid b{display:block;font-size:13.5px;line-height:1.3}
+.qd-mid .qd-sku{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink-3);text-transform:uppercase}
+.qd-mid .qd-line{font-family:var(--mono);font-size:12px;color:var(--ink-2);margin-top:4px}
+.qd-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.qd-right .qty button{width:28px;height:30px;font-size:14px}
+.qd-right .qty .qv{min-width:26px;font-size:12.5px}
+.qd-rm{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--ink-3);cursor:pointer;text-transform:uppercase}
+.qd-rm:hover{color:var(--red)}
+.qd-rm:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.qd-foot{padding:18px 22px 20px;border-top:1px solid var(--line);background:var(--bg-soft)}
+.qd-total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.qd-total span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.qd-total b{font-family:var(--mono);font-size:21px}
+.qd-note{font-size:12px;color:var(--ink-3);margin-bottom:14px}
+.qd-foot .btn{width:100%;justify-content:center}
+
+/* ---- cross-sell band ---- */
+section.xsell{padding:clamp(48px,6vw,76px) 0}
+.xsell-inner{display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
+.xsell-inner h2{margin-bottom:8px;font-size:clamp(23px,3vw,34px)}
+.xsell-inner .sub{font-size:15.5px}
+
+/* ---- svg text ---- */
+.amono{font-family:var(--mono)}
+
+/* ---- responsive ---- */
+@media(max-width:920px){
+  .store-grid{grid-template-columns:1fr;gap:16px}
+  .rail{position:static;max-height:none;overflow:visible;gap:14px;padding-right:0}
+  .cats{flex-direction:row;overflow-x:auto;gap:8px;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+  .filter-btn{width:auto;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:8px 14px;flex:none;background:var(--surface)}
+  .filter-btn.on{border-color:var(--red)}
+  .ck-list{flex-direction:row;flex-wrap:wrap;gap:10px 18px}
+  .res-count{flex-basis:100%;order:5}
+}
+@media(max-width:480px){
+  .p-grid{grid-template-columns:1fr}
+  .qfab{right:14px;bottom:14px}
+}
+</style>
+</head>
+<body>
+
+<nav class="site" aria-label="Main"><div class="nav-inner">
+<a href="index.html" class="brand" aria-label="Khulu Digital home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/><circle cx="5" cy="16" r="1.5"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/><circle cx="27" cy="16" r="1.5"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/><circle cx="16" cy="27" r="1.4"/></g></svg><span class="lockup">KHULU<em>DIGITAL</em></span></a>
+<div class="nav-links"><a href="why.html">Why Khulu</a><a href="ecu.html">Snap-On ECU</a><a href="protection.html">Protection</a><a href="platform.html">Platform</a><a href="store.html">Store</a><a href="demo.html">Live Demo</a></div>
+<a href="index.html#contact" class="btn btn-red nav-cta">Book a demo</a>
+<button class="nav-burger" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></nav>
+
+<!-- hidden shared SVG defs for product renders -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+  <radialGradient id="kdBg" cx="50%" cy="36%" r="78%">
+    <stop offset="0%" stop-color="#37312C"/><stop offset="55%" stop-color="#211D1A"/><stop offset="100%" stop-color="#13100E"/>
+  </radialGradient>
+  <radialGradient id="kdGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="rgba(255,255,255,.11)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+  </radialGradient>
+  <linearGradient id="kdAlu" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#EAE7E3"/><stop offset="30%" stop-color="#C9C4BE"/><stop offset="55%" stop-color="#8E8881"/><stop offset="80%" stop-color="#BFBAB4"/><stop offset="100%" stop-color="#948E87"/>
+  </linearGradient>
+  <linearGradient id="kdBody" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#544D46"/><stop offset="55%" stop-color="#2B2622"/><stop offset="100%" stop-color="#191512"/>
+  </linearGradient>
+  <linearGradient id="kdTop" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="rgba(255,255,255,.4)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+  </linearGradient>
+  <radialGradient id="kdLens" cx="38%" cy="32%" r="75%">
+    <stop offset="0%" stop-color="#7FB2D6"/><stop offset="42%" stop-color="#2C5A7C"/><stop offset="100%" stop-color="#091723"/>
+  </radialGradient>
+  <radialGradient id="kdIris" cx="40%" cy="35%" r="70%">
+    <stop offset="0%" stop-color="#1E3D54"/><stop offset="100%" stop-color="#04090F"/>
+  </radialGradient>
+  <linearGradient id="kdShaft" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#8E8881"/><stop offset="22%" stop-color="#F2F0EC"/><stop offset="45%" stop-color="#B5AFA8"/><stop offset="68%" stop-color="#E5E2DD"/><stop offset="100%" stop-color="#7C766F"/>
+  </linearGradient>
+  <linearGradient id="kdShaftH" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#8E8881"/><stop offset="25%" stop-color="#F2F0EC"/><stop offset="50%" stop-color="#B5AFA8"/><stop offset="75%" stop-color="#E5E2DD"/><stop offset="100%" stop-color="#7C766F"/>
+  </linearGradient>
+  <radialGradient id="kdRedDome" cx="36%" cy="28%" r="80%">
+    <stop offset="0%" stop-color="#FF8B81"/><stop offset="45%" stop-color="#E63329"/><stop offset="100%" stop-color="#7E100A"/>
+  </radialGradient>
+  <linearGradient id="kdScreen" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#1E3C55"/><stop offset="100%" stop-color="#0A1623"/>
+  </linearGradient>
+  <radialGradient id="kdDome" cx="42%" cy="30%" r="80%">
+    <stop offset="0%" stop-color="rgba(118,142,166,.6)"/><stop offset="60%" stop-color="rgba(38,52,66,.78)"/><stop offset="100%" stop-color="rgba(8,12,18,.92)"/>
+  </radialGradient>
+  <linearGradient id="kdCable" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#48423D"/><stop offset="100%" stop-color="#1C1917"/>
+  </linearGradient>
+  <filter id="kdBlur" x="-60%" y="-60%" width="220%" height="220%">
+    <feGaussianBlur stdDeviation="5"/>
+  </filter>
+</defs>
+</svg>
+
+<!-- ============ HERO ============ -->
+<header class="hero compact">
+  <div class="hero-topo" data-topo="light"></div>
+  <div class="wrap">
+    <p class="eyebrow rv">Ecosystem store</p>
+    <h1 class="rv rv-d1">Every add-on. <span class="accent">One ECU.</span> One UI.</h1>
+    <p class="sub rv rv-d2" style="margin-top:18px">Every product on this page clips into the same snap-on ECU and shows up in the same platform — no second login, no second SIM. Prices are indicative and exclude VAT; we confirm everything on a formal quote.</p>
+  </div>
+</header>
+
+<!-- ============ STOREFRONT ============ -->
+<section id="store">
+  <div class="wrap">
+    <div class="store-grid">
+
+      <aside class="rail" aria-label="Product filters">
+        <div>
+          <p class="rail-h">Category</p>
+          <div class="cats" id="catRail"></div>
+        </div>
+        <div>
+          <p class="rail-h">Compatible with</p>
+          <div class="ck-list" id="compatList">
+            <label class="ck"><input type="checkbox" value="euro2"/> Euro 2 truck</label>
+            <label class="ck"><input type="checkbox" value="modern"/> Modern truck</label>
+            <label class="ck"><input type="checkbox" value="ldv"/> Bakkie &amp; LDV</label>
+            <label class="ck"><input type="checkbox" value="trailer"/> Trailer</label>
+          </div>
+        </div>
+      </aside>
+
+      <div>
+        <div class="toolbar">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" class="input" id="searchIn" placeholder="Search by name or SKU…" aria-label="Search products by name or SKU"/>
+          </div>
+          <select class="input" id="sortSel" aria-label="Sort products">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: low–high</option>
+            <option value="price-desc">Price: high–low</option>
+            <option value="name">Name A–Z</option>
+          </select>
+          <span class="res-count" id="resCount"></span>
+        </div>
+        <div class="chips-row" id="chipsRow"></div>
+
+        <div class="p-grid" id="grid"></div>
+
+        <div class="empty" id="emptyState">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8 11h6"/></svg>
+          <h3>No matches in the rack</h3>
+          <p>Try a different search, or clear the filters below.</p>
+          <button class="btn btn-ghost btn-sm" style="flex:none" id="clearAll">Clear all filters</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CROSS-SELL ============ -->
+<section class="dark-band xsell">
+  <div class="wrap xsell-inner rv">
+    <div>
+      <p class="eyebrow">Try before you spec</p>
+      <h2>Not sure what your fleet needs?</h2>
+      <p class="sub">Build it in the demo and find out what you'd be missing.</p>
+    </div>
+    <a href="demo.html" class="btn btn-red">Open the live demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta-band" style="padding:0">
+  <div class="hero-topo" data-topo="dark"></div>
+  <div class="cta-inner wrap">
+    <p class="eyebrow rv">Fleet spec service</p>
+    <h2 class="rv rv-d1">Send us your fleet list — we'll spec it for you.</h2>
+    <p class="sub rv rv-d2">Makes, models, years and routes. We come back with a per-vehicle kit list and a formal quote, fitment included.</p>
+    <div class="cta-actions rv rv-d3">
+      <a class="btn btn-red" href="mailto:daniel@khuludigital.com?subject=Fleet%20spec%20request&amp;body=Hi%20Khulu%20Digital%2C%0A%0AHere%20is%20our%20fleet%20list%3A%0A%0A-%20%0A%0APlease%20spec%20it%20and%20send%20a%20formal%20quote.%0A%0AThanks">Email your fleet list <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" style="border-color:var(--dark-line);color:var(--dark-text)" href="demo.html">See the platform first</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site"><div class="wrap foot">
+<a href="index.html" class="brand" aria-label="Khulu Digital home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/><circle cx="5" cy="16" r="1.5"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/><circle cx="27" cy="16" r="1.5"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/><circle cx="16" cy="27" r="1.4"/></g></svg><span class="lockup">KHULU<em>DIGITAL</em></span></a>
+<div class="foot-links"><a href="why.html">Why Khulu</a><a href="ecu.html">Snap-On ECU</a><a href="protection.html">Protection</a><a href="platform.html">Platform</a><a href="store.html">Store</a><a href="demo.html">Live Demo</a><a href="index.html#contact">Contact</a></div>
+<p>© <span data-year></span> Khulu Digital. Truck telematics, cameras &amp; sensors — one platform.</p>
+</div></footer>
+
+<!-- ============ PRODUCT MODAL ============ -->
+<div class="modal-bg" id="pm" role="dialog" aria-modal="true" aria-label="Product details">
+  <div class="modal">
+    <button class="modal-close" id="pmClose" aria-label="Close product details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div id="pmBody"></div>
+  </div>
+</div>
+
+<!-- ============ QUOTE BASKET ============ -->
+<button class="btn btn-red qfab" id="qFab" aria-label="Open quote basket">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h2.4l2.2 10.2A1.6 1.6 0 0 0 9.16 18.5h8.1a1.6 1.6 0 0 0 1.56-1.24L20.6 10H6.1"/><circle cx="10" cy="21" r="1.4"/><circle cx="17" cy="21" r="1.4"/></svg>
+  Quote <span class="bubble" id="qCount">0</span>
+</button>
+<div class="drawer-bg" id="qBg"></div>
+<aside class="qdrawer" id="qDrawer" role="dialog" aria-modal="true" aria-label="Quote basket">
+  <div class="qd-head">
+    <h3>Quote basket</h3>
+    <button class="modal-close" id="qClose" aria-label="Close quote basket"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="qd-body" id="qBody"></div>
+  <div class="qd-foot">
+    <div class="qd-total"><span>Indicative total · excl. VAT</span><b id="qTotal">R 0</b></div>
+    <p class="qd-note">Final pricing confirmed on formal quote — fitment included.</p>
+    <a class="btn btn-red" id="qSend" href="#">Request formal quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+  </div>
+</aside>
+
+<script src="assets/khulu.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ================= DATA ================= */
+const CATS=[['all','All'],['core','Core hardware'],['cameras','Cameras'],['fuel','Fuel'],['temp','Temperature'],['security','Security'],['load','Load & duty'],['tyres','Tyres'],['acc','Accessories']];
+const CAT_LABEL=Object.fromEntries(CATS);
+const COMPAT_LABEL={euro2:'Euro 2',modern:'Modern',ldv:'LDV',trailer:'Trailer'};
+const COMPAT_FULL={euro2:'Euro 2 truck',modern:'Modern truck',ldv:'Bakkie & LDV',trailer:'Trailer'};
+
+const PRODUCTS=[
+{sku:'KD-ECU-01',name:'Khulu Snap-On ECU',cat:'core',price:8950,badge:'CORE',art:'ecu',compat:['euro2','modern'],req:false,
+ short:'Reads 40+ native engine channels off Euro 2 wiring. The heart of the system — every add-on on this page clips into it.',
+ specs:{'Channels read':'40+ native engine channels','Protocols':'J1708/J1587, K-line, analogue','Protection':'OEM-spec derate & shutdown logic','Install':'Snap-on harness, under 90 min','Connectivity':'LTE Cat-1 + GPS, 72 h store-and-forward','Power':'9–36 V, surge & load-dump protected'},
+ feeds:'FEEDS → ENGINE HEALTH · PROTECTION · LIVE MAP'},
+{sku:'KD-CAM-RD',name:'Road-Facing Dash Camera',cat:'cameras',price:3250,badge:'BEST SELLER',art:'camRoad',compat:['euro2','modern','ldv'],req:true,
+ short:'1080p forward view with automatic event clips for every harsh-brake, swerve and collision.',
+ specs:{'Sensor':'1080p, 140° field of view','Low light':'WDR + night tuning','Storage':'Loop SD + event clips to cloud','Events':'Harsh braking & collision auto-clip','Audio':'Optional, cab-mutable','Mount':'Windscreen, tool-free'},
+ feeds:'FEEDS → EVENT CLIPS · TRIP REPLAY'},
+{sku:'KD-FUL-PR',name:'Fuel Tank Probe',cat:'fuel',price:3450,badge:'BEST SELLER',art:'probe',compat:['euro2','modern'],req:true,
+ short:'Litre-accurate tank level with drain and theft alerts inside 60 seconds.',
+ specs:{'Accuracy':'±1 litre on a 400 L tank','Fit':'Drop-in, cut-to-depth for any tank','Theft alert':'Drain detected in under 60 s','Calibration':'Auto-calibrate from the platform','Compensation':'Temperature / density corrected','Output':'RS-485 to Khulu ECU'},
+ feeds:'FEEDS → FUEL GRAPH · THEFT ALERTS'},
+{sku:'KD-CAM-DR',name:'Driver AI Camera',cat:'cameras',price:4150,art:'camDriver',compat:['euro2','modern','ldv'],req:true,
+ short:'AI lens that flags fatigue, distraction and phone use before they become incidents.',
+ specs:{'AI events':'Fatigue, distraction, phone use, smoking','IR':'940 nm — reads through sunglasses','Alerting':'In-cab buzzer + platform event','Field of view':'Cabin-wide 120°','Privacy':'Clip-on lens cover mode','Link':'Events tagged with ECU engine state'},
+ feeds:'FEEDS → FATIGUE EVENTS · DRIVER SCORE'},
+{sku:'KD-TPM-KT',name:'TPMS Kit (6 wheels)',cat:'tyres',price:4250,badge:'NEW',art:'tpmsKit',compat:['euro2','modern','trailer'],req:true,
+ short:'Pressure and temperature on six wheels, slow-leak trends included.',
+ specs:{'Sensors':'6 valve-cap sensors','Pressure':'0–13 bar, ±0.1 bar','Temperature':'Per-wheel reading','Alerts':'Slow-leak trend + instant blow-out','Battery':'2-year, replaceable','Link':'433 MHz receiver into Khulu ECU'},
+ feeds:'FEEDS → TYRE PRESSURE · LEAK TRENDS'},
+{sku:'KD-TMP-BH',name:'Brake-Hub Sensor Kit',cat:'temp',price:5450,badge:'NEW',art:'hub',compat:['euro2','modern','trailer'],req:true,
+ short:'Per-hub temperature that catches a dragging brake before the smoke does.',
+ specs:{'Range':'0–300 °C per hub','Kit':'4 wireless hub sensors','Alerts':'Dragging brake & bearing heat','Mount':'Hub-face stud, no drilling','Link':'868 MHz wireless to Khulu ECU','Battery':'5-year sealed cell'},
+ feeds:'FEEDS → BRAKE HEAT · MAINTENANCE'},
+{sku:'KD-DSP-01',name:'In-Cab Driver Display',cat:'core',price:2450,art:'display',compat:['euro2','modern','ldv'],req:true,
+ short:'Dash unit for live warnings and protection prompts the driver can actually see.',
+ specs:{'Screen':'4.3″ sunlight-readable LCD','Shows':'Dash warnings, protection prompts','Acknowledge':'2 driver buttons, logged','Mount':'DIN pod or dash-top','Link':'CAN to Khulu ECU','Power':'From ECU harness'},
+ feeds:'FEEDS → DRIVER PROMPTS · ACK LOG'},
+{sku:'KD-FUL-FM',name:'Fuel Flow Meter',cat:'fuel',price:4950,art:'flow',compat:['euro2','modern'],req:true,
+ short:'True burn measured inline — per trip, per job, per PTO hour.',
+ specs:{'Type':'Positive-displacement chamber','Accuracy':'±0.5% of true burn','Range':'1–200 L/h','Use case':'Burn per job / per PTO hour','Rating':'IP66, diesel-rated seals','Output':'Pulse to Khulu ECU'},
+ feeds:'FEEDS → BURN RATE · JOB COSTING'},
+{sku:'KD-TMP-CG',name:'Cargo / Reefer Probe',cat:'temp',price:1650,art:'tempProbe',compat:['euro2','modern','trailer'],req:true,
+ short:'Audit-grade cold-chain trail for reefers and insulated bodies.',
+ specs:{'Range':'−40 °C to +85 °C','Accuracy':'±0.3 °C','Zones':'Up to 4 probes per ECU','Alerts':'Threshold + door-open correlation','Logging':'Audit-grade cold-chain trail','Cable':'5 m food-safe sheath'},
+ feeds:'FEEDS → COLD-CHAIN LOG · ALERTS'},
+{sku:'KD-LOD-AX',name:'Axle Load Sensor',cat:'load',price:6450,art:'axle',compat:['euro2','modern','trailer'],req:true,
+ short:'Know the axle mass before the weighbridge does.',
+ specs:{'Type':'Air-bag pressure / strain-gauge hybrid','Accuracy':'±2% of axle mass','Use case':'Overload alert before the weighbridge','Axles':'Per-axle, stack up to 6','Rating':'IP68','Output':'CAN to Khulu ECU'},
+ feeds:'FEEDS → AXLE MASS · OVERLOAD ALERTS'},
+{sku:'KD-CAM-LB',name:'Load-Bay Camera',cat:'cameras',price:2850,art:'camDome',compat:['euro2','modern','trailer'],req:true,
+ short:'Eyes inside the trailer — snapshot on every door event.',
+ specs:{'Sensor':'720p wide-angle dome','Housing':'IP67, impact-rated dome','Trigger':'Door-open snapshot','Lighting':'IR for dark trailers','Cable':'10 m armoured run','Mount':'Roof or bulkhead'},
+ feeds:'FEEDS → DOOR SNAPSHOTS · LOAD AUDIT'},
+{sku:'KD-CAM-RV',name:'Reversing Camera',cat:'cameras',price:1950,art:'camRev',compat:['euro2','modern','ldv','trailer'],req:true,
+ short:'Wide rear view with guide-lines piped to the in-cab display.',
+ specs:{'Sensor':'720p, 170° field of view','Rating':'IP69K, vibration damped','Guides':'Distance guide-lines on display','Trigger':'Auto-switch on reverse gear','Night':'IR LEDs','Mount':'Number-plate or chassis bracket'},
+ feeds:'FEEDS → IN-CAB DISPLAY · INCIDENT CLIPS'},
+{sku:'KD-PTO-HM',name:'PTO & Hour Meter',cat:'load',price:1850,art:'pto',compat:['euro2','modern'],req:true,
+ short:'True hours for machines that earn while standing still.',
+ specs:{'Inputs':'PTO engage, ignition, aux pump','Meters':'True engine-hours + PTO hours','Use case':'Service by hours, not km','Billing':'Per-hour job costing export','Fit':'Inline tap, ±20 min','Output':'Digital to Khulu ECU'},
+ feeds:'FEEDS → TRUE HOURS · SERVICE PLAN'},
+{sku:'KD-SEC-DR',name:'Door Sensor',cat:'security',price:950,art:'door',compat:['euro2','modern','ldv','trailer'],req:true,
+ short:'GPS-stamped open/close on any door that matters.',
+ specs:{'Type':'Magnetic reed, gap to 25 mm','Rating':'IP67','Events':'Open/close with GPS stamp','Pairs with':'Load-bay camera snapshot','Mount':'Screw or VHB tape','Wiring':'2-wire to Khulu ECU'},
+ feeds:'FEEDS → DOOR EVENTS · ROUTE AUDIT'},
+{sku:'KD-SEC-PB',name:'Panic Button',cat:'security',price:750,art:'panic',compat:['euro2','modern','ldv'],req:true,
+ short:'One press: priority alert, pinned location, control-room call-back.',
+ specs:{'Action':'Single press → priority alert','Location':'GPS pinned at press','Feedback':'LED confirm to driver','Mount':'Column or seat-base','Wiring':'2-wire to Khulu ECU','Self-test':'Monthly, from the platform'},
+ feeds:'FEEDS → PRIORITY ALERTS · CONTROL ROOM'},
+{sku:'KD-TPM-EX',name:'TPMS Expansion (per wheel)',cat:'tyres',price:650,art:'tpmsOne',compat:['euro2','modern','trailer'],req:true,
+ short:'Extend the kit one wheel at a time — interlinks, tags and all.',
+ specs:{'Adds':'1 wheel to an existing TPMS kit','Pressure':'0–13 bar, ±0.1 bar','Pairing':'Auto-pair from the platform','Battery':'2-year, replaceable','Fit':'Screws onto valve, locknut included'},
+ feeds:'FEEDS → TYRE PRESSURE · LEAK TRENDS'},
+{sku:'KD-ACC-HN',name:'Universal Harness',cat:'acc',price:850,art:'harness',compat:['euro2','modern','ldv'],req:false,
+ short:'The clean way to wire any add-on into the ECU.',
+ specs:{'Length':'3 m, 12-core','Spec':'Automotive TXL, fully loomed','Connectors':'Sealed Deutsch-style ends','Fusing':'Inline 5 A blade','Temp range':'−40 °C to +125 °C'},
+ feeds:'SUPPORTS → CLEAN ADD-ON INSTALLS'},
+{sku:'KD-ACC-MT',name:'Camera Mount Set',cat:'acc',price:450,art:'mount',compat:['euro2','modern','ldv','trailer'],req:false,
+ short:'Every plate, pad and ball-joint a camera install needs.',
+ specs:{'Set':'Windscreen, dash + dome plates','Adhesive':'VHB pads ×4','Thread':'Standard 1/4-20 camera thread','Joint':'Ball-joint, lockable','Finish':'Matte black alloy'},
+ feeds:'SUPPORTS → CAMERA INSTALLS'}
+];
+const bySku=s=>PRODUCTS.find(p=>p.sku===s);
+
+/* ================= PRODUCT RENDERS (studio SVG) ================= */
+const BG='<rect x="1.5" y="1.5" width="237" height="177" rx="16" fill="url(#kdBg)"/>'+
+  '<rect x="1.5" y="1.5" width="237" height="177" rx="16" fill="none" stroke="rgba(255,255,255,.06)"/>'+
+  '<ellipse cx="120" cy="66" rx="98" ry="58" fill="url(#kdGlow)"/>'+
+  '<ellipse cx="120" cy="147" rx="66" ry="10" fill="#000" opacity=".55" filter="url(#kdBlur)"/>';
+const led=(x,y,c)=>{c=c||'#FF5C50';return '<circle cx="'+x+'" cy="'+y+'" r="6.5" fill="'+c+'" opacity=".16"/><circle cx="'+x+'" cy="'+y+'" r="3.4" fill="'+c+'" opacity=".35"/><circle cx="'+x+'" cy="'+y+'" r="1.7" fill="'+c+'"/>';};
+const lens=(cx,cy,r)=>'<circle cx="'+cx+'" cy="'+cy+'" r="'+(r+6)+'" fill="#0A0807" stroke="#4A443F" stroke-width="1.4"/>'+
+  '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="url(#kdLens)"/>'+
+  '<circle cx="'+cx+'" cy="'+cy+'" r="'+(r*.46)+'" fill="url(#kdIris)"/>'+
+  '<ellipse cx="'+(cx-r*.36)+'" cy="'+(cy-r*.42)+'" rx="'+(r*.3)+'" ry="'+(r*.16)+'" fill="rgba(255,255,255,.8)" transform="rotate(-28 '+(cx-r*.36)+' '+(cy-r*.42)+')"/>'+
+  '<circle cx="'+(cx+r*.4)+'" cy="'+(cy+r*.34)+'" r="'+(r*.08)+'" fill="rgba(255,255,255,.55)"/>';
+
+const ART={
+ ecu:()=> '<rect x="62" y="94" width="116" height="12" rx="6" fill="#15110E"/>'+
+  '<rect x="58" y="60" width="124" height="76" rx="12" fill="url(#kdAlu)" stroke="#6B655F" stroke-width=".8"/>'+
+  '<rect x="62" y="63" width="116" height="9" rx="4.5" fill="url(#kdTop)" opacity=".55"/>'+
+  [70,82,94,106,118,130,142,154,166].map(x=>'<rect x="'+x+'" y="66" width="4.5" height="20" rx="2.2" fill="rgba(0,0,0,.18)"/>').join('')+
+  '<rect x="74" y="94" width="92" height="32" rx="6" fill="#15110E" stroke="#2E2925"/>'+
+  '<text x="84" y="109" class="amono" font-size="10" font-weight="600" fill="#E63329" letter-spacing="1.5">KHULU</text>'+
+  '<text x="84" y="120" class="amono" font-size="5.6" fill="#A8A29E" letter-spacing="1.2">SNAP-ON ECU · 40+ CH</text>'+
+  '<rect x="44" y="100" width="14" height="22" rx="3" fill="url(#kdBody)"/><rect x="47" y="104" width="8" height="3" fill="#6B655F"/><rect x="47" y="110" width="8" height="3" fill="#6B655F"/><rect x="47" y="116" width="8" height="3" fill="#6B655F"/>'+
+  '<rect x="182" y="100" width="12" height="22" rx="3" fill="url(#kdBody)"/>'+
+  led(172,73),
+ display:()=> '<path d="M102 132 h36 l8 9 h-52 z" fill="url(#kdBody)"/>'+
+  '<rect x="58" y="46" width="124" height="88" rx="11" fill="url(#kdBody)" stroke="#3A332E"/>'+
+  '<rect x="66" y="54" width="108" height="70" rx="5" fill="url(#kdScreen)"/>'+
+  '<path d="M86 78 l7-12 7 12 z" fill="none" stroke="#E63329" stroke-width="2.4" stroke-linejoin="round"/><rect x="92" y="71" width="2" height="4" fill="#E63329"/>'+
+  '<rect x="106" y="66" width="48" height="6" rx="3" fill="rgba(255,255,255,.5)"/>'+
+  '<rect x="106" y="76" width="34" height="4.5" rx="2.2" fill="rgba(255,255,255,.22)"/>'+
+  '<rect x="74" y="94" width="46" height="4.5" rx="2.2" fill="rgba(255,255,255,.16)"/>'+
+  '<rect x="74" y="103" width="60" height="4.5" rx="2.2" fill="rgba(255,255,255,.16)"/>'+
+  '<circle cx="152" cy="104" r="13" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="4"/>'+
+  '<path d="M152 91 a13 13 0 0 1 11.3 19.5" fill="none" stroke="#E63329" stroke-width="4" stroke-linecap="round"/>'+
+  '<path d="M66 54 h44 l-30 70 h-14 z" fill="rgba(255,255,255,.05)"/>'+
+  led(173,129),
+ camRoad:()=> '<rect x="98" y="28" width="44" height="8" rx="4" fill="url(#kdAlu)"/><rect x="112" y="35" width="16" height="15" rx="3" fill="url(#kdBody)"/>'+
+  '<rect x="70" y="48" width="100" height="58" rx="16" fill="url(#kdBody)" stroke="#3A332E"/>'+
+  '<rect x="75" y="51" width="90" height="10" rx="5" fill="url(#kdTop)" opacity=".5"/>'+
+  '<rect x="78" y="78" width="3" height="14" rx="1.5" fill="rgba(0,0,0,.4)"/><rect x="85" y="78" width="3" height="14" rx="1.5" fill="rgba(0,0,0,.4)"/><rect x="92" y="78" width="3" height="14" rx="1.5" fill="rgba(0,0,0,.4)"/>'+
+  lens(140,77,17)+led(86,66),
+ camDriver:()=> '<rect x="100" y="30" width="40" height="8" rx="4" fill="url(#kdAlu)"/><rect x="114" y="37" width="12" height="13" rx="3" fill="url(#kdBody)"/>'+
+  '<rect x="74" y="50" width="92" height="60" rx="18" fill="url(#kdBody)" stroke="#3A332E"/>'+
+  '<rect x="79" y="53" width="82" height="10" rx="5" fill="url(#kdTop)" opacity=".5"/>'+
+  lens(120,80,15)+
+  [[120,52],[144,60],[154,80],[144,100],[96,60],[86,80],[96,100]].map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="2.4" fill="#3B0E0B" stroke="#5A1812" stroke-width=".7"/><circle cx="'+p[0]+'" cy="'+p[1]+'" r=".9" fill="#8E2A20"/>').join('')+
+  led(120,103),
+ camDome:()=> '<rect x="76" y="116" width="88" height="11" rx="5.5" fill="url(#kdAlu)"/>'+
+  '<rect x="80" y="112" width="80" height="6" rx="3" fill="#6B655F"/>'+
+  '<path d="M82 114 a38 38 0 0 1 76 0 z" fill="url(#kdDome)" stroke="rgba(255,255,255,.14)" stroke-width="1"/>'+
+  lens(120,94,11)+
+  '<path d="M92 96 a30 30 0 0 1 14 -24" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2.6" stroke-linecap="round"/>'+
+  led(154,121),
+ camRev:()=> '<rect x="96" y="36" width="48" height="8" rx="4" fill="url(#kdAlu)"/>'+
+  '<path d="M102 44 l-7 18" stroke="url(#kdAlu)" stroke-width="5" stroke-linecap="round"/><path d="M138 44 l7 18" stroke="url(#kdAlu)" stroke-width="5" stroke-linecap="round"/>'+
+  '<rect x="82" y="56" width="76" height="13" rx="6.5" fill="url(#kdAlu)"/>'+
+  '<rect x="86" y="62" width="68" height="50" rx="13" fill="url(#kdBody)" stroke="#3A332E"/>'+
+  lens(120,87,13)+
+  '<circle cx="98" cy="87" r="2.4" fill="#3B0E0B" stroke="#5A1812" stroke-width=".7"/><circle cx="142" cy="87" r="2.4" fill="#3B0E0B" stroke="#5A1812" stroke-width=".7"/>'+
+  led(120,107),
+ probe:()=> '<path d="M120 36 c0-13 24-11 30-3" stroke="url(#kdCable)" stroke-width="4" fill="none" stroke-linecap="round"/>'+
+  '<rect x="100" y="34" width="40" height="24" rx="5" fill="url(#kdBody)" stroke="#3A332E"/>'+
+  '<rect x="103" y="36" width="34" height="5" rx="2.5" fill="url(#kdTop)" opacity=".4"/>'+
+  '<rect x="96" y="58" width="48" height="12" rx="3" fill="url(#kdAlu)" stroke="#6B655F" stroke-width=".6"/>'+
+  '<rect x="113" y="70" width="14" height="66" rx="6" fill="url(#kdShaft)" stroke="rgba(0,0,0,.25)" stroke-width=".6"/>'+
+  [82,94,106,118,128].map(y=>'<line x1="116" y1="'+y+'" x2="124" y2="'+y+'" stroke="rgba(0,0,0,.3)" stroke-width="1"/>').join('')+
+  led(133,46),
+ flow:()=> '<rect x="54" y="80" width="22" height="20" rx="4" fill="url(#kdBody)"/><rect x="164" y="80" width="22" height="20" rx="4" fill="url(#kdBody)"/>'+
+  '<circle cx="120" cy="58" r="16" fill="url(#kdBody)"/><circle cx="120" cy="58" r="11.5" fill="url(#kdScreen)"/>'+
+  '<line x1="120" y1="58" x2="127" y2="50" stroke="#E63329" stroke-width="2.2" stroke-linecap="round"/><circle cx="120" cy="58" r="2" fill="#C9C4BE"/>'+
+  '<rect x="115" y="68" width="10" height="8" fill="url(#kdBody)"/>'+
+  '<rect x="74" y="70" width="92" height="40" rx="14" fill="url(#kdAlu)" stroke="#6B655F" stroke-width=".7"/>'+
+  '<rect x="74" y="86" width="92" height="4" fill="rgba(0,0,0,.16)"/>'+
+  '<path d="M84 99 l8 4 -8 4 z" fill="rgba(0,0,0,.35)"/><path d="M97 99 l8 4 -8 4 z" fill="rgba(0,0,0,.25)"/>'+
+  led(152,79),
+ tempProbe:()=> '<path d="M88 58 c-16 2 -18 14 -4 16 c-14 4 -12 14 2 15 c-13 4 -10 13 3 14" stroke="url(#kdCable)" stroke-width="3.6" fill="none" stroke-linecap="round"/>'+
+  '<rect x="88" y="62" width="36" height="52" rx="11" fill="url(#kdBody)" stroke="#3A332E"/>'+
+  '<rect x="92" y="65" width="28" height="6" rx="3" fill="url(#kdTop)" opacity=".4"/>'+
+  '<rect x="94" y="98" width="24" height="3" rx="1.5" fill="rgba(255,255,255,.14)"/><rect x="94" y="104" width="24" height="3" rx="1.5" fill="rgba(255,255,255,.14)"/>'+
+  '<rect x="122" y="83" width="52" height="9" rx="4.5" fill="url(#kdShaftH)"/>'+
+  '<path d="M174 83 l11 4.5 -11 4.5 z" fill="#C9C4BE"/>'+
+  led(106,76),
+ hub:()=> '<circle cx="112" cy="92" r="38" fill="none" stroke="url(#kdAlu)" stroke-width="13"/>'+
+  '<circle cx="112" cy="92" r="31" fill="#15110E"/>'+
+  '<circle cx="112" cy="92" r="12" fill="url(#kdAlu)"/>'+
+  [[112,73],[130,86],[124,107],[100,107],[94,86]].map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="2.6" fill="#6B655F"/>').join('')+
+  '<rect x="98" y="42" width="28" height="14" rx="7" fill="url(#kdBody)" stroke="#3A332E"/>'+led(112,49)+
+  '<rect x="158" y="98" width="30" height="16" rx="8" fill="url(#kdBody)" stroke="#3A332E"/>'+led(173,106),
+ door:()=> '<rect x="70" y="62" width="46" height="66" rx="8" fill="url(#kdBody)" stroke="#3A332E"/>'+
+  '<rect x="74" y="65" width="38" height="7" rx="3.5" fill="url(#kdTop)" opacity=".35"/>'+
+  '<circle cx="93" cy="74" r="2.6" fill="#0B0908"/><circle cx="93" cy="118" r="2.6" fill="#0B0908"/>'+
+  '<rect x="111" y="87" width="6" height="18" rx="2" fill="#E63329" opacity=".85"/>'+
+  '<rect x="126" y="70" width="28" height="50" rx="6" fill="url(#kdAlu)" stroke="#6B655F" stroke-width=".6"/>'+
+  '<rect x="123" y="87" width="6" height="18" rx="2" fill="rgba(0,0,0,.35)"/>'+
+  '<circle cx="140" cy="79" r="2.2" fill="#6B655F"/><circle cx="140" cy="111" r="2.2" fill="#6B655F"/>'+
+  led(82,95),
+ panic:()=> '<rect x="78" y="102" width="84" height="16" rx="8" fill="url(#kdBody)"/>'+
+  '<ellipse cx="120" cy="103" rx="42" ry="12" fill="url(#kdAlu)"/>'+
+  '<ellipse cx="120" cy="101" rx="34" ry="9" fill="#15110E"/>'+
+  '<circle cx="120" cy="78" r="28" fill="url(#kdRedDome)"/>'+
+  '<ellipse cx="109" cy="66" rx="9.5" ry="5" fill="rgba(255,255,255,.55)" transform="rotate(-24 109 66)"/>'+
+  '<circle cx="131" cy="88" r="1.6" fill="rgba(255,255,255,.4)"/>'+
+  led(152,112,'#FF5C50'),
+ axle:()=> '<rect x="56" y="104" width="20" height="17" rx="3" fill="url(#kdBody)"/><rect x="164" y="104" width="20" height="17" rx="3" fill="url(#kdBody)"/>'+
+  '<circle cx="66" cy="113" r="2.6" fill="#0B0908"/><circle cx="174" cy="113" r="2.6" fill="#0B0908"/>'+
+  '<rect x="50" y="85" width="140" height="21" rx="9.5" fill="url(#kdAlu)" stroke="#6B655F" stroke-width=".7"/>'+
+  '<rect x="62" y="93" width="42" height="3.5" rx="1.7" fill="rgba(0,0,0,.2)"/><rect x="138" y="93" width="38" height="3.5" rx="1.7" fill="rgba(0,0,0,.2)"/>'+
+  '<path d="M104 62 c-14 0 -20 8 -34 6" stroke="url(#kdCable)" stroke-width="3.5" fill="none" stroke-linecap="round"/>'+
+  '<rect x="100" y="60" width="40" height="27" rx="6" fill="url(#kdBody)" stroke="#3A332E"/>'+
+  '<rect x="104" y="63" width="32" height="5" rx="2.5" fill="url(#kdTop)" opacity=".4"/>'+
+  led(131,71),
+ pto:()=> '<rect x="74" y="54" width="92" height="74" rx="12" fill="url(#kdBody)" stroke="#3A332E"/>'+
+  '<rect x="79" y="57" width="82" height="9" rx="4.5" fill="url(#kdTop)" opacity=".4"/>'+
+  '<rect x="86" y="70" width="68" height="26" rx="5" fill="#0B1118" stroke="#1E2A38"/>'+
+  '<text x="93" y="88" class="amono" font-size="13" fill="#34D399" letter-spacing="2.5">0427.6</text>'+
+  '<rect x="86" y="104" width="44" height="5.5" rx="2.7" fill="rgba(255,255,255,.13)"/>'+
+  '<rect x="86" y="113" width="30" height="5.5" rx="2.7" fill="rgba(255,255,255,.09)"/>'+
+  '<rect x="166" y="82" width="13" height="15" rx="4" fill="url(#kdAlu)"/>'+
+  '<path d="M179 89 c10 0 12 8 8 14" stroke="url(#kdCable)" stroke-width="3.4" fill="none" stroke-linecap="round"/>'+
+  led(150,112),
+ tpmsKit:()=>{
+  const cap=(cx,cy,s)=>'<g transform="translate('+cx+' '+cy+') scale('+s+')">'+
+   '<rect x="-6.5" y="10" width="13" height="12" rx="3" fill="url(#kdShaft)"/>'+
+   '<polygon points="-15,0 -7.5,-13 7.5,-13 15,0 7.5,13 -7.5,13" fill="url(#kdAlu)" stroke="#6B655F" stroke-width=".9"/>'+
+   '<circle r="7.6" fill="url(#kdBody)"/><circle r="2.1" fill="#FF5C50"/><circle r="4.4" fill="#FF5C50" opacity=".18"/></g>';
+  return cap(86,92,1.15)+cap(132,72,.95)+cap(160,104,.82);},
+ tpmsOne:()=> '<rect x="113" y="104" width="13" height="34" rx="4" transform="rotate(12 120 110)" fill="url(#kdShaft)"/>'+
+  '<g transform="translate(120 76) scale(1.75)">'+
+  '<polygon points="-15,0 -7.5,-13 7.5,-13 15,0 7.5,13 -7.5,13" fill="url(#kdAlu)" stroke="#6B655F" stroke-width=".8"/>'+
+  '<circle r="7.6" fill="url(#kdBody)"/><circle r="2" fill="#FF5C50"/><circle r="4.4" fill="#FF5C50" opacity=".18"/></g>'+
+  '<ellipse cx="103" cy="62" rx="7" ry="3.4" fill="rgba(255,255,255,.4)" transform="rotate(-28 103 62)"/>',
+ harness:()=> '<rect x="54" y="62" width="32" height="24" rx="5" fill="url(#kdBody)" stroke="#3A332E"/>'+
+  '<rect x="58" y="68" width="6" height="4" fill="#6B655F"/><rect x="58" y="75" width="6" height="4" fill="#6B655F"/>'+
+  '<rect x="84" y="66" width="8" height="16" rx="3" fill="url(#kdAlu)"/>'+
+  '<path d="M92 74 C 138 66, 176 82, 162 104 C 150 124, 98 126, 88 106 C 80 90, 108 86, 130 91" stroke="url(#kdCable)" stroke-width="7" fill="none" stroke-linecap="round"/>'+
+  '<path d="M92 74 C 138 66, 176 82, 162 104 C 150 124, 98 126, 88 106 C 80 90, 108 86, 130 91" stroke="rgba(255,255,255,.15)" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="2 6"/>'+
+  '<rect x="128" y="83" width="28" height="17" rx="4" fill="url(#kdAlu)" stroke="#6B655F" stroke-width=".6" transform="rotate(8 142 91)"/>'+
+  led(70,58),
+ mount:()=> '<ellipse cx="96" cy="122" rx="30" ry="9" fill="url(#kdAlu)"/>'+
+  '<ellipse cx="96" cy="119" rx="22" ry="6" fill="#15110E"/>'+
+  '<rect x="92" y="64" width="12" height="56" rx="6" fill="url(#kdBody)" transform="rotate(14 98 118)"/>'+
+  '<circle cx="111" cy="62" r="8.5" fill="url(#kdAlu)" stroke="#6B655F" stroke-width=".7"/>'+
+  '<rect x="96" y="42" width="40" height="11" rx="5" fill="url(#kdBody)" transform="rotate(-10 116 47)" stroke="#3A332E"/>'+
+  '<circle cx="129" cy="55" r="4.6" fill="url(#kdAlu)"/>'+
+  '<rect x="148" y="96" width="38" height="11" rx="4" fill="url(#kdBody)"/>'+
+  '<rect x="154" y="112" width="38" height="11" rx="4" fill="#3A332E"/>'+
+  '<rect x="148" y="98" width="38" height="3" rx="1.5" fill="url(#kdTop)" opacity=".3"/>',
+};
+function art(p,cls){
+  return '<svg class="'+(cls||'p-art')+'" viewBox="0 0 240 180" role="img" aria-label="'+p.name+' product render" preserveAspectRatio="xMidYMid meet">'+BG+ART[p.art]()+'</svg>';
+}
+
+/* ================= HELPERS ================= */
+const fmt=n=>'R '+String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+const fmtPlain=n=>'R '+String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+const badgePill=b=>{
+  if(!b)return '';
+  const cls=b==='CORE'?'pill-red':(b==='NEW'?'pill-green':'pill-amber');
+  return '<span class="pill '+cls+'">'+b+'</span>';
+};
+const compatTags=p=>'<div class="compat-row">'+p.compat.map(c=>'<span class="tag">'+COMPAT_LABEL[c]+'</span>').join('')+'</div>';
+
+/* ================= STATE / FILTERING ================= */
+const state={cat:'all',compat:new Set(),q:'',sort:'featured'};
+const $=id=>document.getElementById(id);
+const gridEl=$('grid'),chipsRow=$('chipsRow'),resCount=$('resCount'),emptyState=$('emptyState');
+
+function baseMatch(p){ /* compat + search (used for live category counts) */
+  for(const c of state.compat) if(!p.compat.includes(c)) return false;
+  if(state.q){const q=state.q.toLowerCase();if(!p.name.toLowerCase().includes(q)&&!p.sku.toLowerCase().includes(q))return false;}
+  return true;
+}
+function filtered(){
+  let list=PRODUCTS.filter(p=>baseMatch(p)&&(state.cat==='all'||p.cat===state.cat));
+  if(state.sort==='price-asc')list=list.slice().sort((a,b)=>a.price-b.price);
+  else if(state.sort==='price-desc')list=list.slice().sort((a,b)=>b.price-a.price);
+  else if(state.sort==='name')list=list.slice().sort((a,b)=>a.name.localeCompare(b.name));
+  return list;
+}
+
+/* ---- category rail (built once, updated in place) ---- */
+const catRail=$('catRail');
+catRail.innerHTML=CATS.map(([id,label])=>
+  '<button type="button" class="filter-btn'+(id===state.cat?' on':'')+'" data-cat="'+id+'"><span>'+label+'</span><span class="ct"></span></button>').join('');
+catRail.addEventListener('click',e=>{
+  const b=e.target.closest('[data-cat]');if(!b)return;
+  state.cat=b.dataset.cat;update();
+});
+function updateRail(){
+  const base=PRODUCTS.filter(baseMatch);
+  catRail.querySelectorAll('[data-cat]').forEach(b=>{
+    const id=b.dataset.cat;
+    const n=id==='all'?base.length:base.filter(p=>p.cat===id).length;
+    b.querySelector('.ct').textContent=n;
+    b.classList.toggle('on',id===state.cat);
+  });
+}
+
+/* ---- compat checkboxes ---- */
+document.querySelectorAll('#compatList input').forEach(ck=>{
+  ck.addEventListener('change',()=>{
+    if(ck.checked)state.compat.add(ck.value);else state.compat.delete(ck.value);
+    update();
+  });
+});
+function syncChecks(){
+  document.querySelectorAll('#compatList input').forEach(ck=>{ck.checked=state.compat.has(ck.value);});
+}
+
+/* ---- toolbar ---- */
+let qTimer=null;
+$('searchIn').addEventListener('input',e=>{
+  clearTimeout(qTimer);
+  qTimer=setTimeout(()=>{state.q=e.target.value.trim();update();},140);
+});
+$('sortSel').addEventListener('change',e=>{state.sort=e.target.value;update();});
+$('clearAll').addEventListener('click',()=>{
+  state.cat='all';state.compat.clear();state.q='';$('searchIn').value='';
+  syncChecks();update();
+});
+
+/* ---- active filter chips ---- */
+const xSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+function renderChips(){
+  let h='';
+  if(state.cat!=='all')h+='<button type="button" class="chip" data-rm="cat" aria-label="Remove category filter '+CAT_LABEL[state.cat]+'">'+CAT_LABEL[state.cat]+xSvg+'</button>';
+  state.compat.forEach(c=>{h+='<button type="button" class="chip" data-rm="compat" data-val="'+c+'" aria-label="Remove compatibility filter '+COMPAT_FULL[c]+'">'+COMPAT_FULL[c]+xSvg+'</button>';});
+  if(state.q)h+='<button type="button" class="chip" data-rm="q" aria-label="Clear search">&ldquo;'+state.q.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'&rdquo;'+xSvg+'</button>';
+  chipsRow.innerHTML=h;
+  chipsRow.style.display=h?'flex':'none';
+}
+chipsRow.addEventListener('click',e=>{
+  const c=e.target.closest('[data-rm]');if(!c)return;
+  if(c.dataset.rm==='cat')state.cat='all';
+  else if(c.dataset.rm==='compat'){state.compat.delete(c.dataset.val);syncChecks();}
+  else{state.q='';$('searchIn').value='';}
+  update();
+});
+
+/* ---- grid ---- */
+function cardHTML(p,i){
+  return '<article class="card p-card tilt" data-card="'+p.sku+'" style="animation-delay:'+(i*45)+'ms">'+
+    '<div class="p-render">'+badgePill(p.badge)+art(p)+'<div class="p-sku">'+p.sku+'</div></div>'+
+    '<h3>'+p.name+'</h3>'+
+    '<p class="short">'+p.short+'</p>'+
+    compatTags(p)+
+    '<div class="p-price-row"><span class="p-price">'+fmt(p.price)+'</span><span class="p-vat">indicative excl. VAT</span></div>'+
+    '<p class="feeds">'+p.feeds+'</p>'+
+    '<div class="p-actions">'+
+      '<button type="button" class="btn btn-red btn-sm" data-act="add" data-sku="'+p.sku+'">+ ADD</button>'+
+      '<button type="button" class="btn btn-ghost btn-sm" data-act="details" data-sku="'+p.sku+'">DETAILS</button>'+
+    '</div></article>';
+}
+function renderGrid(){
+  const list=filtered();
+  gridEl.innerHTML=list.map(cardHTML).join('');
+  emptyState.classList.toggle('show',list.length===0);
+  resCount.textContent=list.length===PRODUCTS.length?PRODUCTS.length+' products':list.length+' of '+PRODUCTS.length+' products';
+  bindTilt(gridEl);
+}
+gridEl.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  if(b.dataset.act==='add'){addToQuote(b.dataset.sku,1);flashBtn(b);}
+  else openModal(b.dataset.sku);
+});
+function flashBtn(b){
+  if(b.dataset.flash)return;
+  b.dataset.flash='1';const t=b.textContent;b.textContent='ADDED';
+  setTimeout(()=>{b.textContent=t;delete b.dataset.flash;},900);
+}
+
+/* tilt for dynamically rendered cards (shared js only binds on load) */
+const canTilt=!matchMedia('(prefers-reduced-motion: reduce)').matches&&matchMedia('(hover:hover) and (pointer:fine)').matches;
+function bindTilt(scope){
+  if(!canTilt)return;
+  scope.querySelectorAll('.tilt').forEach(card=>{
+    if(card.dataset.tiltBound)return;card.dataset.tiltBound='1';
+    let raf=null;
+    card.addEventListener('pointermove',e=>{
+      if(raf)return;
+      raf=requestAnimationFrame(()=>{
+        const r=card.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+        card.style.transform='perspective(900px) rotateY('+(x*4.5)+'deg) rotateX('+(-y*4.5)+'deg)';
+        raf=null;
+      });
+    });
+    card.addEventListener('pointerleave',()=>{
+      card.style.transition='transform .5s cubic-bezier(.22,.61,.36,1)';
+      card.style.transform='';
+      setTimeout(()=>card.style.transition='',500);
+    });
+  });
+}
+
+function update(){updateRail();renderChips();renderGrid();}
+
+/* ================= QUOTE BASKET ================= */
+let basket={};
+try{basket=JSON.parse(sessionStorage.getItem('khulu-quote')||'{}')||{};}catch(e){basket={};}
+function saveBasket(){try{sessionStorage.setItem('khulu-quote',JSON.stringify(basket));}catch(e){}}
+const qFab=$('qFab'),qCount=$('qCount'),qBg=$('qBg'),qDrawer=$('qDrawer'),qBody=$('qBody'),qTotal=$('qTotal'),qSend=$('qSend');
+
+function basketTotal(){return Object.entries(basket).reduce((s,[sku,q])=>s+bySku(sku).price*q,0);}
+function basketCount(){return Object.values(basket).reduce((s,q)=>s+q,0);}
+
+function addToQuote(sku,qty){
+  basket[sku]=(basket[sku]||0)+qty;
+  saveBasket();renderBasket();
+  qFab.classList.remove('pulse');void qFab.offsetWidth;qFab.classList.add('pulse');
+}
+function setQty(sku,q){
+  if(q<=0)delete basket[sku];else basket[sku]=q;
+  saveBasket();renderBasket();
+}
+function mailtoHref(){
+  const lines=Object.entries(basket).map(([sku,q])=>{
+    const p=bySku(sku);
+    return '- '+sku+' '+p.name+' x '+q+' = '+fmtPlain(p.price*q);
+  });
+  const body='Hi Khulu Digital,\n\nPlease send a formal quote for the following:\n\n'+lines.join('\n')+
+    '\n\nIndicative total (excl. VAT): '+fmtPlain(basketTotal())+
+    '\n\nCompany:\nFleet size:\nRegion:\n\nThanks';
+  return 'mailto:daniel@khuludigital.com?subject='+encodeURIComponent('Quote request')+'&body='+encodeURIComponent(body);
+}
+function renderBasket(){
+  const n=basketCount();
+  qCount.textContent=n;
+  qFab.classList.toggle('show',n>0);
+  const entries=Object.entries(basket);
+  if(!entries.length){
+    qBody.innerHTML='<p class="qd-empty">Your quote basket is empty.<br/>Add hardware from the store to build a quote.</p>';
+  }else{
+    qBody.innerHTML=entries.map(([sku,q])=>{
+      const p=bySku(sku);
+      return '<div class="qd-item"><div class="qd-thumb">'+art(p,'')+'</div>'+
+        '<div class="qd-mid"><b>'+p.name+'</b><span class="qd-sku">'+sku+'</span><div class="qd-line">'+q+' × '+fmt(p.price)+' = '+fmt(p.price*q)+'</div></div>'+
+        '<div class="qd-right"><span class="qty"><button type="button" data-q="dec" data-sku="'+sku+'" aria-label="Decrease quantity of '+p.name+'">−</button><span class="qv">'+q+'</span><button type="button" data-q="inc" data-sku="'+sku+'" aria-label="Increase quantity of '+p.name+'">+</button></span>'+
+        '<button type="button" class="qd-rm" data-q="rm" data-sku="'+sku+'">Remove</button></div></div>';
+    }).join('');
+  }
+  qTotal.textContent=fmt(basketTotal());
+  qSend.href=entries.length?mailtoHref():'#';
+  qSend.style.opacity=entries.length?'':'.5';
+  qSend.style.pointerEvents=entries.length?'':'none';
+}
+qBody.addEventListener('click',e=>{
+  const b=e.target.closest('[data-q]');if(!b)return;
+  const sku=b.dataset.sku,cur=basket[sku]||0;
+  if(b.dataset.q==='inc')setQty(sku,cur+1);
+  else if(b.dataset.q==='dec')setQty(sku,cur-1);
+  else setQty(sku,0);
+});
+function openDrawer(){qDrawer.classList.add('open');qBg.classList.add('open');document.body.style.overflow='hidden';$('qClose').focus();}
+function closeDrawer(){qDrawer.classList.remove('open');qBg.classList.remove('open');if(!pm.classList.contains('open'))document.body.style.overflow='';}
+qFab.addEventListener('click',openDrawer);
+$('qClose').addEventListener('click',closeDrawer);
+qBg.addEventListener('click',closeDrawer);
+
+/* ================= DETAIL MODAL ================= */
+const pm=$('pm'),pmBody=$('pmBody');
+let pmQty=1,pmSku=null;
+function specRows(p){
+  return '<table class="data-table m-specs"><tbody>'+
+    Object.entries(p.specs).map(([k,v])=>'<tr><td>'+k+'</td><td>'+v+'</td></tr>').join('')+
+    '</tbody></table>';
+}
+function openModal(sku){
+  const p=bySku(sku);if(!p)return;
+  pmSku=sku;pmQty=1;
+  pmBody.innerHTML=
+    '<div class="m-top"><div>'+art(p,'m-art')+'</div>'+
+    '<div class="m-info">'+badgePill(p.badge)+
+    '<h3>'+p.name+'</h3><p class="m-sku">'+p.sku+'</p>'+
+    '<p class="short">'+p.short+'</p>'+compatTags(p)+
+    '<div class="m-price-row"><span class="m-price">'+fmt(p.price)+'</span><span class="p-vat">indicative excl. VAT</span></div>'+
+    '</div></div>'+
+    specRows(p)+
+    '<p class="feeds">'+p.feeds+'</p>'+
+    (p.req?'<div class="m-flag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.5 20h19L12 3zm0 7v4m0 3v.5"/></svg><div><b>REQUIRES KHULU ECU</b><span>Add the Snap-On ECU to your quote first — this add-on clips into it.</span></div></div>':'')+
+    '<div class="m-actions">'+
+      '<span class="qty"><button type="button" id="pmDec" aria-label="Decrease quantity">−</button><span class="qv" id="pmQv" aria-live="polite">1</span><button type="button" id="pmInc" aria-label="Increase quantity">+</button></span>'+
+      '<button type="button" class="btn btn-red" id="pmAdd">Add to quote</button>'+
+    '</div>'+
+    '<a class="m-demo" href="demo.html">See it live in the demo &rarr;</a>';
+  $('pmDec').addEventListener('click',()=>{pmQty=Math.max(1,pmQty-1);$('pmQv').textContent=pmQty;});
+  $('pmInc').addEventListener('click',()=>{pmQty=Math.min(99,pmQty+1);$('pmQv').textContent=pmQty;});
+  $('pmAdd').addEventListener('click',function(){addToQuote(pmSku,pmQty);flashBtn2(this);});
+  pm.classList.add('open');
+  document.body.style.overflow='hidden';
+  $('pmClose').focus();
+}
+function flashBtn2(b){
+  if(b.dataset.flash)return;
+  b.dataset.flash='1';const t=b.textContent;b.textContent='Added to quote';
+  setTimeout(()=>{b.textContent=t;delete b.dataset.flash;},900);
+}
+function closeModal(){
+  pm.classList.remove('open');
+  if(!qDrawer.classList.contains('open'))document.body.style.overflow='';
+}
+$('pmClose').addEventListener('click',closeModal);
+pm.addEventListener('click',e=>{if(e.target===pm)closeModal();});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  if(pm.classList.contains('open'))closeModal();
+  else if(qDrawer.classList.contains('open'))closeDrawer();
+});
+
+/* ================= INIT ================= */
+update();
+renderBasket();
+})();
+</script>
+</body>
+</html>
