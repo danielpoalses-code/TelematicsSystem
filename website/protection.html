@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Engine Protection — Khulu Digital</title>
+<meta name="description" content="Khulu engine protection watches every reading against the manufacturer's own limits — coolant, oil, boost and 40 more — and warns the driver on the dash the moment a threshold is breached. Monitor, warn, protect. We never cut the engine." />
+<link rel="icon" href="assets/brand/khulu-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/khulu.css" />
+<style>
+/* ================= page: engine protection ================= */
+
+/* ---- hero ---- */
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(32px,5vw,60px);align-items:center}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{margin-bottom:20px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+
+/* ---- instrument cluster ---- */
+.cluster{
+  background:
+    radial-gradient(120% 90% at 50% 0%,#1d1916 0%,#121009 0%,#17130f 0%,#16120f 55%,#0e0c0a 100%);
+  border:1px solid #2a2522;border-radius:26px;
+  padding:clamp(18px,2.6vw,28px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),inset 0 -18px 40px rgba(0,0,0,.45),0 30px 70px rgba(12,10,9,.30);
+  color:var(--dark-text);
+}
+.cl-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+.cl-tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#A8A29E;display:inline-flex;align-items:center;gap:9px;text-transform:uppercase}
+.cl-dot{width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 10px rgba(52,211,153,.8);animation:cl-pulse 2.2s ease-in-out infinite}
+@keyframes cl-pulse{50%{opacity:.45}}
+.cl-limp{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  padding:5px 13px;border-radius:999px;border:1px solid #332c27;color:#57504a;
+  transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease);
+}
+.cl-limp.on{
+  background:var(--red);border-color:var(--red);color:#fff;
+  box-shadow:0 0 20px rgba(230,51,41,.55);
+  animation:cl-blink .55s steps(2,start) infinite;
+}
+@keyframes cl-blink{50%{opacity:.35}}
+.cluster svg{width:100%;height:auto}
+.gnum{font-family:var(--mono);font-size:12.5px;fill:rgba(250,250,249,.62)}
+.gread{font-family:var(--mono);font-size:27px;font-weight:500;letter-spacing:.02em}
+.glab{font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;fill:#78716C}
+.cl-sub{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px;padding-top:16px;border-top:1px solid #241f1b}
+.cl-bar .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cl-bar label{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:#78716C;text-transform:uppercase}
+.cl-bar b{font-family:var(--mono);font-size:12.5px;font-weight:500;color:#FAFAF9;font-variant-numeric:tabular-nums}
+.cl-track{height:7px;border-radius:99px;background:#231e1a;overflow:hidden;margin-top:8px}
+.cl-track i{display:block;height:100%;border-radius:99px;width:60%}
+#oilFill{background:linear-gradient(90deg,#0E9F6E,#34D399)}
+#rpmFill{background:linear-gradient(90deg,#C2261E,#E63329)}
+
+/* ---- 3-stage logic ---- */
+.stage-card .pill{margin-bottom:16px}
+.callout{
+  margin-top:26px;display:flex;gap:20px;align-items:flex-start;
+  background:var(--red-soft);border:1px solid #F4C8C4;border-radius:var(--radius);
+  padding:clamp(22px,3vw,32px);
+}
+.callout .ic{
+  flex:none;width:48px;height:48px;border-radius:14px;background:var(--red);
+  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(230,51,41,.30);
+}
+.callout .ic svg{width:23px;height:23px;color:#fff}
+.callout p{font-size:clamp(16px,1.6vw,18.5px);color:var(--ink-2);max-width:62ch}
+.callout p strong{color:var(--ink);font-weight:800}
+
+/* ---- case replay ---- */
+.replay-frame{
+  background:var(--dark-2);border:1px solid var(--dark-line);border-radius:var(--radius);
+  padding:clamp(14px,2.6vw,30px);margin-top:42px;overflow:hidden;
+}
+.replay-frame svg{width:100%;height:auto;min-width:0}
+@media(max-width:640px){
+  .replay-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .replay-scroll svg{min-width:640px}
+}
+.ax{font-family:var(--mono);font-size:11px;fill:rgba(250,250,249,.42);letter-spacing:.06em}
+.thr-t{font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+.mk-t{font-family:var(--mono);font-size:11px;letter-spacing:.08em}
+.mk-d{font-family:var(--font);font-size:12.5px;font-weight:600;fill:#FAFAF9}
+.mk-win{font-family:var(--font);font-size:13.5px;font-weight:800;fill:#34D399}
+.replay-line{stroke-dasharray:1;stroke-dashoffset:1}
+.replay-area,.mark{opacity:0}
+.mark{transform:translateY(7px);transform-box:fill-box}
+.play .replay-line{transition:stroke-dashoffset 4.2s linear .25s;stroke-dashoffset:0}
+.play .replay-area{transition:opacity 1s var(--ease) 4.3s;opacity:1}
+.play .mark{transition:opacity .55s var(--ease),transform .55s var(--ease);opacity:1;transform:none}
+.play .mk1{transition-delay:1s}
+.play .mk2{transition-delay:2s}
+.play .mk3{transition-delay:2.7s}
+.play .mk4{transition-delay:3.75s}
+.play .mk5{transition-delay:4.5s}
+.replay-legend{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px;padding:0 6px}
+.replay-legend span{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--dark-text-2);display:inline-flex;align-items:center;gap:8px;text-transform:uppercase}
+.replay-legend i{width:18px;height:0;border-top:2.5px solid #34D399;border-radius:2px}
+.replay-legend .l-warn i{border-top:2px dashed var(--amber)}
+.replay-legend .l-lim i{border-top:2px dashed var(--red)}
+
+/* ---- what it watches ---- */
+.wcard{padding:22px}
+.wcard .ic{width:38px;height:38px;border-radius:10px;margin-bottom:13px}
+.wcard .ic svg{width:18px;height:18px}
+.wcard h3{font-size:16px;margin-bottom:6px}
+.wcard p{font-size:13.5px}
+
+/* ---- stats ---- */
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow);
+}
+.stats .stat+.stat{border-left:1px solid var(--line)}
+@media(max-width:780px){
+  .stats{grid-template-columns:1fr 1fr}
+  .stats .stat+.stat{border-left:none}
+  .stats .stat:nth-child(even){border-left:1px solid var(--line)}
+  .stats .stat:nth-child(n+3){border-top:1px solid var(--line)}
+}
+
+/* ---- cta band ghost on dark ---- */
+.cta-band .btn-ghost{color:var(--dark-text);border-color:#3a332e}
+.cta-band .btn-ghost:hover{border-color:#57504a;background:rgba(255,255,255,.06)}
+</style>
+</head>
+<body>
+
+<nav class="site" aria-label="Main"><div class="nav-inner">
+<a href="index.html" class="brand" aria-label="Khulu Digital home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/><circle cx="5" cy="16" r="1.5"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/><circle cx="27" cy="16" r="1.5"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/><circle cx="16" cy="27" r="1.4"/></g></svg><span class="lockup">KHULU<em>DIGITAL</em></span></a>
+<div class="nav-links"><a href="why.html">Why Khulu</a><a href="ecu.html">Snap-On ECU</a><a href="protection.html">Protection</a><a href="platform.html">Platform</a><a href="store.html">Store</a><a href="demo.html">Live Demo</a></div>
+<a href="index.html#contact" class="btn btn-red nav-cta">Book a demo</a>
+<button class="nav-burger" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></nav>
+
+<!-- ======================= HERO ======================= -->
+<header class="hero">
+  <div class="hero-topo" data-topo="light" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="rv">
+        <p class="eyebrow">Engine protection</p>
+        <h1>We catch it <span class="accent">before</span> the dash light does.</h1>
+        <p class="sub">The snap-on ECU watches every reading against the manufacturer's own limits — coolant, oil, boost and forty more. The moment a threshold is breached, the driver is warned on the dashboard and your ops team sees the same alert on the platform.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-red" href="mailto:daniel@khuludigital.com?subject=Engine%20protection%20demo">Book a demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" href="ecu.html">See the ECU
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+
+      <!-- animated instrument cluster -->
+      <div class="rv rv-d2">
+        <div class="cluster tilt" role="img" aria-label="Animated coolant temperature gauge: needle idles in the green, climbs through the amber warn zone into the red OEM limit zone where the warning lamp blinks and limp mode lights, then recovers.">
+          <div class="cl-head">
+            <span class="cl-tag"><span class="cl-dot"></span>ECU live · Coolant guard</span>
+            <span class="cl-limp" id="limpPill">Limp mode</span>
+          </div>
+          <svg id="gauge" viewBox="0 0 360 280" aria-hidden="true">
+            <defs>
+              <radialGradient id="faceGrad" cx="50%" cy="38%" r="75%">
+                <stop offset="0%" stop-color="#201b17"/>
+                <stop offset="70%" stop-color="#161210"/>
+                <stop offset="100%" stop-color="#0f0d0b"/>
+              </radialGradient>
+            </defs>
+            <!-- face -->
+            <circle cx="180" cy="146" r="126" fill="url(#faceGrad)" stroke="#2a2522" stroke-width="1.5"/>
+            <circle cx="180" cy="146" r="119" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+            <!-- zone arcs: green 60–96 · amber 96–103 · red 103–120 -->
+            <path d="M89.93 198 A104 104 0 0 1 222.30 50.99" fill="none" stroke="#0E9F6E" stroke-width="9" opacity=".85"/>
+            <path d="M222.30 50.99 A104 104 0 0 1 261.95 81.97" fill="none" stroke="#D97706" stroke-width="9" opacity=".9"/>
+            <path d="M261.95 81.97 A104 104 0 0 1 270.07 198" fill="none" stroke="#E63329" stroke-width="9"/>
+            <!-- ticks + numerals (built by JS) -->
+            <g id="gTicks"></g>
+            <!-- needle -->
+            <g id="gNeedle" transform="rotate(-16 180 146)">
+              <path d="M176.6 162 L180 50 L183.4 162 Z" fill="#FAFAF9"/>
+            </g>
+            <circle cx="180" cy="146" r="9" fill="#1C1917" stroke="#3a332e" stroke-width="2"/>
+            <circle cx="180" cy="146" r="3" fill="#E63329"/>
+            <!-- digital readout -->
+            <text id="gRead" class="gread" x="180" y="212" text-anchor="middle" fill="#34D399">86.0°C</text>
+            <text class="glab" x="180" y="231" text-anchor="middle">COOLANT</text>
+            <!-- warning lamp -->
+            <g id="gLamp" opacity=".18">
+              <path d="M180 236 l11.5 19.5 a1.6 1.6 0 0 1 -1.4 2.5 h-20.2 a1.6 1.6 0 0 1 -1.4 -2.5 Z" fill="none" stroke="#E63329" stroke-width="2.4" stroke-linejoin="round"/>
+              <path d="M180 243.5v6" stroke="#E63329" stroke-width="2.4" stroke-linecap="round"/>
+              <circle cx="180" cy="253.4" r="1.3" fill="#E63329"/>
+            </g>
+          </svg>
+          <div class="cl-sub">
+            <div class="cl-bar">
+              <div class="row"><label>Oil press</label><b id="oilVal">4.2 bar</b></div>
+              <div class="cl-track"><i id="oilFill" style="width:70%"></i></div>
+            </div>
+            <div class="cl-bar">
+              <div class="row"><label>RPM</label><b id="rpmVal">1 450</b></div>
+              <div class="cl-track"><i id="rpmFill" style="width:48%"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ======================= 3-STAGE LOGIC ======================= -->
+<section>
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow">How protection works</p>
+      <h2>Three stages. One rule: the engine never gets a surprise.</h2>
+      <p class="sub">Every truck runs the same loop, every second it's alive — baselined to the OEM's own service data, not generic thresholds.</p>
+    </div>
+    <div class="grid-3 gap-top" data-stagger>
+      <div class="card stage-card tilt">
+        <span class="pill pill-green">1 · Monitor</span>
+        <h3>Every reading, against OEM spec</h3>
+        <p>Every parameter is sampled continuously by the snap-on ECU and baselined to the manufacturer's own limits for that exact engine — coolant, oil, boost, gearbox, air, charging and more.</p>
+      </div>
+      <div class="card stage-card tilt">
+        <span class="pill pill-amber">2 · Warn</span>
+        <h3>The dash lights up first</h3>
+        <p>The second a limit is crossed, the driver is warned on the dashboard and your ops team gets the same alert on the platform — same data, same moment, no phone call required.</p>
+      </div>
+      <div class="card stage-card tilt">
+        <span class="pill pill-red">3 · Protect</span>
+        <h3>Escalate before damage</h3>
+        <p>If readings keep climbing, alarms escalate and the driver gets derate guidance — ease off, gear down, pull over — before a hot climb becomes a catastrophic failure.</p>
+      </div>
+    </div>
+    <div class="callout rv">
+      <span class="ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.6 8-10V5l-8-3-8 3v7c0 6.4 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+      </span>
+      <p><strong>We never cut the engine.</strong> Protection means the right people know in time — the driver stays in control of the truck. Always.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CASE REPLAY ======================= -->
+<section class="dark-band">
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow">Case replay</p>
+      <h2>Van Reenen's Pass, 12 minutes.</h2>
+      <p class="sub">A loaded Euro 2 horse on the climb out of the valley. Coolant rises, the warn threshold trips, the driver gets the dash warning and eases off — and the engine never touches the OEM limit.</p>
+    </div>
+    <div class="replay-frame rv rv-d1" id="replay">
+      <div class="replay-scroll">
+      <svg viewBox="0 0 900 300" role="img" aria-label="Timeline chart from 14:02 to 14:14: coolant temperature climbs from 85 degrees, crosses the 96 degree warn threshold at 14:07 triggering a dash warning, peaks near 102 degrees as the driver eases off at 14:09, and recovers well below the 103 degree OEM limit. Engine saved, load delivered.">
+        <defs>
+          <linearGradient id="heat" x1="0" y1="260" x2="0" y2="40" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#34D399"/>
+            <stop offset=".55" stop-color="#FBBF24"/>
+            <stop offset="1" stop-color="#E63329"/>
+          </linearGradient>
+          <linearGradient id="heatFill" x1="0" y1="40" x2="0" y2="268" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="rgba(230,51,41,.22)"/>
+            <stop offset="1" stop-color="rgba(230,51,41,0)"/>
+          </linearGradient>
+        </defs>
+
+        <!-- gridlines + temp scale -->
+        <g stroke="rgba(250,250,249,.07)" stroke-width="1">
+          <line x1="70" y1="232.5" x2="870" y2="232.5"/>
+          <line x1="70" y1="177.5" x2="870" y2="177.5"/>
+          <line x1="70" y1="122.5" x2="870" y2="122.5"/>
+          <line x1="70" y1="67.5"  x2="870" y2="67.5"/>
+        </g>
+        <text class="ax" x="62" y="236.5" text-anchor="end">80°</text>
+        <text class="ax" x="62" y="181.5" text-anchor="end">90°</text>
+        <text class="ax" x="62" y="126.5" text-anchor="end">100°</text>
+        <text class="ax" x="62" y="71.5"  text-anchor="end">110°</text>
+
+        <!-- thresholds -->
+        <line x1="70" y1="144.5" x2="870" y2="144.5" stroke="#D97706" stroke-width="1.4" stroke-dasharray="6 7" opacity=".8"/>
+        <text class="thr-t" x="76" y="139" fill="#D97706">WARN 96°</text>
+        <line x1="70" y1="106" x2="870" y2="106" stroke="#E63329" stroke-width="1.4" stroke-dasharray="6 7" opacity=".9"/>
+        <text class="thr-t" x="76" y="100" fill="#E63329">OEM LIMIT 103°</text>
+
+        <!-- time axis -->
+        <line x1="70" y1="268" x2="870" y2="268" stroke="rgba(250,250,249,.18)" stroke-width="1"/>
+        <g stroke="rgba(250,250,249,.18)" stroke-width="1">
+          <line x1="70" y1="268" x2="70" y2="274"/><line x1="203.3" y1="268" x2="203.3" y2="274"/>
+          <line x1="336.7" y1="268" x2="336.7" y2="274"/><line x1="470" y1="268" x2="470" y2="274"/>
+          <line x1="603.3" y1="268" x2="603.3" y2="274"/><line x1="736.7" y1="268" x2="736.7" y2="274"/>
+          <line x1="870" y1="268" x2="870" y2="274"/>
+        </g>
+        <g class="ax" text-anchor="middle">
+          <text x="70" y="291">14:02</text><text x="203.3" y="291">14:04</text>
+          <text x="336.7" y="291">14:06</text><text x="470" y="291">14:08</text>
+          <text x="603.3" y="291">14:10</text><text x="736.7" y="291">14:12</text>
+          <text x="870" y="291">14:14</text>
+        </g>
+
+        <!-- coolant trace -->
+        <path class="replay-area" fill="url(#heatFill)" d="M70 205 C115 205,165 204,203 202 C248 199,300 179,337 161 C362 150,378 150,403 144 C428 138,448 130,470 125 C496 119,516 113,537 113 C562 113,580 117,603 123 C648 135,698 159,737 172 C778 183,832 191,870 194 L870 268 L70 268 Z"/>
+        <path class="replay-line" pathLength="1" fill="none" stroke="url(#heat)" stroke-width="2.6" stroke-linecap="round"
+          d="M70 205 C115 205,165 204,203 202 C248 199,300 179,337 161 C362 150,378 150,403 144 C428 138,448 130,470 125 C496 119,516 113,537 113 C562 113,580 117,603 123 C648 135,698 159,737 172 C778 183,832 191,870 194"/>
+
+        <!-- event markers -->
+        <g class="mark mk1">
+          <line x1="203" y1="208" x2="203" y2="228" stroke="rgba(250,250,249,.3)" stroke-width="1"/>
+          <circle cx="203" cy="202" r="4.5" fill="#1C1917" stroke="#FAFAF9" stroke-width="2"/>
+          <text class="mk-t" x="203" y="242" text-anchor="middle" fill="rgba(250,250,249,.5)">14:04</text>
+          <text class="mk-d" x="203" y="258" text-anchor="middle">Climb starts</text>
+        </g>
+        <g class="mark mk2">
+          <line x1="403" y1="138" x2="403" y2="74" stroke="rgba(217,119,6,.45)" stroke-width="1"/>
+          <circle cx="403" cy="144" r="4.5" fill="#1C1917" stroke="#D97706" stroke-width="2"/>
+          <text class="mk-t" x="403" y="46" text-anchor="middle" fill="#D97706">14:07</text>
+          <text class="mk-d" x="403" y="62" text-anchor="middle">Warn — dash warning shown</text>
+        </g>
+        <g class="mark mk3">
+          <line x1="537" y1="119" x2="537" y2="200" stroke="rgba(250,250,249,.3)" stroke-width="1"/>
+          <circle cx="537" cy="113" r="4.5" fill="#1C1917" stroke="#FAFAF9" stroke-width="2"/>
+          <text class="mk-t" x="537" y="214" text-anchor="middle" fill="rgba(250,250,249,.5)">14:09</text>
+          <text class="mk-d" x="537" y="230" text-anchor="middle">Driver eases off</text>
+        </g>
+        <g class="mark mk4">
+          <line x1="737" y1="178" x2="737" y2="226" stroke="rgba(52,211,153,.4)" stroke-width="1"/>
+          <circle cx="737" cy="172" r="4.5" fill="#1C1917" stroke="#34D399" stroke-width="2"/>
+          <text class="mk-t" x="737" y="240" text-anchor="middle" fill="#34D399">14:12</text>
+          <text class="mk-d" x="737" y="256" text-anchor="middle">Temps recovering</text>
+        </g>
+        <g class="mark mk5">
+          <circle cx="870" cy="194" r="5" fill="#34D399"/>
+          <circle cx="870" cy="194" r="9.5" fill="none" stroke="rgba(52,211,153,.4)" stroke-width="1.6"/>
+          <text class="mk-win" x="858" y="166" text-anchor="end">Engine saved. Load delivered.</text>
+        </g>
+      </svg>
+      </div>
+      <div class="replay-legend">
+        <span><i></i>Coolant °C</span>
+        <span class="l-warn"><i></i>Warn threshold</span>
+        <span class="l-lim"><i></i>OEM limit</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= WHAT IT WATCHES ======================= -->
+<section>
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow">What it watches</p>
+      <h2>Forty-plus parameters. These are the ones that end engines.</h2>
+      <p class="sub">Read straight off the truck's native sensors by the snap-on ECU — no factory electronics required.</p>
+    </div>
+    <div class="grid-4 gap-top" data-stagger>
+      <div class="card wcard">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/></svg></span>
+        <h3>Coolant temp</h3><p>The classic killer on long climbs — watched against the OEM limit, not a guess.</p>
+      </div>
+      <div class="card wcard">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6 6.3 6 10.6a6 6 0 0 1-12 0C6 9 12 2.7 12 2.7Z"/></svg></span>
+        <h3>Oil pressure</h3><p>Low pressure at speed ends an engine in minutes. We alarm in seconds.</p>
+      </div>
+      <div class="card wcard">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg></span>
+        <h3>Turbo boost</h3><p>Overboost and boost leaks flagged before the turbo lets go.</p>
+      </div>
+      <div class="card wcard">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></span>
+        <h3>Gearbox temp</h3><p>Slipping, overheating boxes caught early on heavy pulls.</p>
+      </div>
+      <div class="card wcard">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg></span>
+        <h3>Air pressure</h3><p>Brake system air watched constantly — no air, no truck on the road.</p>
+      </div>
+      <div class="card wcard">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/><path d="m11 9-2 3h4l-2 3"/></svg></span>
+        <h3>Battery &amp; charging</h3><p>Alternator faults and battery drain flagged before a no-start.</p>
+      </div>
+      <div class="card wcard">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+        <h3>RPM &amp; over-rev</h3><p>Downshift over-revs logged with driver, time and place.</p>
+      </div>
+      <div class="card wcard">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+        <h3>Engine hours</h3><p>True hours, not estimates — services land exactly on time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= NUMBERS ======================= -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="stats rv">
+      <div class="stat"><div class="num">&lt;<em data-count="60">0</em>&#8202;s</div><p>event-to-alert</p></div>
+      <div class="stat"><div class="num"><em data-count="40" data-suffix="+">0</em></div><p>parameters watched</p></div>
+      <div class="stat"><div class="num"><em data-count="24">0</em>/7</div><p>watching</p></div>
+      <div class="stat"><div class="num"><em>0</em></div><p>engines we'll ever cut</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CTA ======================= -->
+<section class="cta-band" style="padding:0">
+  <div class="hero-topo" data-topo="dark" aria-hidden="true"></div>
+  <div class="cta-inner">
+    <p class="eyebrow">Engine protection</p>
+    <h2 class="rv">Your engines have OEM limits.<br/>Start enforcing them.</h2>
+    <p class="sub rv rv-d1">One snap-on ECU per truck. Every reading checked against spec, every second — and the driver always stays in control.</p>
+    <div class="cta-actions rv rv-d2">
+      <a class="btn btn-red" href="mailto:daniel@khuludigital.com?subject=Engine%20protection%20demo">Book a demo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" href="demo.html">Try the live demo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<footer class="site"><div class="wrap foot">
+<a href="index.html" class="brand" aria-label="Khulu Digital home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="9" cy="9" r="1.7"/><circle cx="23" cy="9" r="1.7"/><circle cx="5" cy="16" r="1.5"/><circle cx="12" cy="14" r="2.2"/><circle cx="20" cy="14" r="2.2" fill="#E63329"/><circle cx="27" cy="16" r="1.5"/><circle cx="9" cy="22" r="1.7"/><circle cx="16" cy="21" r="2"/><circle cx="23" cy="22" r="1.7"/><circle cx="16" cy="27" r="1.4"/></g></svg><span class="lockup">KHULU<em>DIGITAL</em></span></a>
+<div class="foot-links"><a href="why.html">Why Khulu</a><a href="ecu.html">Snap-On ECU</a><a href="protection.html">Protection</a><a href="platform.html">Platform</a><a href="store.html">Store</a><a href="demo.html">Live Demo</a><a href="index.html#contact">Contact</a></div>
+<p>© <span data-year></span> Khulu Digital. Truck telematics, cameras &amp; sensors — one platform.</p>
+</div></footer>
+
+<script src="assets/khulu.js"></script>
+<script>
+(function () {
+  'use strict';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ============ instrument cluster ============ */
+  const svg = document.getElementById('gauge');
+  if (svg) {
+    const NS = 'http://www.w3.org/2000/svg';
+    const CX = 180, CY = 146;
+    const degOf = t => -120 + (t - 60) * 4;           /* 60–120 °C → -120°…+120° */
+    const radOf = t => degOf(t) * Math.PI / 180;
+
+    /* ticks + numerals */
+    const tg = document.getElementById('gTicks');
+    for (let t = 60; t <= 120; t += 5) {
+      const major = t % 10 === 0, a = radOf(t);
+      const r1 = major ? 111 : 115, r2 = 120;
+      const ln = document.createElementNS(NS, 'line');
+      ln.setAttribute('x1', (CX + r1 * Math.sin(a)).toFixed(2));
+      ln.setAttribute('y1', (CY - r1 * Math.cos(a)).toFixed(2));
+      ln.setAttribute('x2', (CX + r2 * Math.sin(a)).toFixed(2));
+      ln.setAttribute('y2', (CY - r2 * Math.cos(a)).toFixed(2));
+      ln.setAttribute('stroke', major ? 'rgba(250,250,249,.75)' : 'rgba(250,250,249,.30)');
+      ln.setAttribute('stroke-width', major ? 2.4 : 1.4);
+      ln.setAttribute('stroke-linecap', 'round');
+      tg.appendChild(ln);
+      if (major) {
+        const tx = document.createElementNS(NS, 'text');
+        tx.setAttribute('x', (CX + 82 * Math.sin(a)).toFixed(2));
+        tx.setAttribute('y', (CY - 82 * Math.cos(a) + 4.5).toFixed(2));
+        tx.setAttribute('text-anchor', 'middle');
+        tx.setAttribute('class', 'gnum');
+        tx.textContent = t;
+        tg.appendChild(tx);
+      }
+    }
+
+    const needle = document.getElementById('gNeedle');
+    const read   = document.getElementById('gRead');
+    const lamp   = document.getElementById('gLamp');
+    const limp   = document.getElementById('limpPill');
+    const oilFill = document.getElementById('oilFill'), oilVal = document.getElementById('oilVal');
+    const rpmFill = document.getElementById('rpmFill'), rpmVal = document.getElementById('rpmVal');
+
+    const smooth = k => k * k * (3 - 2 * k);
+    const CYCLE = 14000;
+    /* 0–6s idle ~86 · 6–9s sweep to ~104 · 9–11s in the red · 11–14s recover */
+    function tempAt(p) {
+      if (p < 6000)  return 86 + Math.sin(p / 420) * .5 + Math.sin(p / 97) * .18;
+      if (p < 9000)  return 86 + smooth((p - 6000) / 3000) * 18;
+      if (p < 11000) return 104 + Math.sin(p / 130) * .35;
+      return 104 - smooth((p - 11000) / 3000) * 18;
+    }
+
+    function render(temp, p) {
+      needle.setAttribute('transform', 'rotate(' + degOf(temp).toFixed(2) + ' 180 146)');
+      read.textContent = temp.toFixed(1) + '°C';
+      const danger = temp >= 103, warn = temp >= 96;
+      read.setAttribute('fill', danger ? '#FF6B61' : warn ? '#FBBF24' : '#34D399');
+      const blinkOn = danger && (reduced || Math.floor(p / 260) % 2 === 0);
+      lamp.setAttribute('opacity', danger ? (blinkOn ? 1 : .3) : .18);
+      limp.classList.toggle('on', danger);
+      /* sub-gauges: oil sags and rpm climbs with heat, plus subtle jitter */
+      const oil = Math.max(2.8, 4.3 - (temp - 86) * .03 + Math.sin(p / 300) * .1 + Math.sin(p / 77) * .04);
+      const rpm = Math.min(2600, Math.max(900, 1450 + (temp - 86) * 22 + Math.sin(p / 240) * 55 + Math.sin(p / 61) * 20));
+      oilFill.style.width = (oil / 6 * 100).toFixed(1) + '%';
+      oilVal.textContent = oil.toFixed(1) + ' bar';
+      rpmFill.style.width = (rpm / 3000 * 100).toFixed(1) + '%';
+      rpmVal.textContent = Math.round(rpm).toLocaleString('en-ZA').replace(/,/g, ' ');
+    }
+
+    if (reduced) {
+      render(86, 0);                                  /* static mid-state */
+    } else {
+      let running = false;
+      const t0 = performance.now();
+      function frame(now) {
+        if (!running) return;
+        render(tempAt((now - t0) % CYCLE), (now - t0) % CYCLE);
+        requestAnimationFrame(frame);
+      }
+      new IntersectionObserver(es => es.forEach(e => {
+        if (e.isIntersecting && !running) { running = true; requestAnimationFrame(frame); }
+        else if (!e.isIntersecting) running = false;
+      }), { threshold: .15 }).observe(svg);
+      render(86, 0);
+    }
+  }
+
+  /* ============ case replay: play when in view ============ */
+  const replay = document.getElementById('replay');
+  if (replay) {
+    if (reduced) replay.classList.add('play');        /* CSS motion-safety makes it instant */
+    else new IntersectionObserver((es, io) => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      replay.classList.add('play');
+      io.disconnect();
+    }), { threshold: .35 }).observe(replay);
+  }
+})();
+</script>
+</body>
+</html>
