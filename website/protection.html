@@ -47,7 +47,7 @@
 .gnum{font-family:var(--mono);font-size:12.5px;fill:rgba(250,250,249,.62)}
 .gread{font-family:var(--mono);font-size:27px;font-weight:500;letter-spacing:.02em}
 .glab{font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;fill:#78716C}
-.cl-sub{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px;padding-top:16px;border-top:1px solid #241f1b}
+.cl-sub{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:8px;padding-top:16px;border-top:1px solid #241f1b}
 .cl-bar .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .cl-bar label{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:#78716C;text-transform:uppercase}
 .cl-bar b{font-family:var(--mono);font-size:12.5px;font-weight:500;color:#FAFAF9;font-variant-numeric:tabular-nums}
@@ -55,6 +55,7 @@
 .cl-track i{display:block;height:100%;border-radius:99px;width:60%}
 #oilFill{background:linear-gradient(90deg,#0E9F6E,#34D399)}
 #rpmFill{background:linear-gradient(90deg,#C2261E,#E63329)}
+#spdFill{background:linear-gradient(90deg,#57504B,#A8A29E)}
 
 /* ---- 3-stage logic ---- */
 .stage-card .pill{margin-bottom:16px}
@@ -87,11 +88,11 @@
 .mk-d{font-family:var(--font);font-size:12.5px;font-weight:600;fill:#FAFAF9}
 .mk-win{font-family:var(--font);font-size:13.5px;font-weight:800;fill:#34D399}
 .replay-line{stroke-dasharray:1;stroke-dashoffset:1}
-.replay-area,.mark{opacity:0}
-.mark{transform:translateY(7px);transform-box:fill-box}
+.replay-area,.ev-mark{opacity:0}
+.ev-mark{transform:translateY(7px);transform-box:fill-box}
 .play .replay-line{transition:stroke-dashoffset 4.2s linear .25s;stroke-dashoffset:0}
 .play .replay-area{transition:opacity 1s var(--ease) 4.3s;opacity:1}
-.play .mark{transition:opacity .55s var(--ease),transform .55s var(--ease);opacity:1;transform:none}
+.play .ev-mark{transition:opacity .55s var(--ease),transform .55s var(--ease);opacity:1;transform:none}
 .play .mk1{transition-delay:1s}
 .play .mk2{transition-delay:2s}
 .play .mk3{transition-delay:2.7s}
@@ -311,31 +312,31 @@
           d="M70 205 C115 205,165 204,203 202 C248 199,300 179,337 161 C362 150,378 150,403 144 C428 138,448 130,470 125 C496 119,516 113,537 113 C562 113,580 117,603 123 C648 135,698 159,737 172 C778 183,832 191,870 194"/>
 
         <!-- event markers -->
-        <g class="mark mk1">
+        <g class="ev-mark mk1">
           <line x1="203" y1="208" x2="203" y2="228" stroke="rgba(250,250,249,.3)" stroke-width="1"/>
           <circle cx="203" cy="202" r="4.5" fill="#1C1917" stroke="#FAFAF9" stroke-width="2"/>
           <text class="mk-t" x="203" y="242" text-anchor="middle" fill="rgba(250,250,249,.5)">14:04</text>
           <text class="mk-d" x="203" y="258" text-anchor="middle">Climb starts</text>
         </g>
-        <g class="mark mk2">
+        <g class="ev-mark mk2">
           <line x1="403" y1="138" x2="403" y2="74" stroke="rgba(217,119,6,.45)" stroke-width="1"/>
           <circle cx="403" cy="144" r="4.5" fill="#1C1917" stroke="#D97706" stroke-width="2"/>
           <text class="mk-t" x="403" y="46" text-anchor="middle" fill="#D97706">14:07</text>
           <text class="mk-d" x="403" y="62" text-anchor="middle">Warn — dash warning shown</text>
         </g>
-        <g class="mark mk3">
+        <g class="ev-mark mk3">
           <line x1="537" y1="119" x2="537" y2="200" stroke="rgba(250,250,249,.3)" stroke-width="1"/>
           <circle cx="537" cy="113" r="4.5" fill="#1C1917" stroke="#FAFAF9" stroke-width="2"/>
           <text class="mk-t" x="537" y="214" text-anchor="middle" fill="rgba(250,250,249,.5)">14:09</text>
           <text class="mk-d" x="537" y="230" text-anchor="middle">Driver eases off</text>
         </g>
-        <g class="mark mk4">
+        <g class="ev-mark mk4">
           <line x1="737" y1="178" x2="737" y2="226" stroke="rgba(52,211,153,.4)" stroke-width="1"/>
           <circle cx="737" cy="172" r="4.5" fill="#1C1917" stroke="#34D399" stroke-width="2"/>
           <text class="mk-t" x="737" y="240" text-anchor="middle" fill="#34D399">14:12</text>
           <text class="mk-d" x="737" y="256" text-anchor="middle">Temps recovering</text>
         </g>
-        <g class="mark mk5">
+        <g class="ev-mark mk5">
           <circle cx="870" cy="194" r="5" fill="#34D399"/>
           <circle cx="870" cy="194" r="9.5" fill="none" stroke="rgba(52,211,153,.4)" stroke-width="1.6"/>
           <text class="mk-win" x="858" y="166" text-anchor="end">Engine saved. Load delivered.</text>
