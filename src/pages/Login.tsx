@@ -106,6 +106,13 @@ const Login: React.FC = () => {
 
                 <div className="pt-4 flex flex-col items-center gap-4">
                     <div className="h-px w-full bg-border" />
+                    <button
+                        type="button"
+                        onClick={() => navigate('/demo')}
+                        className="w-full py-3 rounded-xl border-2 border-dashed border-accent/40 text-accent text-sm font-black uppercase tracking-widest hover:bg-accent/5 hover:border-accent transition-all"
+                    >
+                        Try the interactive demo →
+                    </button>
                     <div className="text-center text-[10px] text-slate-400 uppercase tracking-[0.25em] font-black">
                         Secure Access Portal • PowerTech Intelligence
                     </div>

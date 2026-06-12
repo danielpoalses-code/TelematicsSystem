@@ -26,6 +26,7 @@ const ClientOnboarding = lazy(() => import('./pages/admin/ClientOnboarding'));
 const TruckModels = lazy(() => import('./pages/admin/TruckModels'));
 const GeoZones = lazy(() => import('./pages/admin/GeoZones'));
 const FuelTheft = lazy(() => import('./pages/admin/FuelTheft'));
+const DemoApp = lazy(() => import('./demo/DemoApp'));
 
 const Loading = () => (
     <div className="flex items-center justify-center p-8 min-h-screen bg-background text-white">
@@ -48,6 +49,9 @@ const App: React.FC = () => {
             <Suspense fallback={<Loading />}>
                 <Routes>
                     <Route path="/login" element={<Login />} />
+
+                    {/* Client-facing interactive demo — no auth required */}
+                    <Route path="/demo/*" element={<DemoApp />} />
 
                     <Route path="/" element={
                         <ProtectedRoute>
