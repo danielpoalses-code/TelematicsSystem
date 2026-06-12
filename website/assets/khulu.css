@@ -156,6 +156,21 @@ nav.site.scrolled .nav-inner{height:68px}
   nav.site.open .nav-cta{display:inline-flex;order:4;margin-top:16px;justify-content:center}
 }
 
+/* nav over dark sections: switch to light-on-dark */
+nav.site.over-dark .brand,nav.site.over-dark .nav-burger{color:var(--dark-text)}
+nav.site.over-dark .nav-links a{color:var(--dark-text-2)}
+nav.site.over-dark .nav-links a:hover,nav.site.over-dark .nav-links a.active{color:var(--dark-text)}
+nav.site.over-dark::before{
+  background:rgba(10,9,8,.72);
+  border-bottom-color:rgba(255,255,255,.08);
+}
+nav.site.over-dark.scrolled::before{opacity:1}
+nav.site.over-dark .btn-ghost{border-color:rgba(255,255,255,.25);color:var(--dark-text)}
+@media(max-width:1080px){
+  nav.site.over-dark.open::before{opacity:1;background:rgba(10,9,8,.97)}
+  nav.site.over-dark.open .nav-links a{border-bottom-color:var(--dark-line)}
+}
+
 /* ---------- hero ---------- */
 .hero{padding:clamp(160px,20vh,210px) 0 clamp(64px,8vw,104px);position:relative;overflow:hidden}
 .hero h1{font-size:clamp(40px,5.2vw,72px)}

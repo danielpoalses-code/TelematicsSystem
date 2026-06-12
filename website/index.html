@@ -36,7 +36,7 @@
 .app-head .uid{margin-left:auto;color:#78716C}
 .gauge-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .gauge-cell{background:rgba(255,255,255,.035);border:1px solid #221E1B;border-radius:14px;padding:12px 10px 8px;text-align:center}
-.gauge-cell svg{width:100%;max-width:150px;margin:0 auto}
+.gauge-cell svg{width:100%;max-width:172px;margin:0 auto}
 .gauge-cell .glab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#78716C;text-transform:uppercase}
 .chart-cell{background:rgba(255,255,255,.035);border:1px solid #221E1B;border-radius:14px;padding:14px 12px 8px}
 .chart-cell .clab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#78716C;text-transform:uppercase;margin-bottom:6px}
@@ -136,8 +136,8 @@
           <span class="uid">UNIT 4035 · 1996 POWERSTAR</span>
         </div>
         <div class="gauge-row">
-          <div class="gauge-cell"><svg id="gaugeCool" viewBox="0 0 160 100"></svg><div class="glab">Coolant °C</div></div>
-          <div class="gauge-cell"><svg id="gaugeOil" viewBox="0 0 160 100"></svg><div class="glab">Oil bar</div></div>
+          <div class="gauge-cell"><svg id="gaugeCool" viewBox="0 0 160 126"></svg><div class="glab">Coolant °C</div></div>
+          <div class="gauge-cell"><svg id="gaugeOil" viewBox="0 0 160 126"></svg><div class="glab">Oil bar</div></div>
         </div>
         <div class="chart-cell">
           <div class="clab"><span>Coolant · last 60 min</span><b id="coolNow">86.4°C</b></div>
@@ -403,73 +403,86 @@
 
 <script src="assets/khulu.js"></script>
 <script>
-/* ---------- zone gauges (SVG arc with ticks) ---------- */
-function buildGauge(svgId, min, max, zones, startVal) {
+/* ---------- automotive zone gauges: 240° dial, smooth needle ---------- */
+function buildGauge(svgId, opts) {
   const svg = document.getElementById(svgId); if (!svg) return null;
-  const NS = 'http://www.w3.org/2000/svg', cx = 80, cy = 88, R = 64;
-  const a0 = Math.PI, a1 = 0; // 180° sweep
-  const ang = v => a0 + (v - min) / (max - min) * (a1 - a0);
-  const pt = (a, r) => [cx + Math.cos(a) * r, cy - Math.sin(a) * -1 * r * 0 + Math.sin(a) * 0 - 0]; // unused
-  const pos = (a, r) => [cx + Math.cos(Math.PI - (a - a0) / (a1 - a0) * Math.PI) * 0, 0]; // unused
-  const xy = (v, r) => {
-    const t = (v - min) / (max - min); // 0..1
-    const a = Math.PI - t * Math.PI;   // PI..0
-    return [cx + Math.cos(a) * r, cy - Math.sin(a) * r];
-  };
-  // zone arcs
-  zones.forEach(z => {
-    const [x1, y1] = xy(z.from, R), [x2, y2] = xy(z.to, R);
-    const large = (z.to - z.from) / (max - min) > .5 ? 1 : 0;
+  const NS = 'http://www.w3.org/2000/svg', cx = 80, cy = 66, R = 54;
+  const A0 = 210, A1 = -30; // 240° sweep, open at the bottom
+  const rad = d => d * Math.PI / 180;
+  const xy = (aDeg, r) => [cx + Math.cos(rad(aDeg)) * r, cy - Math.sin(rad(aDeg)) * r];
+  const angOf = v => A0 + (v - opts.min) / (opts.max - opts.min) * (A1 - A0);
+  function arc(aFrom, aTo, r, col, w, cap) {
+    const [x1, y1] = xy(aFrom, r), [x2, y2] = xy(aTo, r);
+    const large = (aFrom - aTo) > 180 ? 1 : 0;
     const p = document.createElementNS(NS, 'path');
-    p.setAttribute('d', `M${x1} ${y1} A${R} ${R} 0 ${large} 1 ${x2} ${y2}`);
-    p.setAttribute('stroke', z.c); p.setAttribute('stroke-width', '7');
-    p.setAttribute('fill', 'none'); p.setAttribute('stroke-linecap', 'butt');
-    p.setAttribute('opacity', '.85');
-    svg.appendChild(p);
+    p.setAttribute('d', `M${x1.toFixed(1)} ${y1.toFixed(1)} A${r} ${r} 0 ${large} 1 ${x2.toFixed(1)} ${y2.toFixed(1)}`);
+    p.setAttribute('stroke', col); p.setAttribute('stroke-width', w);
+    p.setAttribute('fill', 'none'); p.setAttribute('stroke-linecap', cap || 'butt');
+    svg.appendChild(p); return p;
+  }
+  arc(A0, A1, R, '#262120', 9, 'round');                                  // track
+  opts.zones.forEach(z => arc(angOf(z.from), angOf(z.to), R, z.c, 9));    // zones
+  opts.zones.slice(1).forEach(z => {                                      // zone separators
+    const [x1, y1] = xy(angOf(z.from), R - 6), [x2, y2] = xy(angOf(z.from), R + 6);
+    const l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', x1); l.setAttribute('y1', y1); l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+    l.setAttribute('stroke', '#12100E'); l.setAttribute('stroke-width', '2.5');
+    svg.appendChild(l);
   });
-  // ticks + labels
-  for (let v = min; v <= max; v += (max - min) / 6) {
-    const [x1, y1] = xy(v, R - 9), [x2, y2] = xy(v, R - 2);
-    const t = document.createElementNS(NS, 'line');
-    t.setAttribute('x1', x1); t.setAttribute('y1', y1); t.setAttribute('x2', x2); t.setAttribute('y2', y2);
-    t.setAttribute('stroke', '#78716C'); t.setAttribute('stroke-width', '1.5');
-    svg.appendChild(t);
-    const [lx, ly] = xy(v, R - 20);
-    const tx = document.createElementNS(NS, 'text');
-    tx.setAttribute('x', lx); tx.setAttribute('y', ly + 3); tx.setAttribute('text-anchor', 'middle');
-    tx.setAttribute('font-family', 'IBM Plex Mono,monospace'); tx.setAttribute('font-size', '8'); tx.setAttribute('fill', '#78716C');
-    tx.textContent = Math.round(v);
-    svg.appendChild(tx);
+  for (let i = 0; i <= 8; i++) {                                          // minor ticks
+    const a = A0 + (A1 - A0) * i / 8;
+    const [x1, y1] = xy(a, R - 13), [x2, y2] = xy(a, R - 9);
+    const l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', x1); l.setAttribute('y1', y1); l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+    l.setAttribute('stroke', '#3F3B38'); l.setAttribute('stroke-width', '1.5'); l.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(l);
   }
-  // needle
-  const needle = document.createElementNS(NS, 'line');
-  needle.setAttribute('stroke', '#FAFAF9'); needle.setAttribute('stroke-width', '2.5'); needle.setAttribute('stroke-linecap', 'round');
-  svg.appendChild(needle);
+  [[opts.min, A0], [opts.max, A1]].forEach(([v, a]) => {                  // end labels
+    const [lx, ly] = xy(a, R);
+    const t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', lx); t.setAttribute('y', ly + 16); t.setAttribute('text-anchor', 'middle');
+    t.setAttribute('font-family', 'IBM Plex Mono,monospace'); t.setAttribute('font-size', '8.5'); t.setAttribute('fill', '#57504B');
+    t.textContent = v; svg.appendChild(t);
+  });
+  const ng = document.createElementNS(NS, 'g');                           // tapered needle
+  const nd = document.createElementNS(NS, 'path');
+  nd.setAttribute('d', `M${cx - 2.4} ${cy + 7} L${cx} ${cy - (R - 14)} L${cx + 2.4} ${cy + 7} Z`);
+  nd.setAttribute('fill', '#FAFAF9');
+  ng.appendChild(nd); svg.appendChild(ng);
+  ng.style.transformOrigin = `${cx}px ${cy}px`;
+  ng.style.transition = 'transform 1.6s cubic-bezier(.22,.61,.36,1)';
   const hub = document.createElementNS(NS, 'circle');
-  hub.setAttribute('cx', cx); hub.setAttribute('cy', cy); hub.setAttribute('r', '5'); hub.setAttribute('fill', '#44403C');
+  hub.setAttribute('cx', cx); hub.setAttribute('cy', cy); hub.setAttribute('r', '5.5');
+  hub.setAttribute('fill', '#1C1917'); hub.setAttribute('stroke', '#3F3B38'); hub.setAttribute('stroke-width', '1.5');
   svg.appendChild(hub);
-  // value text
-  const val = document.createElementNS(NS, 'text');
-  val.setAttribute('x', cx); val.setAttribute('y', cy - 22); val.setAttribute('text-anchor', 'middle');
-  val.setAttribute('font-family', 'IBM Plex Mono,monospace'); val.setAttribute('font-size', '17'); val.setAttribute('fill', '#FAFAF9');
+  const hubDot = document.createElementNS(NS, 'circle');
+  hubDot.setAttribute('cx', cx); hubDot.setAttribute('cy', cy); hubDot.setAttribute('r', '1.8'); hubDot.setAttribute('fill', '#E63329');
+  svg.appendChild(hubDot);
+  const val = document.createElementNS(NS, 'text');                       // digital value
+  val.setAttribute('x', cx); val.setAttribute('y', cy + 40); val.setAttribute('text-anchor', 'middle');
+  val.setAttribute('font-family', 'IBM Plex Mono,monospace'); val.setAttribute('font-size', '19'); val.setAttribute('fill', '#FAFAF9');
   svg.appendChild(val);
-  let cur = startVal;
+  const colorFor = v => { const z = opts.zones.find(z => v >= z.from && v <= z.to); return z ? z.c : '#FAFAF9'; };
+  let cur = opts.start;
   function set(v) {
-    cur = v;
-    const [x2, y2] = xy(v, R - 16);
-    needle.setAttribute('x1', cx); needle.setAttribute('y1', cy);
-    needle.setAttribute('x2', x2); needle.setAttribute('y2', y2);
-    val.textContent = (max - min) > 50 ? Math.round(v) : v.toFixed(1);
+    cur = Math.max(opts.min, Math.min(opts.max, v));
+    ng.style.transform = `rotate(${90 - angOf(cur)}deg)`;
+    val.textContent = cur.toFixed(opts.dec);
+    const c = colorFor(cur);
+    val.setAttribute('fill', c === '#0E9F6E' ? '#FAFAF9' : c);
   }
-  set(startVal);
+  set(opts.min);                                                          // sweep in from zero
+  requestAnimationFrame(() => requestAnimationFrame(() => set(opts.start)));
   return { set, get: () => cur };
 }
-const gCool = buildGauge('gaugeCool', 60, 120, [
-  { from: 60, to: 96, c: '#0E9F6E' }, { from: 96, to: 103, c: '#D97706' }, { from: 103, to: 120, c: '#E63329' }
-], 86.4);
-const gOil = buildGauge('gaugeOil', 0, 8, [
-  { from: 0, to: 1.5, c: '#E63329' }, { from: 1.5, to: 2.5, c: '#D97706' }, { from: 2.5, to: 8, c: '#0E9F6E' }
-], 4.6);
+const gCool = buildGauge('gaugeCool', {
+  min: 60, max: 120, start: 86.4, dec: 1,
+  zones: [{ from: 60, to: 96, c: '#0E9F6E' }, { from: 96, to: 103, c: '#D97706' }, { from: 103, to: 120, c: '#E63329' }]
+});
+const gOil = buildGauge('gaugeOil', {
+  min: 0, max: 8, start: 4.6, dec: 1,
+  zones: [{ from: 0, to: 1.5, c: '#E63329' }, { from: 1.5, to: 2.5, c: '#D97706' }, { from: 2.5, to: 8, c: '#0E9F6E' }]
+});
 
 /* ---------- coolant chart with thresholds ---------- */
 (function () {
@@ -513,14 +526,25 @@ const gOil = buildGauge('gaugeOil', 0, 8, [
   const data = [];
   let v = 85;
   for (let i = 0; i < 60; i++) { v += (Math.random() - .48) * 1.2; v = Math.max(82, Math.min(94, v)); data.push(v); }
+  const defs = document.createElementNS(NS, 'defs');
+  defs.innerHTML = '<linearGradient id="coolFill" x1="0" y1="0" x2="0" y2="1">' +
+    '<stop offset="0" stop-color="#0E9F6E" stop-opacity=".28"/>' +
+    '<stop offset="1" stop-color="#0E9F6E" stop-opacity="0"/></linearGradient>';
+  svg.appendChild(defs);
+  const area = document.createElementNS(NS, 'polygon');
+  area.setAttribute('fill', 'url(#coolFill)');
+  svg.appendChild(area);
   const line = document.createElementNS(NS, 'polyline');
-  line.setAttribute('fill', 'none'); line.setAttribute('stroke', '#0E9F6E'); line.setAttribute('stroke-width', '1.8');
+  line.setAttribute('fill', 'none'); line.setAttribute('stroke', '#0E9F6E'); line.setAttribute('stroke-width', '2');
+  line.setAttribute('stroke-linejoin', 'round'); line.setAttribute('stroke-linecap', 'round');
   svg.appendChild(line);
   const dot = document.createElementNS(NS, 'circle');
   dot.setAttribute('r', '3'); dot.setAttribute('fill', '#0E9F6E'); svg.appendChild(dot);
   const nowLab = document.getElementById('coolNow');
   function render() {
-    line.setAttribute('points', data.map((d, i) => `${x(i)},${y(d)}`).join(' '));
+    const pts = data.map((d, i) => `${x(i)},${y(d)}`).join(' ');
+    line.setAttribute('points', pts);
+    area.setAttribute('points', `${x(0)},${H - padB} ${pts} ${x(59)},${H - padB}`);
     dot.setAttribute('cx', x(59)); dot.setAttribute('cy', y(data[59]));
     if (nowLab) nowLab.textContent = data[59].toFixed(1) + '°C';
   }

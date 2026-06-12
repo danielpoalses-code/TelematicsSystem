@@ -20,8 +20,24 @@
   if (nav) {
     const burger = nav.querySelector('.nav-burger');
     if (burger) burger.addEventListener('click', () => nav.classList.toggle('open'));
-    const setScrolled = () => nav.classList.toggle('scrolled', scrollY > 24);
+    const darkEls = document.querySelectorAll('.dark-band,.cta-band,footer.site,[data-nav-dark]');
+    let navRaf = null;
+    const setScrolled = () => {
+      nav.classList.toggle('scrolled', scrollY > 24);
+      if (navRaf) return;
+      navRaf = requestAnimationFrame(() => {
+        const y = nav.offsetHeight / 2;
+        let over = false;
+        darkEls.forEach(el => {
+          const r = el.getBoundingClientRect();
+          if (r.top <= y && r.bottom >= y) over = true;
+        });
+        nav.classList.toggle('over-dark', over);
+        navRaf = null;
+      });
+    };
     addEventListener('scroll', setScrolled, { passive: true });
+    addEventListener('resize', setScrolled, { passive: true });
     setScrolled();
     const here = location.pathname.split('/').pop() || 'index.html';
     nav.querySelectorAll('.nav-links a').forEach(a => {
