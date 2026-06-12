@@ -404,6 +404,8 @@ function initGame() {
       lastSpace = now;
     }
     if (e.code === 'KeyF') { player.fly = !player.fly; player.vy = 0; }
+    if (e.code === 'KeyE' && started) doAction(true);   // place (mouse-free building)
+    if (e.code === 'KeyQ' && started) doAction(false);  // break
     if (/^Digit[1-9]$/.test(e.code)) selectSlot(Number(e.code[5]) - 1);
   });
   document.addEventListener('keyup', e => { keys[e.code] = false; });
@@ -456,10 +458,19 @@ function initGame() {
       drag.x = e.clientX; drag.y = e.clientY;
     }
   });
+  // cooldown so a single physical click can't fire two actions (Magic Mouse
+  // can emit both a left and right event for one click)
+  let lastActionT = 0;
+  const doAction = place => {
+    const now = performance.now();
+    if (now - lastActionT < 120) return;
+    lastActionT = now;
+    if (place) placeBlock(); else breakBlock();
+  };
   const clickAction = e => {
     // Ctrl+click (or two-finger click sending button 2) places — Apple-mouse friendly
-    if (e.button === 2 || e.ctrlKey || e.metaKey) placeBlock();
-    else if (e.button === 0) breakBlock();
+    if (e.button === 2 || e.ctrlKey || e.metaKey) doAction(true);
+    else if (e.button === 0) doAction(false);
   };
   document.addEventListener('mousedown', e => {
     if (!started) return;
