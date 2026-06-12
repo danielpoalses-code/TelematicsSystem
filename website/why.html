@@ -33,7 +33,7 @@
 .hl-stack{position:relative;width:100%;max-width:980px;height:clamp(86px,16vw,128px);text-align:center}
 .hl{
   position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-  opacity:0;transform:translateY(10px);transition:opacity .55s var(--ease),transform .55s var(--ease);pointer-events:none;
+  opacity:0;transform:translateY(12px);transition:opacity .75s var(--ease-out),transform .75s var(--ease-out);pointer-events:none;
 }
 .hl h1{font-size:clamp(25px,4.6vw,52px);color:var(--dark-text);letter-spacing:-.01em}
 .hl h1 em{font-style:normal;color:var(--red)}
@@ -46,12 +46,19 @@
 .truck-box{width:min(1020px,100%);margin:0 auto}
 #truckSvg{width:100%;height:auto;overflow:visible}
 #truckSvg text{user-select:none}
+#truckSvg line,#truckSvg path,#truckSvg rect,#truckSvg circle{stroke-linecap:round;stroke-linejoin:round}
 
-/* truck entrance */
-#truck{transform:translateX(-2400px);transition:transform 2.35s cubic-bezier(.16,.76,.28,1)}
+/* truck entrance — one long ease-out glide, no hard stop */
+#truck{transform:translateX(-2400px);transition:transform 2.7s cubic-bezier(.16,1,.3,1)}
 #stage.p1 #truck{transform:translateX(0)}
-#stage.settled #truckBody{animation:settle .95s var(--ease) 1}
-@keyframes settle{0%{transform:translateY(0)}30%{transform:translateY(6px)}55%{transform:translateY(-3px)}76%{transform:translateY(1.6px)}100%{transform:translateY(0)}}
+#stage.settled #truckBody{animation:settle 1.2s var(--ease-out) 1}
+@keyframes settle{
+  0%{transform:translateY(0)}
+  36%{transform:translateY(4.4px)}
+  62%{transform:translateY(-2.3px)}
+  82%{transform:translateY(1px)}
+  100%{transform:translateY(0)}
+}
 
 /* wheels + road */
 .spokes{transform-box:fill-box;transform-origin:center}
@@ -61,17 +68,17 @@
 #stage.driving #roadDash{animation:roadmove .42s linear infinite}
 @keyframes roadmove{to{stroke-dashoffset:-66}}
 
-/* panels fly off in phase 2 */
-.panel{transform-box:fill-box;transform-origin:center;transition:transform .8s var(--ease),opacity .8s var(--ease)}
+/* panels fly off in phase 2 — long ease-out, gentle rotation, full fade */
+.panel{transform-box:fill-box;transform-origin:center;transition:transform 1.25s var(--ease-out),opacity 1.05s var(--ease-out)}
 #stage.p2 .panel{opacity:0}
-#stage.p2 #pan-roof   {transform:translate(70px,-280px) rotate(7deg);transition-delay:0s}
-#stage.p2 #pan-tr1    {transform:translate(-150px,-200px) rotate(-17deg);transition-delay:.15s}
-#stage.p2 #pan-tr2    {transform:translate(-40px,-260px) rotate(11deg);transition-delay:.3s}
-#stage.p2 #pan-cabroof{transform:translate(95px,-250px) rotate(-9deg);transition-delay:.45s}
-#stage.p2 #pan-door   {transform:translate(160px,-150px) rotate(21deg);transition-delay:.6s}
-#stage.p2 #pan-nose   {transform:translate(240px,-80px) rotate(28deg);transition-delay:.75s}
-#stage.p2 #pan-fender {transform:translate(200px,130px) rotate(38deg);transition-delay:.9s}
-#stage.p2 #pan-skirt  {transform:translate(-40px,190px) rotate(-14deg);transition-delay:1.05s}
+#stage.p2 #pan-roof   {transform:translate(60px,-300px) rotate(5deg);transition-delay:0s}
+#stage.p2 #pan-tr1    {transform:translate(-140px,-230px) rotate(-8deg);transition-delay:.16s}
+#stage.p2 #pan-tr2    {transform:translate(-30px,-290px) rotate(6deg);transition-delay:.32s}
+#stage.p2 #pan-cabroof{transform:translate(90px,-270px) rotate(-6deg);transition-delay:.48s}
+#stage.p2 #pan-door   {transform:translate(150px,-175px) rotate(10deg);transition-delay:.64s}
+#stage.p2 #pan-nose   {transform:translate(230px,-105px) rotate(14deg);transition-delay:.8s}
+#stage.p2 #pan-fender {transform:translate(190px,120px) rotate(18deg);transition-delay:.96s}
+#stage.p2 #pan-skirt  {transform:translate(-30px,170px) rotate(-8deg);transition-delay:1.12s}
 
 /* ECU glow once exposed */
 #ecu{filter:drop-shadow(0 0 4px rgba(230,51,41,.45))}
@@ -82,30 +89,44 @@
 }
 
 /* sensors + CAN bus in phase 3 */
-.sensor{opacity:0;transform:scale(.2);transform-box:fill-box;transform-origin:center;transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.sensor{opacity:0;transform:scale(.3);transform-box:fill-box;transform-origin:center;transition:opacity .6s var(--ease-out),transform .6s var(--ease-out)}
 #stage.p3 .sensor{opacity:1;transform:scale(1)}
-#stage.p3 #s1{transition-delay:0s}#stage.p3 #s2{transition-delay:.12s}#stage.p3 #s3{transition-delay:.24s}
-#stage.p3 #s4{transition-delay:.36s}#stage.p3 #s5{transition-delay:.48s}#stage.p3 #s6{transition-delay:.6s}
-#stage.p3 #s7{transition-delay:.72s}#stage.p3 #s8{transition-delay:.84s}
-.halo{transform-box:fill-box;transform-origin:center;animation:halo 2s ease-out infinite}
+#stage.p3 #s1{transition-delay:0s}#stage.p3 #s2{transition-delay:.14s}#stage.p3 #s3{transition-delay:.28s}
+#stage.p3 #s4{transition-delay:.42s}#stage.p3 #s5{transition-delay:.56s}#stage.p3 #s6{transition-delay:.7s}
+#stage.p3 #s7{transition-delay:.84s}#stage.p3 #s8{transition-delay:.98s}
+.halo{transform-box:fill-box;transform-origin:center;animation:halo 2.2s var(--ease-out) infinite}
 @keyframes halo{0%{transform:scale(.4);opacity:.85}100%{transform:scale(2.4);opacity:0}}
-#canBus{opacity:0;transition:opacity .7s var(--ease) .3s}
+#canBus{opacity:0;transition:opacity 1s var(--ease-out) .25s}
 #stage.p3 #canBus{opacity:1}
-@media(prefers-reduced-motion:reduce){#canPulse{display:none}}
+/* trunk data flow: dashes drift toward the ECU */
+#stage.p3 #canPath{animation:canflow 1.3s linear infinite}
+@keyframes canflow{to{stroke-dashoffset:-26}}
+@media(prefers-reduced-motion:reduce){.can-pulse{display:none}}
 
-/* reason chips in phase 4 */
-.chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:880px}
-.chip{
-  display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;
-  border:1px solid var(--dark-line);background:rgba(28,25,23,.6);
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dark-text);
-  opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease),transform .5s var(--ease);cursor:default;
+/* credential strip in phase 4 — quiet glass cards, not buttons */
+.cred-strip{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:1080px;width:100%}
+.cred{
+  display:flex;align-items:center;gap:14px;padding:18px 22px;border-radius:14px;
+  background:rgba(250,250,249,.035);border:1px solid rgba(250,250,249,.13);
+  opacity:0;cursor:default;
+  transition:transform .35s var(--ease-out),border-color .35s var(--ease),background .35s var(--ease);
 }
-.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--red);flex:none}
-#stage.p4 .chip{opacity:1;transform:none}
-#stage.p4 .chip:nth-child(1){transition-delay:.1s}#stage.p4 .chip:nth-child(2){transition-delay:.22s}
-#stage.p4 .chip:nth-child(3){transition-delay:.34s}#stage.p4 .chip:nth-child(4){transition-delay:.46s}
-#stage.p4 .chip:nth-child(5){transition-delay:.58s}
+.cred .idx{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--red);flex:none}
+.cred .lbl{font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.015em;color:var(--dark-text);white-space:nowrap}
+.cred:hover{transform:translateY(-3px);border-color:rgba(250,250,249,.3);background:rgba(250,250,249,.05)}
+#stage.p4 .cred{opacity:1;animation:credIn .9s var(--ease-out) backwards}
+#stage.p4 .cred:nth-child(1){animation-delay:.08s}#stage.p4 .cred:nth-child(2){animation-delay:.2s}
+#stage.p4 .cred:nth-child(3){animation-delay:.32s}#stage.p4 .cred:nth-child(4){animation-delay:.44s}
+#stage.p4 .cred:nth-child(5){animation-delay:.56s}
+@keyframes credIn{from{opacity:0;transform:translateY(22px)}}
+@media(max-width:900px){
+  .cred-strip{gap:10px}
+  .cred{padding:15px 18px;gap:11px}
+  .cred .lbl{font-size:14px}
+}
+@media(max-width:560px){
+  .cred{flex:1 1 100%;max-width:340px;justify-content:flex-start}
+}
 
 .scroll-hint{
   position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
@@ -137,7 +158,6 @@
   #stage{padding-top:120px}
   #stage .ctrl{top:84px;right:12px}
   #stage .ctrl button{padding:7px 11px;font-size:10px}
-  .chip{font-size:10px;padding:8px 12px}
 }
 </style>
 </head>
@@ -151,7 +171,7 @@
 </div></nav>
 
 <!-- ============ 1 · CINEMATIC OPENING ============ -->
-<section id="cinema" class="dark-band">
+<section id="cinema" class="dark-band" data-nav-dark>
   <div id="stage" class="p0">
 
     <div class="ctrl">
@@ -167,7 +187,7 @@
     </div>
 
     <div class="truck-box">
-      <svg id="truckSvg" viewBox="0 0 980 392" role="img" aria-label="Animated Khulu Digital truck: body panels lift away to reveal the chassis, engine and a glowing snap-on ECU connected to eight engine sensors">
+      <svg id="truckSvg" viewBox="0 0 980 392" role="img" aria-label="Animated Khulu Digital truck: body panels lift away to reveal the chassis, engine, gearbox, fuel tank, battery box and air tanks, with eight native sensors wired along one harness on the chassis rail up to a glowing snap-on ECU at the dashboard">
         <defs>
           <linearGradient id="gTrailer" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#383330"/><stop offset=".55" stop-color="#262220"/><stop offset="1" stop-color="#1A1715"/>
@@ -207,34 +227,48 @@
             <path d="M34 244 V74 H582 V244" fill="none" stroke="rgba(250,250,249,.18)" stroke-width="1.4" stroke-dasharray="5 5"/>
             <path d="M170 74 V244 M306 74 V244 M444 74 V244" stroke="rgba(250,250,249,.09)" stroke-width="1.2" stroke-dasharray="4 6" fill="none"/>
             <path d="M622 252 V124 Q622 96 650 92 L832 90 Q862 90 872 114 L888 166 V252" fill="none" stroke="rgba(250,250,249,.18)" stroke-width="1.4" stroke-dasharray="5 5"/>
-            <!-- seat + steering (cab interior) -->
-            <path d="M758 142 q-8 0 -8 10 v32 h34 v-10 h-24 z" fill="#2A2522" stroke="#57534E" stroke-width="1.2"/>
-            <circle cx="836" cy="150" r="9" fill="none" stroke="#57534E" stroke-width="2.4"/>
-            <line x1="836" y1="158" x2="836" y2="178" stroke="#57534E" stroke-width="2.4"/>
-            <!-- battery -->
-            <rect x="632" y="218" width="38" height="26" rx="3" fill="#211E1C" stroke="#57534E" stroke-width="1.2"/>
-            <line x1="640" y1="218" x2="640" y2="212" stroke="#78716C" stroke-width="2"/>
-            <line x1="662" y1="218" x2="662" y2="212" stroke="#E63329" stroke-width="2"/>
-            <!-- air tanks under trailer -->
-            <rect x="298" y="266" width="74" height="26" rx="13" fill="url(#gTank)" stroke="#44403C"/>
-            <rect x="298" y="296" width="56" height="18" rx="9" fill="#211E1C" stroke="#44403C"/>
-            <!-- gearbox + driveshaft -->
-            <rect x="714" y="214" width="62" height="32" rx="5" fill="url(#gEngine)" stroke="#57534E" stroke-width="1.2"/>
-            <line x1="714" y1="238" x2="654" y2="296" stroke="#57534E" stroke-width="4" stroke-linecap="round"/>
-            <!-- engine block -->
+            <!-- cab interior: seat over the engine tunnel, steering + dash at the front -->
+            <path d="M792 142 q-8 0 -8 10 v22 h34 v-10 h-24 z" fill="#2A2522" stroke="#57534E" stroke-width="1.2"/>
+            <circle cx="838" cy="144" r="8" fill="none" stroke="#57534E" stroke-width="2.4"/>
+            <line x1="838" y1="152" x2="838" y2="170" stroke="#57534E" stroke-width="2.4"/>
+            <rect x="842" y="154" width="42" height="9" rx="3" fill="#2A2522" stroke="#57534E" stroke-width="1.2"/>
+            <!-- engine block under the cab (cab-over: engine lives beneath the seat) -->
             <g>
-              <rect x="784" y="192" width="84" height="56" rx="5" fill="url(#gEngine)" stroke="#6B6560" stroke-width="1.4"/>
-              <rect x="790" y="176" width="72" height="18" rx="3" fill="#3B3835" stroke="#6B6560" stroke-width="1.2"/>
-              <line x1="806" y1="196" x2="806" y2="244" stroke="#57534E" stroke-width="2"/>
-              <line x1="826" y1="196" x2="826" y2="244" stroke="#57534E" stroke-width="2"/>
-              <line x1="846" y1="196" x2="846" y2="244" stroke="#57534E" stroke-width="2"/>
-              <circle cx="872" cy="226" r="10" fill="#211E1C" stroke="#78716C" stroke-width="2"/>
+              <rect x="752" y="174" width="86" height="16" rx="3" fill="#3B3835" stroke="#6B6560" stroke-width="1.2"/>
+              <rect x="745" y="190" width="100" height="60" rx="5" fill="url(#gEngine)" stroke="#6B6560" stroke-width="1.4"/>
+              <line x1="786" y1="196" x2="786" y2="244" stroke="#57534E" stroke-width="2"/>
+              <line x1="804" y1="196" x2="804" y2="244" stroke="#57534E" stroke-width="2"/>
+              <line x1="822" y1="196" x2="822" y2="244" stroke="#57534E" stroke-width="2"/>
+              <circle cx="838" cy="222" r="8" fill="#211E1C" stroke="#78716C" stroke-width="2"/>
+              <!-- turbo housing on the block -->
+              <circle cx="770" cy="206" r="8" fill="#211E1C" stroke="#78716C" stroke-width="2"/>
+              <circle cx="770" cy="206" r="3" fill="none" stroke="#57534E" stroke-width="1.4"/>
             </g>
-            <!-- fuel tank (under cab) -->
+            <!-- gearbox bolted just behind the engine, driveshaft to the drive axle -->
             <g>
-              <rect x="690" y="262" width="92" height="40" rx="18" fill="url(#gTank)" stroke="#57534E" stroke-width="1.2"/>
+              <rect x="736" y="208" width="10" height="44" rx="2" fill="#3B3835" stroke="#57534E" stroke-width="1"/>
+              <rect x="664" y="214" width="72" height="32" rx="5" fill="url(#gEngine)" stroke="#57534E" stroke-width="1.2"/>
+              <line x1="666" y1="238" x2="650" y2="294" stroke="#57534E" stroke-width="4" stroke-linecap="round"/>
+            </g>
+            <!-- fuel tank hung mid-chassis between the tractor axles -->
+            <g>
+              <rect x="692" y="262" width="74" height="38" rx="17" fill="url(#gTank)" stroke="#57534E" stroke-width="1.2"/>
               <circle cx="712" cy="268" r="4" fill="#78716C"/>
-              <line x1="700" y1="282" x2="772" y2="282" stroke="rgba(250,250,249,.12)" stroke-width="1.4"/>
+              <line x1="700" y1="281" x2="758" y2="281" stroke="rgba(250,250,249,.12)" stroke-width="1.4"/>
+              <path d="M706 262 v38 M748 262 v38" stroke="rgba(250,250,249,.1)" stroke-width="2" fill="none"/>
+            </g>
+            <!-- battery box on the rail at the front overhang, spread out from the fuel tank -->
+            <g>
+              <rect x="846" y="264" width="40" height="28" rx="4" fill="#211E1C" stroke="#57534E" stroke-width="1.2"/>
+              <line x1="854" y1="264" x2="854" y2="258" stroke="#78716C" stroke-width="2"/>
+              <line x1="876" y1="264" x2="876" y2="258" stroke="#E63329" stroke-width="2"/>
+              <line x1="850" y1="278" x2="882" y2="278" stroke="rgba(250,250,249,.1)" stroke-width="1.4"/>
+            </g>
+            <!-- air tanks further back along the chassis -->
+            <g>
+              <rect x="296" y="264" width="76" height="27" rx="13" fill="url(#gTank)" stroke="#44403C"/>
+              <path d="M312 264 v27 M356 264 v27" stroke="rgba(250,250,249,.08)" stroke-width="2" fill="none"/>
+              <rect x="380" y="266" width="54" height="23" rx="11" fill="#211E1C" stroke="#44403C"/>
             </g>
             <!-- chassis rails (always there, exposed by fly-off) -->
             <rect x="30" y="244" width="556" height="14" rx="3" fill="#292524" stroke="#44403C"/>
@@ -248,71 +282,78 @@
             <rect x="595" y="60" width="20" height="10" rx="4" fill="#57534E"/>
             <rect x="594" y="150" width="22" height="44" rx="8" fill="#2A2522" stroke="#57534E" stroke-width="1"/>
 
-            <!-- ===== ECU : the snap-on smartwatch ===== -->
+            <!-- ===== ECU : snapped on at the dashboard, inside the cab ===== -->
             <g id="ecu">
-              <rect x="694" y="168" width="20" height="7" rx="3" fill="#7C150F"/>
-              <rect x="694" y="211" width="20" height="7" rx="3" fill="#7C150F"/>
-              <rect x="680" y="174" width="48" height="38" rx="9" fill="url(#gEcu)" stroke="#FF8A80" stroke-width="1.4"/>
-              <text x="704" y="197" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="11" font-weight="500" fill="#FFFFFF">ECU</text>
+              <rect x="858" y="161" width="12" height="9" rx="2" fill="#7C150F"/>
+              <rect x="848" y="168" width="36" height="24" rx="7" fill="url(#gEcu)" stroke="#FF8A80" stroke-width="1.4"/>
+              <text x="866" y="184" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" font-weight="500" fill="#FFFFFF">ECU</text>
             </g>
 
-            <!-- ===== CAN BUS + SENSORS (phase 3) ===== -->
+            <!-- ===== CAN BUS + SENSORS (phase 3) =====
+                 one trunk along the chassis rail, short stubs from each sensor,
+                 trunk rises into the cab to the ECU at the dash -->
             <g id="canBus">
-              <path id="canPath" d="M196 262 L240 252 L560 252 L620 246 L658 222 L678 200 L680 195" fill="none" stroke="#E63329" stroke-width="1.6" stroke-dasharray="6 5" opacity=".8"/>
+              <path id="canPath" d="M334 251 H858 Q866 251 866 243 V196" fill="none" stroke="#E63329" stroke-width="1.8" stroke-dasharray="7 6" opacity=".85"/>
               <g stroke="#E63329" stroke-width="1.2" stroke-dasharray="3 4" opacity=".55" fill="none">
-                <path d="M336 277 L336 252"/>
-                <path d="M650 212 L680 198"/>
-                <path d="M824 180 L728 184"/>
-                <path d="M862 206 L728 196"/>
-                <path d="M800 246 L726 208"/>
-                <path d="M744 226 L718 212"/>
-                <path d="M736 282 L710 214"/>
+                <path d="M334 272 V251"/>
+                <path d="M729 276 Q729 254 734 251"/>
+                <path d="M866 266 V251"/>
+                <path d="M762 182 V251"/>
+                <path d="M770 214 V251"/>
+                <path d="M700 222 V251"/>
+                <path d="M736 245 V251"/>
+                <path d="M668 234 V251"/>
               </g>
-              <circle id="canPulse" r="4" fill="#FF6B61">
-                <animateMotion dur="3.4s" repeatCount="indefinite">
+              <circle class="can-pulse" r="3.6" fill="#FF6B61">
+                <animateMotion dur="3.6s" repeatCount="indefinite">
+                  <mpath href="#canPath" xlink:href="#canPath"/>
+                </animateMotion>
+              </circle>
+              <circle class="can-pulse" r="2.6" fill="#FFB4AE" opacity=".8">
+                <animateMotion dur="3.6s" begin="1.8s" repeatCount="indefinite">
                   <mpath href="#canPath" xlink:href="#canPath"/>
                 </animateMotion>
               </circle>
 
               <g id="s1" class="sensor">
-                <circle class="halo" cx="824" cy="180" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
-                <circle cx="824" cy="180" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
-                <text x="824" y="160" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">COOLANT</text>
+                <circle class="halo" cx="762" cy="176" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
+                <circle cx="762" cy="176" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
+                <text x="762" y="159" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">COOLANT</text>
               </g>
               <g id="s2" class="sensor">
-                <circle class="halo" cx="800" cy="246" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
-                <circle cx="800" cy="246" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
-                <text x="800" y="270" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">OIL</text>
+                <circle class="halo" cx="770" cy="206" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
+                <circle cx="770" cy="206" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
+                <text x="756" y="210" text-anchor="end" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">TURBO</text>
               </g>
               <g id="s3" class="sensor">
-                <circle class="halo" cx="862" cy="206" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
-                <circle cx="862" cy="206" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
-                <text x="888" y="196" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">TURBO</text>
+                <circle class="halo" cx="700" cy="218" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
+                <circle cx="700" cy="218" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
+                <text x="700" y="201" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">GEARBOX</text>
               </g>
               <g id="s4" class="sensor">
-                <circle class="halo" cx="744" cy="226" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
-                <circle cx="744" cy="226" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
-                <text x="752" y="248" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">GEARBOX</text>
+                <circle class="halo" cx="736" cy="240" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
+                <circle cx="736" cy="240" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
+                <text x="736" y="228" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">OIL</text>
               </g>
               <g id="s5" class="sensor">
-                <circle class="halo" cx="736" cy="282" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
-                <circle cx="736" cy="282" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
-                <text x="736" y="320" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">FUEL</text>
+                <circle class="halo" cx="668" cy="228" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
+                <circle cx="668" cy="228" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
+                <text x="646" y="215" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">SPEED</text>
               </g>
               <g id="s6" class="sensor">
-                <circle class="halo" cx="650" cy="212" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
-                <circle cx="650" cy="212" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
-                <text x="644" y="196" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">VOLTS</text>
+                <circle class="halo" cx="729" cy="281" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
+                <circle cx="729" cy="281" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
+                <text x="729" y="318" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">FUEL</text>
               </g>
               <g id="s7" class="sensor">
-                <circle class="halo" cx="336" cy="277" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
-                <circle cx="336" cy="277" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
-                <text x="336" y="316" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">AIR / BRAKES</text>
+                <circle class="halo" cx="866" cy="272" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
+                <circle cx="866" cy="272" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
+                <text x="866" y="310" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">VOLTS</text>
               </g>
               <g id="s8" class="sensor">
-                <circle class="halo" cx="196" cy="262" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
-                <circle cx="196" cy="262" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
-                <text x="172" y="238" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">SPEED</text>
+                <circle class="halo" cx="334" cy="277" r="11" fill="none" stroke="#E63329" stroke-width="1.4"/>
+                <circle cx="334" cy="277" r="4.6" fill="#E63329" stroke="#FFD9D6" stroke-width="1.2"/>
+                <text x="334" y="316" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="1" fill="#A8A29E">AIR / BRAKES</text>
               </g>
             </g>
 
@@ -406,12 +447,12 @@
       </svg>
     </div>
 
-    <div class="chips" aria-label="Five reasons in short">
-      <span class="chip">Reads Euro 2 natively</span>
-      <span class="chip">OEM-spec protection</span>
-      <span class="chip">One login for everything</span>
-      <span class="chip">Warranty stays intact</span>
-      <span class="chip">Built in South Africa</span>
+    <div class="cred-strip" aria-label="Five reasons in short">
+      <div class="cred"><span class="idx">01</span><span class="lbl">Reads Euro 2 natively</span></div>
+      <div class="cred"><span class="idx">02</span><span class="lbl">OEM-spec protection</span></div>
+      <div class="cred"><span class="idx">03</span><span class="lbl">One login for everything</span></div>
+      <div class="cred"><span class="idx">04</span><span class="lbl">Warranty stays intact</span></div>
+      <div class="cred"><span class="idx">05</span><span class="lbl">Built in South Africa</span></div>
     </div>
 
     <a class="scroll-hint" href="#reasons">SCROLL &mdash; THE FULL CASE &darr;</a>
@@ -573,16 +614,16 @@
 
   function play() {
     reset(true);
-    /* 0–2.6s · headline 1, truck drives in, wheels + road moving */
+    /* 0–2.7s · headline 1, truck glides in, wheels + road moving */
     at(60,   () => stage.classList.add('p1', 'driving'));
-    /* truck arrives → wheels stop, suspension settles */
-    at(2450, () => { stage.classList.remove('driving'); stage.classList.add('settled'); });
-    /* 3–6s · headline 2, panels fly off one by one */
-    at(3000, () => stage.classList.add('p2'));
-    /* 6–8s · headline 3, sensors pop in along the CAN bus */
-    at(6000, () => stage.classList.add('p3'));
-    /* 8s+ · headline 4, reason chips cascade, scroll hint */
-    at(8000, () => stage.classList.add('p4'));
+    /* truck arrives → wheels stop, suspension settles with a soft damped bounce */
+    at(2750, () => { stage.classList.remove('driving'); stage.classList.add('settled'); });
+    /* 3.6–6s · headline 2, panels drift off one by one */
+    at(3600, () => stage.classList.add('p2'));
+    /* 6.7–9s · headline 3, sensors bloom along the harness to the dash ECU */
+    at(6700, () => stage.classList.add('p3'));
+    /* 9.1s+ · headline 4, credential strip cascades, scroll hint */
+    at(9100, () => stage.classList.add('p4'));
   }
 
   function finish() {
