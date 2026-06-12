@@ -409,23 +409,70 @@ function initGame() {
   document.addEventListener('keyup', e => { keys[e.code] = false; });
   addEventListener('wheel', e => selectSlot((player.sel + (e.deltaY > 0 ? 1 : 8)) % 9));
 
+  // Pointer lock with Safari/old-WebKit prefixes, plus a drag-to-look
+  // fallback for browsers/mice where pointer capture is unavailable.
   const canvas = renderer.domElement;
-  canvas.addEventListener('click', () => {
-    if (document.pointerLockElement !== canvas) canvas.requestPointerLock();
+  const overlayEl = document.getElementById('overlay');
+  let started = false;
+  const lockedEl = () =>
+    document.pointerLockElement || document.webkitPointerLockElement || document.mozPointerLockElement;
+  function tryLock() {
+    const req = canvas.requestPointerLock || canvas.webkitRequestPointerLock || canvas.mozRequestPointerLock;
+    if (!req) return;
+    try {
+      const r = req.call(canvas);
+      if (r && r.catch) r.catch(() => {});
+    } catch (err) { /* fall back to drag-look */ }
+  }
+  function startPlaying() {
+    started = true;
+    overlayEl.style.display = 'none';
+    if (lockedEl() !== canvas) tryLock();
+  }
+  canvas.addEventListener('click', () => { if (!started || lockedEl() !== canvas) startPlaying(); });
+  for (const ev of ['pointerlockchange', 'webkitpointerlockchange', 'mozpointerlockchange']) {
+    document.addEventListener(ev, () => {
+      if (lockedEl() === canvas) overlayEl.style.display = 'none';
+    });
+  }
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Escape' && started && !lockedEl()) {
+      overlayEl.style.display = overlayEl.style.display === 'none' ? 'flex' : 'none';
+    }
   });
-  document.addEventListener('pointerlockchange', () => {
-    document.getElementById('overlay').style.display =
-      document.pointerLockElement === canvas ? 'none' : 'flex';
-  });
+
+  const applyLook = (dx, dy) => {
+    player.yaw -= dx * 0.0024;
+    player.pitch = Math.max(-1.55, Math.min(1.55, player.pitch - dy * 0.0024));
+  };
+  // drag-look state (used only when pointer lock is not engaged)
+  let drag = null;
   document.addEventListener('mousemove', e => {
-    if (document.pointerLockElement !== canvas) return;
-    player.yaw -= e.movementX * 0.0024;
-    player.pitch = Math.max(-1.55, Math.min(1.55, player.pitch - e.movementY * 0.0024));
+    if (lockedEl() === canvas) {
+      applyLook(e.movementX, e.movementY);
+    } else if (drag) {
+      applyLook(e.clientX - drag.x, e.clientY - drag.y);
+      drag.moved += Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y);
+      drag.x = e.clientX; drag.y = e.clientY;
+    }
   });
+  const clickAction = e => {
+    // Ctrl+click (or two-finger click sending button 2) places — Apple-mouse friendly
+    if (e.button === 2 || e.ctrlKey || e.metaKey) placeBlock();
+    else if (e.button === 0) breakBlock();
+  };
   document.addEventListener('mousedown', e => {
-    if (document.pointerLockElement !== canvas) return;
-    if (e.button === 0) breakBlock();
-    if (e.button === 2) placeBlock();
+    if (!started) return;
+    if (lockedEl() === canvas) { clickAction(e); return; }
+    drag = { x: e.clientX, y: e.clientY, moved: 0, t: performance.now(), btn: e.button, ctrl: e.ctrlKey || e.metaKey };
+  });
+  document.addEventListener('mouseup', e => {
+    if (!drag) return;
+    // a short, still click in drag-look mode counts as break/place
+    if (drag.moved < 6 && performance.now() - drag.t < 350) {
+      clickAction({ button: drag.btn, ctrlKey: drag.ctrl, metaKey: false });
+    }
+    drag = null;
   });
   document.addEventListener('contextmenu', e => e.preventDefault());
   addEventListener('resize', () => {
@@ -603,7 +650,7 @@ function initGame() {
   // API for automated tests
   window.game = {
     world, player, camera,
-    breakBlock, placeBlock, rayFromEye, selectSlot,
+    breakBlock, placeBlock, rayFromEye, selectSlot, startPlaying,
     setView: (yaw, pitch) => { player.yaw = yaw; player.pitch = pitch; },
     renderOnce: () => renderer.render(scene, camera),
     renderer,
