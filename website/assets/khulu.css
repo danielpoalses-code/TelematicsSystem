@@ -124,7 +124,7 @@ nav.site::before{
 nav.site.scrolled::before{opacity:1}
 nav.site.scrolled .nav-inner{height:68px}
 .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:17px;letter-spacing:.06em;margin-right:auto;color:var(--ink);font-family:var(--font-display)}
-.brand .mark{width:34px;height:34px;color:var(--ink);transition:transform .4s var(--ease)}
+.brand .mark{width:34px;height:34px;color:inherit;transition:transform .4s var(--ease)}
 .brand:hover .mark{transform:rotate(18deg)}
 .brand .lockup{line-height:1.02}
 .brand .lockup em{font-style:normal;color:var(--red);font-weight:600;font-size:9.5px;letter-spacing:.4em;display:block;font-family:var(--font)}

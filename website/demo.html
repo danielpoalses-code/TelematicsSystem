@@ -638,9 +638,10 @@ function toast(opts){
     setTimeout(function(){ box.remove(); }, 450);
   }, life);
 }
-function award(key){
+function award(key, opts){
   if(state.achievements.indexOf(key) !== -1) return;
   state.achievements.push(key); save();
+  if(opts && opts.silent) return;
   toast({kind:'achv', title:'Achievement · '+ACH[key].t, body:ACH[key].d, life:5200});
 }
 
@@ -709,16 +710,16 @@ function addUnit(name, type, addons, quiet){
   initTele(u);
   if(state.started) spawnMarker(u);
   if(!quiet){
-    if(state.units.length===1) award('founder');
-    if(addons.indexOf('roadcam')!==-1 || addons.indexOf('drivercam')!==-1) award('eyes');
-    if(state.units.length>=5) award('operator');
+    if(state.units.length===1) award('founder', {silent:true});
+    if(addons.indexOf('roadcam')!==-1 || addons.indexOf('drivercam')!==-1) award('eyes', {silent:true});
+    if(state.units.length>=5) award('operator', {silent:true});
   }
   return u;
 }
 function checkBulkAchievements(){
-  if(state.units.length>=1) award('founder');
-  if(state.units.some(function(u){ return u.addons.indexOf('roadcam')!==-1 || u.addons.indexOf('drivercam')!==-1; })) award('eyes');
-  if(state.units.length>=5) award('operator');
+  if(state.units.length>=1) award('founder', {silent:true});
+  if(state.units.some(function(u){ return u.addons.indexOf('roadcam')!==-1 || u.addons.indexOf('drivercam')!==-1; })) award('eyes', {silent:true});
+  if(state.units.length>=5) award('operator', {silent:true});
 }
 $('btnAdd').addEventListener('click', function(){
   var name = elName.value.trim();

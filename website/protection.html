@@ -204,6 +204,10 @@
               <div class="row"><label>RPM</label><b id="rpmVal">1 450</b></div>
               <div class="cl-track"><i id="rpmFill" style="width:48%"></i></div>
             </div>
+            <div class="cl-bar">
+              <div class="row"><label>Speed</label><b id="spdVal">78 km/h</b></div>
+              <div class="cl-track"><i id="spdFill" style="width:65%"></i></div>
+            </div>
           </div>
         </div>
       </div>
@@ -503,48 +507,73 @@
     const oilFill = document.getElementById('oilFill'), oilVal = document.getElementById('oilVal');
     const rpmFill = document.getElementById('rpmFill'), rpmVal = document.getElementById('rpmVal');
 
+    const spdFill = document.getElementById('spdFill'), spdVal = document.getElementById('spdVal');
     const smooth = k => k * k * (3 - 2 * k);
-    const CYCLE = 14000;
-    /* 0–6s idle ~86 · 6–9s sweep to ~104 · 9–11s in the red · 11–14s recover */
-    function tempAt(p) {
-      if (p < 6000)  return 86 + Math.sin(p / 420) * .5 + Math.sin(p / 97) * .18;
-      if (p < 9000)  return 86 + smooth((p - 6000) / 3000) * 18;
-      if (p < 11000) return 104 + Math.sin(p / 130) * .35;
-      return 104 - smooth((p - 11000) / 3000) * 18;
+    const CYCLE = 24000;
+    /* slow, realistic story:
+       0-9s     cruising on the flat - everything steady
+       9-14s    loaded climb - temp creeps up, revs and effort up, speed bleeding off
+       14-18.5s OEM limit breached - limp mode: revs derate, speed falls with them
+       18.5-24s backed off - everything recovers */
+    function stateAt(p) {
+      if (p < 9000) {
+        return { temp: 86 + Math.sin(p / 1700) * .4,
+                 rpm: 1450 + Math.sin(p / 2300) * 30,
+                 spd: 78 + Math.sin(p / 2900) * 2 };
+      }
+      if (p < 14000) {
+        const k = smooth((p - 9000) / 5000);
+        return { temp: 86 + k * 18, rpm: 1450 + k * 400, spd: 78 - k * 26 };
+      }
+      if (p < 18500) {
+        const q = (p - 14000) / 4500;
+        const derate = smooth(Math.min(1, q / .35)); /* revs pulled down early in limp */
+        return { temp: 104 + Math.sin(p / 1100) * .4,
+                 rpm: 1850 - derate * 700,
+                 spd: 52 - derate * 16 };
+      }
+      const k = smooth((p - 18500) / (CYCLE - 18500));
+      return { temp: 104 - k * 18, rpm: 1150 + k * 300, spd: 36 + k * 42 };
     }
 
-    function render(temp, p) {
-      needle.setAttribute('transform', 'rotate(' + degOf(temp).toFixed(2) + ' 180 146)');
-      read.textContent = temp.toFixed(1) + '°C';
-      const danger = temp >= 103, warn = temp >= 96;
-      read.setAttribute('fill', danger ? '#FF6B61' : warn ? '#FBBF24' : '#34D399');
-      const blinkOn = danger && (reduced || Math.floor(p / 260) % 2 === 0);
+    let lastTick = -1;
+    function render(st, p) {
+      /* needle moves smoothly every frame; digital readouts update at a
+         realistic ~0.7s cadence so the numbers don't flicker */
+      needle.setAttribute('transform', 'rotate(' + degOf(st.temp).toFixed(2) + ' 180 146)');
+      const danger = st.temp >= 103, warn = st.temp >= 96;
+      const blinkOn = danger && (reduced || Math.floor(p / 420) % 2 === 0);
       lamp.setAttribute('opacity', danger ? (blinkOn ? 1 : .3) : .18);
       limp.classList.toggle('on', danger);
-      /* sub-gauges: oil sags and rpm climbs with heat, plus subtle jitter */
-      const oil = Math.max(2.8, 4.3 - (temp - 86) * .03 + Math.sin(p / 300) * .1 + Math.sin(p / 77) * .04);
-      const rpm = Math.min(2600, Math.max(900, 1450 + (temp - 86) * 22 + Math.sin(p / 240) * 55 + Math.sin(p / 61) * 20));
+      const tick = Math.floor(p / 700);
+      if (tick === lastTick) return;
+      lastTick = tick;
+      read.textContent = st.temp.toFixed(1) + '\u00B0C';
+      read.setAttribute('fill', danger ? '#FF6B61' : warn ? '#FBBF24' : '#34D399');
+      const oil = Math.max(2.6, 2.6 + st.rpm * .00115 - (st.temp - 86) * .012);
       oilFill.style.width = (oil / 6 * 100).toFixed(1) + '%';
       oilVal.textContent = oil.toFixed(1) + ' bar';
-      rpmFill.style.width = (rpm / 3000 * 100).toFixed(1) + '%';
-      rpmVal.textContent = Math.round(rpm).toLocaleString('en-ZA').replace(/,/g, ' ');
+      rpmFill.style.width = (st.rpm / 3000 * 100).toFixed(1) + '%';
+      rpmVal.textContent = (Math.round(st.rpm / 10) * 10).toLocaleString('en-ZA').replace(/,/g, ' ');
+      spdFill.style.width = (st.spd / 120 * 100).toFixed(1) + '%';
+      spdVal.textContent = Math.round(st.spd) + ' km/h';
     }
 
     if (reduced) {
-      render(86, 0);                                  /* static mid-state */
+      render(stateAt(0), 0);                                  /* static mid-state */
     } else {
       let running = false;
       const t0 = performance.now();
       function frame(now) {
         if (!running) return;
-        render(tempAt((now - t0) % CYCLE), (now - t0) % CYCLE);
+        render(stateAt((now - t0) % CYCLE), (now - t0) % CYCLE);
         requestAnimationFrame(frame);
       }
       new IntersectionObserver(es => es.forEach(e => {
         if (e.isIntersecting && !running) { running = true; requestAnimationFrame(frame); }
         else if (!e.isIntersecting) running = false;
       }), { threshold: .15 }).observe(svg);
-      render(86, 0);
+      render(stateAt(0), 0);
     }
   }
 
