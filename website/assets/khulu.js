@@ -15,15 +15,42 @@
     bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
   }, { passive: true });
 
-  /* ---------- nav: burger + active link ---------- */
+  /* ---------- nav: burger + active link + scrolled state ---------- */
   const nav = document.querySelector('nav.site');
   if (nav) {
     const burger = nav.querySelector('.nav-burger');
     if (burger) burger.addEventListener('click', () => nav.classList.toggle('open'));
+    const setScrolled = () => nav.classList.toggle('scrolled', scrollY > 24);
+    addEventListener('scroll', setScrolled, { passive: true });
+    setScrolled();
     const here = location.pathname.split('/').pop() || 'index.html';
     nav.querySelectorAll('.nav-links a').forEach(a => {
       const href = a.getAttribute('href') || '';
       if (href === here || (here === 'index.html' && href === 'index.html')) a.classList.add('active');
+    });
+  }
+
+  /* ---------- hero headline word reveal ---------- */
+  if (!reduced) {
+    document.querySelectorAll('.hero h1').forEach(h1 => {
+      let wi = 0;
+      (function split(node) {
+        [...node.childNodes].forEach(child => {
+          if (child.nodeType === 3) {
+            const frag = document.createDocumentFragment();
+            child.textContent.split(/(\s+)/).forEach(part => {
+              if (!part) return;
+              if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+              const w = document.createElement('span'); w.className = 'w';
+              const i = document.createElement('span'); i.className = 'wi';
+              i.style.setProperty('--wi', wi++); i.textContent = part;
+              w.appendChild(i); frag.appendChild(w);
+            });
+            node.replaceChild(frag, child);
+          } else if (child.nodeType === 1 && child.tagName !== 'BR') split(child);
+        });
+      })(h1);
+      requestAnimationFrame(() => h1.classList.add('words-go'));
     });
   }
 
