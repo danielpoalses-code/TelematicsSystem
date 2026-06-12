@@ -404,6 +404,7 @@ function initGame() {
       lastSpace = now;
     }
     if (e.code === 'KeyF') { player.fly = !player.fly; player.vy = 0; }
+    if (e.code === 'KeyR') setClickMode(clickMode === 'place' ? 'break' : 'place');
     if (e.code === 'KeyE' && started) doAction(true);   // place (mouse-free building)
     if (e.code === 'KeyQ' && started) doAction(false);  // break
     if (/^Digit[1-9]$/.test(e.code)) selectSlot(Number(e.code[5]) - 1);
@@ -468,10 +469,19 @@ function initGame() {
     if (place) placeBlock(); else breakBlock();
   };
   const clickAction = e => {
-    // Ctrl+click (or two-finger click sending button 2) places — Apple-mouse friendly
     if (e.button === 2 || e.ctrlKey || e.metaKey) doAction(true);
-    else if (e.button === 0) doAction(false);
+    else if (e.button === 0) doAction(clickMode === 'place');
   };
+  // R toggles what a plain left click does — for mice with no working right button
+  let clickMode = 'break';
+  function setClickMode(m) {
+    clickMode = m;
+    const el = document.getElementById('mode');
+    el.textContent = clickMode === 'place'
+      ? 'CLICK = PLACE BLOCK 🧱  (R to switch to digging)'
+      : 'CLICK = DIG ⛏  (R to switch to placing)';
+    el.classList.toggle('placing', clickMode === 'place');
+  }
   document.addEventListener('mousedown', e => {
     if (!started) return;
     if (lockedEl() === canvas) { clickAction(e); return; }
@@ -636,6 +646,15 @@ function initGame() {
     hotbarEl.appendChild(slot);
   });
   selectSlot(0);
+  setClickMode('break');
+  const modeEl = document.getElementById('mode');
+  for (const ev of ['mousedown', 'mouseup']) {
+    modeEl.addEventListener(ev, e => e.stopPropagation());
+  }
+  modeEl.addEventListener('click', e => {
+    e.stopPropagation();
+    setClickMode(clickMode === 'place' ? 'break' : 'place');
+  });
 
   // ----- main loop -----
   const coordsEl = document.getElementById('coords');
@@ -661,7 +680,7 @@ function initGame() {
   // API for automated tests
   window.game = {
     world, player, camera,
-    breakBlock, placeBlock, rayFromEye, selectSlot, startPlaying,
+    breakBlock, placeBlock, rayFromEye, selectSlot, startPlaying, setClickMode,
     setView: (yaw, pitch) => { player.yaw = yaw; player.pitch = pitch; },
     renderOnce: () => renderer.render(scene, camera),
     renderer,
