@@ -13,20 +13,40 @@
 <style>
 /* ============ demo page styles ============ */
 
-/* ---- hero stage chips ---- */
-.stage-chips{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
-.schip{
-  display:inline-flex;align-items:center;gap:10px;padding:10px 20px;border-radius:999px;
-  border:1.5px solid var(--line-strong);background:var(--surface);
-  font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--ink-3);
-  transition:border-color .25s var(--ease),color .25s var(--ease),background .25s var(--ease);cursor:pointer;
+/* ---- 3-step guide strip ---- */
+.guide{
+  display:flex;align-items:stretch;border:1px solid var(--line);border-radius:18px;
+  background:var(--surface);box-shadow:var(--shadow);overflow:hidden;
+  margin-bottom:clamp(40px,5vw,60px);
 }
-.schip .n{
-  width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
-  background:var(--bg-soft);color:var(--ink-3);font-size:11px;font-weight:500;transition:inherit;
+.g-step{
+  position:relative;flex:1;display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:18px 16px;border-right:1px solid var(--line);cursor:pointer;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);
+  transition:color .2s var(--ease),background .2s var(--ease);white-space:nowrap;
 }
-.schip.is-on{border-color:var(--red);color:var(--ink);background:var(--red-soft)}
-.schip.is-on .n{background:var(--red);color:#fff}
+.g-step:last-child{border-right:none}
+.g-step:hover{color:var(--ink)}
+.g-step .g-num{font-size:11px;color:var(--ink-3);transition:color .2s var(--ease)}
+.g-step::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:transparent;transition:background .2s var(--ease)}
+.g-step.is-on{color:var(--ink)}
+.g-step.is-on .g-num{color:var(--red);font-weight:500}
+.g-step.is-on::after{background:var(--red)}
+.g-step.is-done{color:var(--ink-2)}
+.g-step.is-done .g-num{color:var(--green)}
+@media(max-width:640px){
+  .g-step{flex-direction:column;gap:6px;padding:13px 6px;font-size:9.5px;letter-spacing:.1em;white-space:normal;text-align:center}
+}
+
+/* ---- quick-start strip ---- */
+.quickstart{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  background:var(--red-soft);border:1px solid rgba(230,51,41,.18);border-radius:var(--radius);
+  padding:26px 30px;margin-bottom:22px;box-shadow:var(--shadow);
+}
+.quickstart h3{margin-bottom:4px}
+.quickstart p{font-size:14.5px;color:var(--ink-2)}
+@media(max-width:640px){.quickstart{justify-content:center;text-align:center}.quickstart .btn{width:100%;justify-content:center}}
 
 /* ---- builder layout ---- */
 .builder-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:22px;align-items:start}
@@ -37,34 +57,40 @@
 }
 
 /* ---- type tiles ---- */
-.type-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 18px}
+.type-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:8px 0 24px}
 @media(max-width:760px){.type-tiles{grid-template-columns:repeat(2,1fr)}}
 .tile{
-  border:1.5px solid var(--line-strong);border-radius:var(--radius-sm);background:var(--surface);
-  padding:14px 10px 12px;text-align:center;cursor:pointer;
-  transition:border-color .2s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease);
+  position:relative;border:2px solid var(--line);border-radius:var(--radius-sm);background:var(--surface);
+  padding:22px 12px 18px;text-align:center;cursor:pointer;
+  transition:border-color .2s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease),transform .2s var(--ease);
 }
-.tile svg{width:62px;height:36px;margin:0 auto 8px;color:var(--ink-2);transition:color .2s}
-.tile span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
-.tile:hover{border-color:var(--ink-3)}
-.tile[aria-pressed="true"]{border-color:var(--red);background:var(--red-soft);box-shadow:0 4px 14px rgba(230,51,41,.12)}
-.tile[aria-pressed="true"] svg{color:var(--red)}
-.tile[aria-pressed="true"] span{color:var(--red)}
+.tile svg.silh{width:64px;height:38px;margin:0 auto 10px;color:var(--ink-2);transition:color .2s var(--ease)}
+.tile span.t-lab{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);transition:color .2s var(--ease)}
+.tile:hover{border-color:var(--line-strong);transform:translateY(-2px);box-shadow:var(--shadow)}
+.tile .tick{
+  position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;
+  background:var(--red);display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(.5);transition:opacity .2s var(--ease),transform .2s var(--ease);
+}
+.tile .tick svg{width:11px;height:11px;color:#fff;margin:0}
+.tile[aria-pressed="true"]{border-color:var(--red);background:var(--red-soft)}
+.tile[aria-pressed="true"] svg.silh{color:var(--red)}
+.tile[aria-pressed="true"] span.t-lab{color:var(--red)}
+.tile[aria-pressed="true"] .tick{opacity:1;transform:scale(1)}
 
 /* ---- addon chips ---- */
-.addon-chips{display:flex;flex-wrap:wrap;gap:9px;margin:6px 0 22px}
+.addon-chips{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 28px}
 .chip{
-  position:relative;overflow:hidden;
-  display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:999px;
-  border:1.5px solid var(--line-strong);background:var(--surface);
+  display:inline-flex;align-items:center;gap:8px;padding:10px 17px;border-radius:999px;
+  border:1px solid var(--line-strong);background:var(--surface);
   font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--ink-2);cursor:pointer;
   transition:border-color .2s var(--ease),background .2s var(--ease),color .2s var(--ease);
 }
 .chip svg{width:14px;height:14px}
 .chip:hover{border-color:var(--ink-3)}
 .chip[aria-pressed="true"]{border-color:var(--red);background:var(--red);color:#fff}
-.tile:focus-visible,.chip:focus-visible,.schip:focus-visible,.unit-x:focus-visible,.scn-btn:focus-visible,.u-marker:focus-visible{outline:2px solid var(--red);outline-offset:3px}
-.form-err{font-family:var(--mono);font-size:12px;color:var(--red);margin-top:10px;min-height:18px}
+.tile:focus-visible,.chip:focus-visible,.g-step:focus-visible,.unit-x:focus-visible,.scn-card:focus-visible,.u-marker:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.form-err{font-family:var(--mono);font-size:12px;color:var(--red);margin-top:12px;min-height:18px;letter-spacing:.02em}
 
 /* ---- fleet list ---- */
 .fleet-list{display:grid;gap:12px;margin-top:18px}
@@ -92,15 +118,16 @@
 }
 
 /* ---- ecosystem score ---- */
-.score-card .big{font-size:46px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.score-tier{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);margin:18px 0 4px;display:flex;align-items:center;gap:9px;font-weight:500}
+.score-tier .dot{width:7px;height:7px;border-radius:2px;background:var(--red);flex-shrink:0}
+.score-card .big{font-family:var(--font-display);font-size:clamp(54px,4.6vw,68px);font-weight:700;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1;margin-bottom:18px}
 .score-card .big em{font-style:normal;color:var(--red)}
-.score-tier{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin:6px 0 16px;display:flex;align-items:center;gap:8px}
-.score-tier .dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0}
-.score-bar{height:9px;border-radius:999px;background:var(--bg-soft);border:1px solid var(--line);overflow:hidden}
-.score-bar i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--red),var(--red-deep));transition:width .7s var(--ease)}
-.score-next{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3);margin-top:8px;text-transform:uppercase}
-.score-stats{display:flex;gap:18px;margin:18px 0 20px;padding-top:16px;border-top:1px solid var(--line)}
-.score-stats div b{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;display:block}
+.score-card .big .pts{font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:var(--ink-3);font-weight:400;margin-left:6px}
+.score-bar{height:4px;border-radius:999px;background:var(--line);overflow:hidden}
+.score-bar i{display:block;height:100%;width:0;border-radius:999px;background:var(--red);transition:width .7s var(--ease)}
+.score-next{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3);margin-top:10px;text-transform:uppercase}
+.score-stats{display:flex;gap:22px;margin:20px 0 22px;padding-top:18px;border-top:1px solid var(--line)}
+.score-stats div b{font-family:var(--font-display);font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;display:block;letter-spacing:-.02em}
 .score-stats div span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
 .score-card.pulse{animation:tierPulse .9s var(--ease)}
 @keyframes tierPulse{0%{box-shadow:var(--shadow)}35%{box-shadow:0 0 0 5px rgba(230,51,41,.22),var(--shadow-lg);border-color:var(--red)}100%{box-shadow:var(--shadow)}}
@@ -118,22 +145,41 @@
 }
 .sim-lock.gone{opacity:0;pointer-events:none}
 .sim-lock svg{width:30px;height:30px;color:var(--dark-text-2)}
-.sim-lock p{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--dark-text-2);max-width:40ch}
-.scn-row{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 20px}
-.scn-btn{
-  position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:10px;
-  padding:13px 22px;border-radius:999px;border:1.5px solid var(--dark-line);
-  background:var(--dark-2);color:var(--dark-text);font-weight:700;font-size:14.5px;cursor:pointer;
-  transition:border-color .2s var(--ease),background .2s var(--ease);
+.sim-lock p{font-family:var(--font-display);font-weight:600;font-size:19px;letter-spacing:-.01em;color:var(--dark-text);max-width:26ch;line-height:1.4}
+
+/* scenario cards */
+.scn-lead{font-family:var(--font-display);font-weight:700;font-size:clamp(18px,2vw,21px);letter-spacing:-.015em;margin:34px 0 16px}
+.scn-lead em{font-style:normal;color:var(--red)}
+.scn-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:760px){.scn-grid{grid-template-columns:1fr}}
+.scn-card{
+  display:flex;gap:18px;align-items:flex-start;text-align:left;
+  background:var(--dark-2);border:1px solid var(--dark-line);border-radius:var(--radius);
+  padding:26px 28px;cursor:pointer;color:var(--dark-text);
+  transition:border-color .2s var(--ease),transform .25s var(--ease),box-shadow .25s var(--ease),opacity .2s var(--ease);
 }
-.scn-btn svg{width:17px;height:17px;color:var(--red)}
-.scn-btn:hover{border-color:#4a4039;background:#241f1c}
-.scn-btn[disabled]{opacity:.45;pointer-events:none}
+.scn-card:hover{transform:translateY(-3px);border-color:#3a332e;box-shadow:0 18px 44px rgba(0,0,0,.38)}
+.scn-card[disabled]{opacity:.4;pointer-events:none}
+.scn-ic{width:46px;height:46px;border-radius:13px;background:rgba(230,51,41,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.scn-ic svg{width:22px;height:22px;color:var(--red)}
+.scn-t{display:block;font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:-.02em;margin-bottom:6px}
+.scn-d{display:block;font-size:14px;color:var(--dark-text-2);line-height:1.55;margin-bottom:13px;font-weight:400}
+.scn-go{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.scn-go svg{width:14px;height:14px;transition:transform .2s var(--ease)}
+.scn-card:hover .scn-go svg{transform:translateX(4px)}
 .sim-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,1fr);gap:20px;align-items:start}
 @media(max-width:980px){.sim-grid{grid-template-columns:1fr}}
 
 /* map */
-.map-card{background:var(--dark-2);border:1px solid var(--dark-line);border-radius:var(--radius);padding:14px;overflow:hidden}
+.map-card{position:relative;background:var(--dark-2);border:1px solid var(--dark-line);border-radius:var(--radius);padding:14px;overflow:hidden}
+.map-hint{
+  position:absolute;left:50%;top:54px;transform:translateX(-50%) translateY(-8px);z-index:5;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;
+  background:rgba(20,17,16,.94);border:1px solid rgba(230,51,41,.55);color:var(--dark-text);
+  padding:11px 20px;border-radius:999px;box-shadow:0 14px 40px rgba(0,0,0,.45);
+  opacity:0;pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease);
+}
+.map-hint.show{opacity:1;transform:translateX(-50%)}
 .map-card svg{width:100%;height:auto;display:block;border-radius:10px}
 .map-head{display:flex;justify-content:space-between;align-items:center;padding:2px 6px 12px;flex-wrap:wrap;gap:8px}
 .map-head .t{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dark-text-2)}
@@ -157,7 +203,7 @@
 @keyframes halo{0%{stroke-opacity:.9;r:9}100%{stroke-opacity:0;r:17}}
 
 /* detail panel */
-.det-panel{background:var(--dark-2);border:1px solid var(--dark-line);border-radius:var(--radius);padding:22px;min-height:340px}
+.det-panel{background:var(--dark-2);border:1px solid var(--dark-line);border-radius:var(--radius);padding:26px;min-height:340px}
 .det-panel.flash-amber{animation:flashAmber 1s var(--ease) 3}
 @keyframes flashAmber{0%,100%{border-color:var(--dark-line);box-shadow:none}50%{border-color:#D97706;box-shadow:0 0 0 3px rgba(217,119,6,.3)}}
 .det-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:300px;text-align:center}
@@ -209,7 +255,7 @@
 /* toasts */
 #toasts{position:fixed;top:84px;right:18px;z-index:95;display:flex;flex-direction:column;gap:10px;width:min(330px,calc(100vw - 36px));pointer-events:none}
 .toast{
-  display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:14px;
+  display:flex;gap:13px;align-items:flex-start;padding:16px 18px;border-radius:16px;
   background:rgba(20,17,16,.94);border:1px solid var(--dark-line);color:var(--dark-text);
   box-shadow:0 14px 40px rgba(0,0,0,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   transform:translateX(24px);opacity:0;transition:transform .4s var(--ease),opacity .4s var(--ease);pointer-events:auto;
@@ -263,36 +309,50 @@
   <div class="wrap center">
     <p class="eyebrow rv">Play with the platform</p>
     <h1 class="rv rv-d1">Build your fleet.<br/><span class="accent">Watch it come alive.</span></h1>
-    <p class="sub rv rv-d2" style="margin-top:18px">Name your units, kit them out with cameras and sensors, then run real scenarios on a live map — exactly how the real platform feels.</p>
-    <div class="stage-chips rv rv-d3">
-      <button class="schip is-on" id="chip1" type="button"><span class="n">1</span>BUILD</button>
-      <button class="schip" id="chip2" type="button"><span class="n">2</span>GO LIVE</button>
-    </div>
+    <p class="sub rv rv-d2" style="margin-top:18px">Three clicks to a living fleet. No signup, no sales call — just play.</p>
   </div>
 </header>
 
 <!-- ============ STAGE 1 · FLEET BUILDER ============ -->
 <section id="stage1" style="padding-top:clamp(28px,4vw,48px)">
   <div class="wrap">
+
+    <!-- 3-step guide -->
+    <div class="guide rv" role="group" aria-label="Demo steps">
+      <button class="g-step is-on" id="chip1" type="button"><span class="g-num">01</span>Build your fleet</button>
+      <button class="g-step" id="chip2" type="button"><span class="g-num">02</span>Go live</button>
+      <button class="g-step" id="chip3" type="button"><span class="g-num">03</span>Break something</button>
+    </div>
+
     <p class="eyebrow rv">Stage 1 · Fleet builder</p>
-    <h2 class="rv">Kit out your yard</h2>
-    <p class="sub rv rv-d1" style="margin-bottom:38px">Every unit you add — old or new, truck or trailer — lands on the same platform. One login, one UI.</p>
+    <h2 class="rv">Build your fleet</h2>
+    <p class="sub rv rv-d1" style="margin-bottom:38px">Add a truck, give it a name, choose its kit. Old Euro 2 skadonk or brand-new rig — everything lands on one platform.</p>
 
     <div class="builder-grid">
       <div>
+        <!-- quick start -->
+        <div class="quickstart rv">
+          <div>
+            <h3>In a hurry?</h3>
+            <p>Load a ready-made fleet — fastest way to see it work.</p>
+          </div>
+          <button class="btn btn-red" id="btnSample" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load a ready-made fleet</button>
+        </div>
+
         <!-- add a unit -->
-        <div class="card rv" id="addCard">
-          <h3 style="margin-bottom:18px">Add a unit</h3>
+        <div class="card rv" id="addCard" style="padding:38px">
+          <h3 style="margin-bottom:6px">Or build one yourself</h3>
+          <p style="font-size:14.5px;color:var(--ink-2);margin-bottom:24px">Name it, pick a type, tick the kit it carries.</p>
           <label class="lab" for="unitName">Unit name</label>
           <input class="input" id="unitName" type="text" maxlength="22" placeholder="e.g. Big Red" autocomplete="off"/>
 
-          <label class="lab" style="margin-top:18px">Unit type</label>
+          <label class="lab" style="margin-top:22px">Unit type</label>
           <div class="type-tiles" role="group" aria-label="Unit type" id="typeTiles"></div>
 
           <label class="lab">Add-ons</label>
           <div class="addon-chips" role="group" aria-label="Add-ons" id="addonChips"></div>
 
-          <button class="btn btn-red" id="btnAdd" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>ADD UNIT</button>
+          <button class="btn btn-red" id="btnAdd" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add to fleet</button>
           <p class="form-err" id="formErr" role="alert" aria-live="polite"></p>
         </div>
 
@@ -307,8 +367,8 @@
       <aside class="score-stick">
         <div class="card score-card rv rv-d2" id="scoreCard">
           <label class="lab">Ecosystem score</label>
-          <div class="big"><em id="scoreNum">0</em><span style="font-size:18px;color:var(--ink-3);font-weight:600"> pts</span></div>
           <div class="score-tier"><span class="dot"></span><span id="tierLabel">Empty yard</span></div>
+          <div class="big"><em id="scoreNum">0</em><span class="pts">PTS</span></div>
           <div class="score-bar" role="progressbar" aria-label="Ecosystem score" aria-valuemin="0" aria-valuemax="140" aria-valuenow="0" id="scoreBarBox"><i id="scoreBar"></i></div>
           <p class="score-next" id="scoreNext">20 pts to “First wheels”</p>
           <div class="score-stats">
@@ -317,8 +377,7 @@
             <div><b id="statCams">0</b><span>Cameras</span></div>
           </div>
           <div class="score-actions">
-            <button class="btn btn-ghost" id="btnSample" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Load sample fleet</button>
-            <button class="btn btn-red" id="btnGoLive" type="button" disabled>START LIVE SIMULATION<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            <button class="btn btn-red" id="btnGoLive" type="button" disabled>Go live<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
           </div>
         </div>
       </aside>
@@ -331,25 +390,34 @@
   <div class="wrap">
     <p class="eyebrow rv">Stage 2 · Go live</p>
     <h2 class="rv">Your fleet, on the road</h2>
-    <p class="sub rv rv-d1">Click any unit on the map to open its live panel. Then break something — on purpose.</p>
+    <p class="sub rv rv-d1">Every unit you built is now rolling on real SA routes. Click one to open its live panel.</p>
 
     <div class="sim-shell gap-top-sm">
       <!-- lock overlay -->
       <div class="sim-lock" id="simLock">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <p>Add at least one unit to go live</p>
-        <a href="#stage1" class="btn btn-ghost" style="border-color:var(--dark-line);color:var(--dark-text)">Back to the builder</a>
+        <p>Add one unit above and this map comes alive.</p>
+        <a href="#stage1" class="btn btn-ghost" style="border-color:var(--dark-line);color:var(--dark-text)">Build your first unit</a>
       </div>
 
-      <!-- scenario buttons -->
-      <div class="scn-row">
-        <button class="scn-btn" id="btnOverheat" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
-          Overheat on a climb
+      <!-- scenario cards -->
+      <p class="scn-lead rv">Now break something. <em>That’s where Khulu shows off.</em></p>
+      <div class="scn-grid">
+        <button class="scn-card" id="btnOverheat" type="button" disabled>
+          <span class="scn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
+          <span>
+            <span class="scn-t">Overheat on Van Reenen’s</span>
+            <span class="scn-d">A loaded climb, coolant rising fast. Watch Khulu warn the driver before the engine pays for it.</span>
+            <span class="scn-go">Run scenario <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </span>
         </button>
-        <button class="scn-btn" id="btnTheft" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="22" x2="15" y2="22"/><line x1="4" y1="9" x2="14" y2="9"/><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"/></svg>
-          Fuel theft at night
+        <button class="scn-card" id="btnTheft" type="button" disabled>
+          <span class="scn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="22" x2="15" y2="22"/><line x1="4" y1="9" x2="14" y2="9"/><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"/></svg></span>
+          <span>
+            <span class="scn-t">Fuel theft at 02:00</span>
+            <span class="scn-d">A parked truck, a quiet depot, 60 litres walking away. See who notices — and who never would.</span>
+            <span class="scn-go">Run scenario <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </span>
         </button>
       </div>
 
@@ -360,6 +428,7 @@
             <span class="t">Khulu Live · ZA network</span>
             <span class="live"><i></i>LIVE</span>
           </div>
+          <div class="map-hint" id="mapHint" aria-hidden="true">Click any moving unit</div>
           <svg viewBox="0 0 820 560" id="mapSvg" aria-label="Live fleet map of South African routes" role="img">
             <!-- routes -->
             <path class="rt" id="pN1" d=""/>
@@ -392,7 +461,7 @@
         <div class="det-panel" id="detPanel" aria-live="polite">
           <div class="det-empty">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4.5 8-11a8 8 0 1 0-16 0c0 6.5 8 11 8 11z"/><circle cx="12" cy="11" r="3"/></svg>
-            <p>Click a unit on the map<br/>to open its live panel</p>
+            <p>Click any unit on the map —<br/>its live panel opens here</p>
           </div>
         </div>
       </div>
@@ -552,8 +621,8 @@ var elName=$('unitName'), elTiles=$('typeTiles'), elChips=$('addonChips'), elErr
     elStatU=$('statUnits'), elStatA=$('statAddons'), elStatC=$('statCams'),
     elGoLive=$('btnGoLive'), elLock=$('simLock'),
     elLayer=$('layerUnits'), elMapSvg=$('mapSvg'), elMapCard=$('mapCard'),
-    elPanel=$('detPanel'), elChip1=$('chip1'), elChip2=$('chip2'),
-    elBtnOv=$('btnOverheat'), elBtnTh=$('btnTheft'), elClock=$('nightClock');
+    elPanel=$('detPanel'), elChip1=$('chip1'), elChip2=$('chip2'), elChip3=$('chip3'),
+    elBtnOv=$('btnOverheat'), elBtnTh=$('btnTheft'), elClock=$('nightClock'), elHint=$('mapHint');
 
 /* ================= toasts ================= */
 function toast(opts){
@@ -612,7 +681,8 @@ Object.keys(TYPES).forEach(function(key){
   var b = document.createElement('button');
   b.type='button'; b.className='tile'; b.dataset.type=key;
   b.setAttribute('aria-pressed','false');
-  b.innerHTML = SILH[key] + '<span>'+TYPES[key].label+'</span>';
+  b.innerHTML = SILH[key] + '<span class="t-lab">'+TYPES[key].label+'</span>'+
+    '<span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>';
   b.addEventListener('click', function(){
     state.draft.type = key;
     elTiles.querySelectorAll('.tile').forEach(function(t){ t.setAttribute('aria-pressed', t.dataset.type===key ? 'true':'false'); });
@@ -652,8 +722,8 @@ function checkBulkAchievements(){
 }
 $('btnAdd').addEventListener('click', function(){
   var name = elName.value.trim();
-  if(!name){ elErr.textContent='Give the unit a name first.'; elName.focus(); return; }
-  if(!state.draft.type){ elErr.textContent='Pick a unit type.'; return; }
+  if(!name){ elErr.textContent='Give your unit a name first — “Big Red” works nicely.'; elName.focus(); return; }
+  if(!state.draft.type){ elErr.textContent='Almost there — now pick a type: truck, bakkie or trailer.'; return; }
   elErr.textContent='';
   addUnit(name, state.draft.type, state.draft.addons);
   elName.value=''; state.draft.addons=[]; state.draft.type=null;
@@ -669,6 +739,7 @@ $('btnSample').addEventListener('click', function(){
   addUnit('Reefer One','trailer',['temp','door'],true);
   checkBulkAchievements();
   renderFleet(); renderScore(); save();
+  if(!state.started) toast({icon:'info', title:'Fleet loaded', body:'Three units, kitted and ready. Now hit “Go live” and watch them roll.'});
 });
 
 function removeUnit(id){
@@ -678,13 +749,14 @@ function removeUnit(id){
   if(state.selectedId===id){ state.selectedId=null; renderPanel(); }
   if(state.units.length===0 && state.started){
     state.started=false; elLock.classList.remove('gone'); setStage(1);
+    elBtnOv.disabled=true; elBtnTh.disabled=true;
   }
   renderFleet(); renderScore(); save();
 }
 function renderFleet(){
   elFleet.innerHTML='';
   if(!state.units.length){
-    elFleet.innerHTML = '<div class="fleet-empty">No units yet — add one above, or load the sample fleet.</div>';
+    elFleet.innerHTML = '<div class="fleet-empty">Your yard is empty. Load the ready-made fleet above, or build your first unit — it takes seconds.</div>';
     return;
   }
   state.units.forEach(function(u){
@@ -700,19 +772,22 @@ function renderFleet(){
 }
 function escapeHtml(s){ return s.replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
 
-/* ================= stage chips ================= */
+/* ================= 3-step guide strip ================= */
+/* progress-based: 1 = building, 2 = live, 3 = scenario run */
 function setStage(n){
-  elChip1.classList.toggle('is-on', n===1);
-  elChip2.classList.toggle('is-on', n===2);
+  [elChip1, elChip2, elChip3].forEach(function(c, i){
+    c.classList.toggle('is-on',  n === i+1);
+    c.classList.toggle('is-done', n > i+1);
+  });
 }
 elChip1.addEventListener('click', function(){ $('stage1').scrollIntoView({behavior: REDUCED?'auto':'smooth'}); });
 elChip2.addEventListener('click', function(){ $('stage2').scrollIntoView({behavior: REDUCED?'auto':'smooth'}); });
-var spy = new IntersectionObserver(function(es){
-  es.forEach(function(e){
-    if(e.isIntersecting) setStage(e.target.id==='stage2' ? 2 : 1);
-  });
-}, {threshold:.18});
-spy.observe($('stage1')); spy.observe($('stage2'));
+elChip3.addEventListener('click', function(){ $('stage2').scrollIntoView({behavior: REDUCED?'auto':'smooth'}); });
+function showMapHint(){
+  if(!elHint) return;
+  elHint.classList.add('show');
+  setTimeout(function(){ elHint.classList.remove('show'); }, 3600);
+}
 
 /* ================= map routes ================= */
 var ROUTES = {
@@ -907,7 +982,7 @@ function buildPanel(){
 function renderPanel(){
   elPanel.innerHTML = '<div class="det-empty">'+
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4.5 8-11a8 8 0 1 0-16 0c0 6.5 8 11 8 11z"/><circle cx="12" cy="11" r="3"/></svg>'+
-    '<p>Click a unit on the map<br/>to open its live panel</p></div>';
+    '<p>Click any unit on the map —<br/>its live panel opens here</p></div>';
 }
 function updatePanel(){
   var u = state.units.find(function(x){ return x.id===state.selectedId; });
@@ -939,14 +1014,16 @@ function startSim(){
   if(!state.units.length) return;
   if(!state.started){ state.started=true; save(); }
   elLock.classList.add('gone');
+  if(!state.scenario){ elBtnOv.disabled=false; elBtnTh.disabled=false; }
   state.units.forEach(spawnMarker);
   if(!state.selectedId && state.units.length) selectUnit(state.units[0].id);
   kickLoop();
 }
 elGoLive.addEventListener('click', function(){
   startSim();
-  $('stage2').scrollIntoView({behavior: REDUCED?'auto':'smooth'});
+  elMapCard.scrollIntoView({behavior: REDUCED?'auto':'smooth', block:'center'});
   setStage(2);
+  showMapHint();
 });
 
 /* ================= scenarios ================= */
@@ -977,15 +1054,17 @@ function pickUnit(kind){
 }
 function scnBusy(b){
   state.scenario = b;
-  elBtnOv.disabled = !!b; elBtnTh.disabled = !!b;
+  var off = !!b || !state.started;
+  elBtnOv.disabled = off; elBtnTh.disabled = off;
 }
 
 /* ---- overheat on a climb ---- */
 elBtnOv.addEventListener('click', function(){
   if(state.scenario || !state.started) return;
   var u = pickUnit('overheat');
-  if(!u){ toast({kind:'grey', icon:'info', title:'No engine, no overheat', body:'Trailers don’t have engines — add a truck in the builder first.'}); return; }
+  if(!u){ toast({kind:'grey', icon:'info', title:'No engine, no overheat', body:'Trailers don’t have engines — pop back up and add a truck first.'}); return; }
   scnBusy('overheat');
+  setStage(3);
   /* snap to Van Reenen climb on the N3 */
   u.sim.route='N3'; u.sim.dir=1; u.sim.parked=false;
   var g=RGEO.N3, d=0; for(var i=0;i<VANREENEN.from;i++) d+=g.segs[i].len;
@@ -1023,6 +1102,7 @@ elBtnTh.addEventListener('click', function(){
   var u = pickUnit('theft');
   if(!u) return;
   scnBusy('theft');
+  setStage(3);
   var hasProbe = u.addons.indexOf('fuel')!==-1;
   u.sim.scripted=true; u.sim.parked=true;
   u.tele.tSpeed=0; u.tele.speed=0;
@@ -1068,7 +1148,12 @@ state.units.forEach(initTele);
 state.units.forEach(function(u,i){ u.color=COLORS[i%COLORS.length]; });
 renderFleet(); renderScore();
 lastTierIdx = (function(){ var s=score(),t=0; TIERS.forEach(function(x,i){ if(s>=x.min) t=i; }); return t; })();
-if(state.started && state.units.length){ startSim(); }
+if(state.started && state.units.length){
+  startSim();
+  setStage(state.achievements.indexOf('saver')!==-1 || state.achievements.indexOf('caught')!==-1 ? 3 : 2);
+} else {
+  setStage(1);
+}
 })();
 </script>
 </body>
