@@ -43,7 +43,7 @@ const Landing: React.FC = () => {
                         <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">Interactive sandbox — no sign-up needed</span>
                     </div>
                     <h1 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900">
-                        Take Power<span className="text-accent">Tech</span> for a drive
+                        Take Khulu<span className="text-accent">Digital</span> for a drive
                     </h1>
                     <p className="text-slate-500 mt-4 max-w-2xl mx-auto text-lg">
                         A fully simulated fleet — live positions, sensor alerts, geofences, reports and camera

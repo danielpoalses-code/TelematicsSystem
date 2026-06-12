@@ -42,7 +42,7 @@ export const DemoShell: React.FC = () => {
                         <Radio size={18} />
                     </span>
                     <span className="font-black tracking-tight text-slate-800 hidden lg:block">
-                        Power<span className="text-accent">Tech</span>
+                        Khulu<span className="text-accent">Digital</span>
                         <span className="ml-2 text-[10px] font-bold uppercase tracking-widest text-white bg-slate-800 rounded px-1.5 py-0.5 align-middle">Demo</span>
                     </span>
                 </button>

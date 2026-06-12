@@ -16,7 +16,7 @@ const FleetManager = lazy(() => import('./pages/FleetManager'));
 const Loading = () => (
     <div className="h-full flex items-center justify-center bg-slate-50">
         <div className="animate-pulse text-accent font-black tracking-tight">
-            Power<span className="text-slate-800">Tech</span> Demo…
+            Khulu<span className="text-slate-800">Digital</span> Demo…
         </div>
     </div>
 );

@@ -114,7 +114,7 @@ const Login: React.FC = () => {
                         Try the interactive demo →
                     </button>
                     <div className="text-center text-[10px] text-slate-400 uppercase tracking-[0.25em] font-black">
-                        Secure Access Portal • PowerTech Intelligence
+                        Secure Access Portal • KhuluDigital Intelligence
                     </div>
                 </div>
             </div>
