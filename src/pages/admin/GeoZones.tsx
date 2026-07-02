@@ -5,7 +5,7 @@ import L from 'leaflet';
 import {
     MapPin, Globe, Building2, Factory, Truck,
     Radio, Shield, AlertTriangle, CheckCircle2,
-    Map, Package, Layers, RefreshCw, WifiOff,
+    Map as MapIcon, Package, Layers, RefreshCw, WifiOff,
     BatteryLow, Signal, ToggleLeft, Smartphone,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -129,6 +129,7 @@ const TIER_COLORS: Record<ZoneTier, string> = {
     suppliers:   '#f59e0b',
     factory:     '#f97316',
     crossborder: '#3b82f6',
+    offline:     '#9ca3af',
 };
 
 // ── Offline truck mock data ────────────────────────────────────────────────────
@@ -945,7 +946,7 @@ const KpiBar: React.FC<{
     crossBorderDealers: number;
 }> = ({ provinceCount, dealerCount, supplierCount, factoryCount, crossBorderDealers }) => {
     const items = [
-        { label: 'Province Zones',        value: provinceCount,      icon: Map,        color: '#6366f1' },
+        { label: 'Province Zones',        value: provinceCount,      icon: MapIcon,    color: '#6366f1' },
         { label: 'Dealership Zones',      value: dealerCount,        icon: Building2,  color: '#10b981' },
         { label: 'Supplier Zones',        value: supplierCount,      icon: Package,    color: '#f59e0b' },
         { label: 'Factory Zones',         value: factoryCount,       icon: Factory,    color: '#f97316' },
@@ -1086,7 +1087,7 @@ interface KMLData {
 }
 
 const TIERS: { key: ZoneTier; label: string; icon: React.ElementType }[] = [
-    { key: 'provincial',  label: 'Provincial',   icon: Map       },
+    { key: 'provincial',  label: 'Provincial',   icon: MapIcon   },
     { key: 'dealerships', label: 'Dealerships',  icon: Building2 },
     { key: 'suppliers',   label: 'Suppliers',    icon: Package   },
     { key: 'factory',     label: 'Factory',       icon: Factory   },

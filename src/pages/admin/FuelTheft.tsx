@@ -294,7 +294,7 @@ const EventDetail: React.FC<{
                         </div>
                     ))}
                     <p className="text-[8px] font-mono text-red-500 mt-1">
-                        − {e.litres}L drained ({sd.dropPct ?? Math.round(e.litres / sd.tank * 100)}% of tank)
+                        − {e.litres}L drained ({Math.round(e.litres / sd.tank * 100)}% of tank)
                     </p>
                 </div>
 
@@ -656,7 +656,7 @@ const FuelTheft: React.FC = () => {
                                     'bg-white border rounded-xl px-3 py-3 flex flex-col gap-2 shadow-sm transition-all text-left',
                                     filter === z ? 'ring-2' : 'hover:shadow-md'
                                 )}
-                                style={filter === z ? { ringColor: ZONE_COLORS[z], borderColor: ZONE_COLORS[z] + '60' } : {}}>
+                                style={filter === z ? { '--tw-ring-color': ZONE_COLORS[z], borderColor: ZONE_COLORS[z] + '60' } as React.CSSProperties : undefined}>
                                 <div className="flex items-center justify-between">
                                     <div className="h-7 w-7 rounded-lg flex items-center justify-center"
                                          style={{ background: ZONE_COLORS[z] + '18', border: `1px solid ${ZONE_COLORS[z]}30` }}>
