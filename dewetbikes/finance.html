@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bike Finance &amp; Trade-Ins | De Wet Bikes Pretoria</title>
+  <meta name="description" content="Ride now, pay monthly. De Wet Bikes arranges motorcycle finance through all major banks, with fast approvals and trade-ins welcome." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script>document.documentElement.className += ' js';</script>
+</head>
+<body data-page="finance">
+
+  <section class="pagehero">
+    <div class="container pagehero__inner">
+      <div class="crumbs"><a href="index.html">Home</a> / <span>Finance</span></div>
+      <h1>Finance &amp; trade-ins made easy</h1>
+      <p>Ride now, pay monthly. We work with all the major banks to get you approved fast — and we'll take your current bike as a trade-in.</p>
+    </div>
+  </section>
+
+  <!-- Copy + calculator -->
+  <section class="section">
+    <div class="container">
+      <div class="split reveal">
+        <div>
+          <span class="kicker">Ride now, pay monthly</span>
+          <h2 class="section__title">Get on the road for less upfront</h2>
+          <p class="lead">Whether it's your first commuter scooter or a superbike, our team structures a deal that fits your budget. We handle the bank application for you and can include your trade-in to bring the monthly down.</p>
+          <div class="finance__stats">
+            <div><strong>All</strong><span>major banks</span></div>
+            <div><strong>24h</strong><span>approval turnaround</span></div>
+            <div><strong>0%</strong><span>obligation quotes</span></div>
+          </div>
+          <a href="#apply" class="btn btn--navy" style="margin-top:1.4rem">Apply for finance</a>
+        </div>
+        <div class="finance__calc">
+          <h3>Quick repayment estimate</h3>
+          <div class="field"><label>Bike price</label><input type="range" id="calcPrice" min="15000" max="250000" step="5000" value="75000" /><output id="calcPriceOut">R75 000</output></div>
+          <div class="field"><label>Deposit</label><input type="range" id="calcDeposit" min="0" max="50" step="5" value="10" /><output id="calcDepositOut">10%</output></div>
+          <div class="field"><label>Term</label>
+            <select id="calcTerm"><option value="24">24 months</option><option value="36" selected>36 months</option><option value="48">48 months</option><option value="60">60 months</option></select>
+          </div>
+          <div class="calc__result"><span>Estimated monthly</span><strong id="calcResult">R2 480 pm</strong></div>
+          <p class="calc__disc">Indicative only, at ~13.5% p.a. excl. fees. Subject to bank approval.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Steps -->
+  <section class="section section--light">
+    <div class="container">
+      <div class="section__head reveal"><span class="kicker">How finance works</span><h2 class="section__title">From application to keys</h2></div>
+      <div class="steps">
+        <div class="step reveal"><span class="step__num">1</span><h3>Pick your bike</h3><p>Choose from our stock or bring one you've found. We'll confirm the price and any trade-in value.</p></div>
+        <div class="step reveal"><span class="step__num">2</span><h3>Apply in minutes</h3><p>Fill in a short application and we submit it to the banks on your behalf — no running around.</p></div>
+        <div class="step reveal"><span class="step__num">3</span><h3>Get approved</h3><p>Most approvals come back within 24 hours. We'll talk you through the offer and monthly payment.</p></div>
+        <div class="step reveal"><span class="step__num">4</span><h3>Ride away</h3><p>Sign, settle any deposit or trade-in, and the bike is yours. Simple.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Apply form -->
+  <section class="section" id="apply">
+    <div class="container">
+      <div class="split">
+        <div class="reveal">
+          <span class="kicker">Start your application</span>
+          <h2 class="section__title">Apply for finance</h2>
+          <p class="lead">Send us a few details and our finance team will get the ball rolling. A trade-in? Mention it and we'll include the value.</p>
+          <ul class="sell__list">
+            <li><span class="i i-check"></span> No obligation to accept</li>
+            <li><span class="i i-check"></span> We compare offers across the banks</li>
+            <li><span class="i i-check"></span> Trade-ins reduce your monthly</li>
+          </ul>
+        </div>
+        <form class="infocard reveal" data-toast="Application received — our finance team will call you shortly.">
+          <div class="vform__row">
+            <div class="field"><label>Name</label><input type="text" required /></div>
+            <div class="field"><label>Phone</label><input type="tel" required /></div>
+          </div>
+          <div class="field"><label>Email</label><input type="email" /></div>
+          <div class="field"><label>Bike you're interested in</label><input type="text" placeholder="e.g. KTM 390 Duke" /></div>
+          <div class="vform__row">
+            <div class="field"><label>Approx. price</label><input type="text" placeholder="R75 000" /></div>
+            <div class="field"><label>Trade-in?</label><select><option>No</option><option>Yes</option></select></div>
+          </div>
+          <button type="submit" class="btn btn--yellow btn--block">Submit application</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/layout.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

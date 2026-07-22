@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bike Auctions | De Wet Bikes — Live &amp; Online in Pretoria</title>
+  <meta name="description" content="Grab a bargain or sell fast at De Wet Bikes' live and online motorcycle auctions in Wonderboom South, Pretoria. Register to bid or consign your bike." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script>document.documentElement.className += ' js';</script>
+</head>
+<body data-page="auctions">
+
+  <section class="pagehero">
+    <div class="container pagehero__inner">
+      <div class="crumbs"><a href="index.html">Home</a> / <span>Auctions</span></div>
+      <h1>Live &amp; online bike auctions</h1>
+      <p>Grab a bargain or move your bike fast. Our supervised auctions run in-branch and online, with bikes going under the hammer at prices you won't find anywhere else.</p>
+      <div class="pagehero__actions">
+        <a href="#register" class="btn btn--yellow">Register to bid</a>
+        <a href="#consign" class="btn btn--ghost">Sell at auction</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Auction types -->
+  <section class="section">
+    <div class="container">
+      <div class="section__head reveal"><span class="kicker">Every weekend</span><h2 class="section__title">Ways to buy &amp; sell at auction</h2></div>
+      <div class="auction-grid">
+        <div class="auction-card reveal" style="background:var(--navy)"><span class="auction-card__tag">Live</span><h3>Saturday floor auction</h3><p>Every Saturday from 10:00 at our Wonderboom South branch. Registration from 09:00. View the lots on the Friday.</p><a href="#register" class="link-arrow">Register to bid →</a></div>
+        <div class="auction-card reveal" style="background:var(--navy)"><span class="auction-card__tag auction-card__tag--online">Online</span><h3>Timed online sales</h3><p>Bid from anywhere. New lots listed midweek, closing Friday evenings. Delivery can be arranged countrywide.</p><a href="#register" class="link-arrow">See upcoming lots →</a></div>
+        <div class="auction-card reveal" style="background:var(--navy)"><span class="auction-card__tag auction-card__tag--sell">Consign</span><h3>Sell at auction</h3><p>Let us auction your bike to our buyer network for the best price. Low commission and a fast payout once it's sold.</p><a href="#consign" class="link-arrow">Consign a bike →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How bidding works -->
+  <section class="section section--light">
+    <div class="container">
+      <div class="section__head reveal"><span class="kicker">First time?</span><h2 class="section__title">How bidding works</h2></div>
+      <div class="steps">
+        <div class="step reveal"><span class="step__num">1</span><h3>Register</h3><p>Sign up in-branch or online. Bring your ID — registration is free and takes a few minutes.</p></div>
+        <div class="step reveal"><span class="step__num">2</span><h3>View the lots</h3><p>Inspect the bikes on view day or browse the online catalogue with photos and condition notes.</p></div>
+        <div class="step reveal"><span class="step__num">3</span><h3>Place your bid</h3><p>Bid on the floor or online. The highest bid when the lot closes wins — simple and transparent.</p></div>
+        <div class="step reveal"><span class="step__num">4</span><h3>Pay &amp; collect</h3><p>Settle on the day and ride away, or arrange delivery. Finance can be pre-arranged before you bid.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Register / consign -->
+  <section class="section">
+    <div class="container">
+      <div class="split">
+        <form class="infocard reveal" id="register" data-toast="You're on the list — we'll send auction details and lot previews.">
+          <span class="kicker">Bidders</span>
+          <h2 class="section__title" style="margin-bottom:1rem">Register to bid</h2>
+          <div class="vform__row">
+            <div class="field"><label>Name</label><input type="text" required /></div>
+            <div class="field"><label>Phone</label><input type="tel" required /></div>
+          </div>
+          <div class="field"><label>Email</label><input type="email" /></div>
+          <div class="field"><label>I'm interested in</label><select><option>Live Saturday auction</option><option>Online timed sales</option><option>Both</option></select></div>
+          <button type="submit" class="btn btn--yellow btn--block">Register</button>
+        </form>
+        <form class="infocard reveal" id="consign" data-toast="Thanks! We'll be in touch about consigning your bike.">
+          <span class="kicker">Sellers</span>
+          <h2 class="section__title" style="margin-bottom:1rem">Consign a bike</h2>
+          <div class="field"><label>Category</label><select><option>Motorcycle</option><option>Quad</option><option>Scooter</option><option>Off-road</option><option>Trailer</option></select></div>
+          <div class="vform__row">
+            <div class="field"><label>Make &amp; model</label><input type="text" placeholder="e.g. Honda CB650R" required /></div>
+            <div class="field"><label>Year</label><input type="text" placeholder="2020" /></div>
+          </div>
+          <div class="field"><label>Your phone</label><input type="tel" required /></div>
+          <button type="submit" class="btn btn--navy btn--block">Consign my bike</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/layout.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

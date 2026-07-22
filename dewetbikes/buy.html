@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy a Bike | De Wet Bikes — Motorcycles, Quads, Scooters &amp; More</title>
+  <meta name="description" content="Browse quality-checked motorcycles, quads, scooters, off-road bikes, go-karts and trailers for sale at De Wet Bikes in Pretoria. Finance and trade-ins welcome." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script>document.documentElement.className += ' js';</script>
+</head>
+<body data-page="buy">
+
+  <section class="pagehero">
+    <div class="container pagehero__inner">
+      <div class="crumbs"><a href="index.html">Home</a> / <span>Buy</span></div>
+      <h1>Find your next bike</h1>
+      <p>Every bike quality-checked and ready to ride. Filter by type, make and budget — or search for a specific model.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="buywrap">
+        <!-- Filters -->
+        <aside class="filterbar">
+          <h3>Filter <button class="filterbar__clear" id="stockClear">Clear all</button></h3>
+          <div class="field"><label>Search</label><input type="search" id="stockSearch" placeholder="Make or model…" /></div>
+          <div class="field"><label>Category</label>
+            <select id="fltCategory"><option value="">All categories</option><option>Motorcycle</option><option>Quad</option><option>Scooter</option><option>Off-road</option><option>Go-kart</option><option>Trailer</option></select>
+          </div>
+          <div class="field"><label>Make</label>
+            <select id="fltMake"><option value="">Any make</option><option>KTM</option><option>Husqvarna</option><option>Honda</option><option>Kawasaki</option><option>Yamaha</option><option>BMW</option><option>Vespa</option></select>
+          </div>
+          <div class="field"><label>Max price</label>
+            <select id="fltPrice"><option value="">No limit</option><option value="30000">Under R30 000</option><option value="60000">Under R60 000</option><option value="100000">Under R100 000</option><option value="200000">Under R200 000</option></select>
+          </div>
+          <a href="sell.html" class="btn btn--yellow btn--block">Sell your bike</a>
+        </aside>
+
+        <!-- Results -->
+        <div class="buymain">
+          <div class="buymain__head">
+            <span class="buymain__count" id="stockCount">Loading…</span>
+            <div class="filters" id="stockFilters">
+              <button class="chip is-active" data-cat="">All</button>
+              <button class="chip" data-cat="Motorcycle">Motorcycles</button>
+              <button class="chip" data-cat="Quad">Quads</button>
+              <button class="chip" data-cat="Scooter">Scooters</button>
+              <button class="chip" data-cat="Off-road">Off-road</button>
+              <button class="chip" data-cat="Go-kart">Go-karts</button>
+              <button class="chip" data-cat="Trailer">Trailers</button>
+            </div>
+          </div>
+          <div class="card-grid card-grid--buy" id="stockGrid"></div>
+          <p class="stock__empty" id="stockEmpty" hidden>No bikes match your filters — try widening your search.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/layout.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
