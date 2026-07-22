@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>De Wet Bikes | We Buy, Sell &amp; Auction Motorcycles, Trailers &amp; More</title>
+  <meta name="description" content="De Wet Bikes — Pretoria's home for buying, selling and auctioning motorcycles, quads, scooters, trailers and vehicles. Instant offers, finance and trade-ins welcome." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script>document.documentElement.className += ' js';</script>
+</head>
+<body>
+
+  <!-- ============ TOP CONTACT STRIP ============ -->
+  <div class="topbar">
+    <div class="container topbar__inner">
+      <div class="topbar__left">
+        <a href="tel:+27128240071" class="topbar__link"><span class="i i-phone"></span> +27 12 824 0071</a>
+        <a href="https://wa.me/27797005732" class="topbar__link"><span class="i i-chat"></span> WhatsApp 079 700 5732</a>
+        <span class="topbar__link topbar__hours"><span class="i i-clock"></span> Mon–Fri 08:00–17:00 · Sat 08:00–13:00</span>
+      </div>
+      <div class="topbar__right">
+        <span class="topbar__loc"><span class="i i-pin"></span> 971 Steve Biko Rd, Wonderboom South, Pretoria</span>
+        <a href="#" class="topbar__social" aria-label="Facebook"><span class="i i-fb"></span></a>
+        <a href="#" class="topbar__social" aria-label="Instagram"><span class="i i-ig"></span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HEADER / NAV ============ -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#home" class="brand" aria-label="De Wet Bikes home">
+        <span class="brand__mark">DW</span>
+        <span class="brand__text">De Wet <strong>Bikes</strong></span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="#stock" class="nav__link">Buy</a>
+        <a href="#sell" class="nav__link">Sell</a>
+        <a href="#finance" class="nav__link">Finance</a>
+        <a href="#auctions" class="nav__link">Auctions</a>
+        <a href="#how" class="nav__link">How it works</a>
+        <a href="#about" class="nav__link">About</a>
+        <a href="#contact" class="nav__link">Contact</a>
+      </nav>
+
+      <div class="header__cta">
+        <a href="#sell" class="btn btn--yellow btn--sm">Sell your bike</a>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ SLIDE-IN MOBILE MENU ============ -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer__head">
+      <span class="brand__text">De Wet <strong>Bikes</strong></span>
+      <button class="drawer__close" id="drawerClose" aria-label="Close menu">&times;</button>
+    </div>
+    <nav class="drawer__nav">
+      <a href="#stock" class="drawer__link">Buy a bike</a>
+      <a href="#sell" class="drawer__link">Sell your bike</a>
+      <a href="#finance" class="drawer__link">Finance</a>
+      <a href="#auctions" class="drawer__link">Auctions</a>
+      <a href="#how" class="drawer__link">How it works</a>
+      <a href="#about" class="drawer__link">About us</a>
+      <a href="#contact" class="drawer__link">Contact</a>
+    </nav>
+    <div class="drawer__foot">
+      <a href="tel:+27128240071" class="btn btn--navy btn--block">Call +27 12 824 0071</a>
+      <a href="https://wa.me/27797005732" class="btn btn--yellow btn--block">WhatsApp us</a>
+    </div>
+  </aside>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="home">
+    <div class="hero__slides" id="heroSlides">
+      <div class="hero__slide is-active" data-slide="0"></div>
+      <div class="hero__slide" data-slide="1"></div>
+      <div class="hero__slide" data-slide="2"></div>
+    </div>
+    <div class="hero__overlay"></div>
+
+    <div class="container hero__inner">
+      <div class="hero__copy">
+        <span class="hero__eyebrow">Pretoria's #1 for two wheels &amp; more</span>
+        <h1 class="hero__title">We buy, sell &amp; auction<br><span class="hi">motorcycles &amp; more</span></h1>
+        <p class="hero__sub">Motorcycles · Quads · Scooters · Off-road · Go-karts · Trailers · Vehicles. Get an instant offer or browse hundreds of quality-checked bikes ready to ride.</p>
+        <div class="hero__actions">
+          <a href="#stock" class="btn btn--yellow">Browse stock</a>
+          <a href="#sell" class="btn btn--ghost">Sell my bike</a>
+        </div>
+      </div>
+
+      <!-- Search / filter card -->
+      <div class="searchcard" id="searchcard">
+        <div class="searchcard__head">
+          <button class="searchtab is-active" data-mode="buy">Find a bike</button>
+          <button class="searchtab" data-mode="value">Value my bike</button>
+        </div>
+        <div class="searchcard__body">
+          <div class="field">
+            <label>Category</label>
+            <select id="fltCategory">
+              <option value="">All categories</option>
+              <option>Motorcycle</option>
+              <option>Quad</option>
+              <option>Scooter</option>
+              <option>Off-road</option>
+              <option>Go-kart</option>
+              <option>Trailer</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Make</label>
+            <select id="fltMake">
+              <option value="">Any make</option>
+              <option>KTM</option>
+              <option>Husqvarna</option>
+              <option>Honda</option>
+              <option>Kawasaki</option>
+              <option>Yamaha</option>
+              <option>BMW</option>
+              <option>Suzuki</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Max price</label>
+            <select id="fltPrice">
+              <option value="">No limit</option>
+              <option value="30000">Under R30 000</option>
+              <option value="60000">Under R60 000</option>
+              <option value="100000">Under R100 000</option>
+              <option value="200000">Under R200 000</option>
+            </select>
+          </div>
+          <a href="#stock" class="btn btn--navy btn--block" id="searchGo">Search stock</a>
+          <p class="searchcard__hint">1 200+ bikes bought &amp; sold · 100% recommended</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- hero slider dots -->
+    <div class="hero__dots" id="heroDots">
+      <button class="dot is-active" data-slide="0" aria-label="Slide 1"></button>
+      <button class="dot" data-slide="1" aria-label="Slide 2"></button>
+      <button class="dot" data-slide="2" aria-label="Slide 3"></button>
+    </div>
+  </section>
+
+  <!-- ============ TRUST STRIP ============ -->
+  <section class="trust">
+    <div class="container trust__inner">
+      <div class="trust__item"><span class="i i-shield"></span><div><strong>Quality checked</strong><span>Every bike inspected</span></div></div>
+      <div class="trust__item"><span class="i i-cash"></span><div><strong>Instant offers</strong><span>Cash on the day</span></div></div>
+      <div class="trust__item"><span class="i i-bank"></span><div><strong>Finance &amp; trade-ins</strong><span>Via major banks</span></div></div>
+      <div class="trust__item"><span class="i i-star"></span><div><strong>100% recommended</strong><span>66+ happy reviews</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section class="section categories" id="categories">
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="kicker">Browse by type</span>
+        <h2 class="section__title">Whatever you ride, we've got it</h2>
+      </div>
+      <div class="cat-grid" id="catGrid"><!-- rendered by JS --></div>
+    </div>
+  </section>
+
+  <!-- ============ STOCK ============ -->
+  <section class="section section--light" id="stock">
+    <div class="container">
+      <div class="section__head section__head--row reveal">
+        <div>
+          <span class="kicker">In stock now</span>
+          <h2 class="section__title">Featured bikes ready to ride</h2>
+        </div>
+        <div class="stock__tools">
+          <input type="search" id="stockSearch" class="stock__search" placeholder="Search make or model…" />
+        </div>
+      </div>
+
+      <div class="filters" id="stockFilters">
+        <button class="chip is-active" data-cat="">All</button>
+        <button class="chip" data-cat="Motorcycle">Motorcycles</button>
+        <button class="chip" data-cat="Quad">Quads</button>
+        <button class="chip" data-cat="Scooter">Scooters</button>
+        <button class="chip" data-cat="Off-road">Off-road</button>
+        <button class="chip" data-cat="Go-kart">Go-karts</button>
+        <button class="chip" data-cat="Trailer">Trailers</button>
+      </div>
+
+      <div class="card-grid" id="stockGrid"><!-- rendered by JS --></div>
+      <p class="stock__empty" id="stockEmpty" hidden>No bikes match your search — try another filter.</p>
+
+      <div class="stock__more">
+        <a href="#contact" class="btn btn--navy">View all stock</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SELL CTA ============ -->
+  <section class="sell" id="sell">
+    <div class="container sell__inner">
+      <div class="sell__copy reveal">
+        <span class="kicker kicker--navy">Sell in minutes</span>
+        <h2 class="sell__title">Turn your bike into cash — today</h2>
+        <p class="sell__sub">Bring your motorcycle, quad, scooter or trailer to our Wonderboom branch, or send us the details online. We inspect, make a fair offer and pay you out on the spot. No stress, no hidden fees.</p>
+        <ul class="sell__list">
+          <li><span class="i i-check"></span> Free, no-obligation valuation</li>
+          <li><span class="i i-check"></span> Same-day cash payment</li>
+          <li><span class="i i-check"></span> We handle all the paperwork</li>
+          <li><span class="i i-check"></span> Trade-in against anything in stock</li>
+        </ul>
+        <div class="sell__actions">
+          <a href="#contact" class="btn btn--navy">Get my offer</a>
+          <a href="https://wa.me/27797005732" class="btn btn--outline-navy">WhatsApp a photo</a>
+        </div>
+      </div>
+      <div class="sell__card reveal">
+        <h3>Value my bike</h3>
+        <form id="valueForm" class="vform">
+          <div class="field"><label>Category</label>
+            <select required><option value="">Select…</option><option>Motorcycle</option><option>Quad</option><option>Scooter</option><option>Off-road</option><option>Trailer</option></select>
+          </div>
+          <div class="vform__row">
+            <div class="field"><label>Make</label><input type="text" placeholder="e.g. KTM" required /></div>
+            <div class="field"><label>Year</label><input type="text" placeholder="2021" required /></div>
+          </div>
+          <div class="field"><label>Model</label><input type="text" placeholder="e.g. Duke 390" required /></div>
+          <div class="field"><label>Your WhatsApp / phone</label><input type="tel" placeholder="079 …" required /></div>
+          <button type="submit" class="btn btn--yellow btn--block">Get my free offer</button>
+          <p class="vform__note">We'll reply within one business hour.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="section" id="how">
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="kicker">Simple &amp; transparent</span>
+        <h2 class="section__title">How De Wet Bikes works</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal"><span class="step__num">1</span><h3>Tell us about it</h3><p>Send your bike's details online or pop in. We only need the make, model, year and a few photos.</p></div>
+        <div class="step reveal"><span class="step__num">2</span><h3>Free inspection</h3><p>Our team checks the bike and gives you a fair, market-related offer — usually within the hour.</p></div>
+        <div class="step reveal"><span class="step__num">3</span><h3>Accept your offer</h3><p>Happy with the price? We sort the paperwork and licensing on your behalf. Zero admin for you.</p></div>
+        <div class="step reveal"><span class="step__num">4</span><h3>Get paid</h3><p>Cash or instant EFT on the day. Or trade in and ride away on something new from our stock.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINANCE ============ -->
+  <section class="finance" id="finance">
+    <div class="container finance__inner">
+      <div class="finance__copy reveal">
+        <span class="kicker kicker--navy">Ride now, pay monthly</span>
+        <h2 class="finance__title">Finance &amp; trade-ins made easy</h2>
+        <p>We work with all the major banks to get you approved fast. Whether it's your first commuter scooter or a superbike, our team structures a deal that fits your budget — and we'll take your current bike as a trade-in.</p>
+        <div class="finance__stats">
+          <div><strong>All</strong><span>major banks</span></div>
+          <div><strong>24h</strong><span>approval turnaround</span></div>
+          <div><strong>0%</strong><span>obligation quotes</span></div>
+        </div>
+        <a href="#contact" class="btn btn--navy">Apply for finance</a>
+      </div>
+      <div class="finance__calc reveal">
+        <h3>Quick repayment estimate</h3>
+        <div class="field"><label>Bike price</label><input type="range" id="calcPrice" min="15000" max="250000" step="5000" value="75000" /><output id="calcPriceOut">R75 000</output></div>
+        <div class="field"><label>Deposit</label><input type="range" id="calcDeposit" min="0" max="50" step="5" value="10" /><output id="calcDepositOut">10%</output></div>
+        <div class="field"><label>Term</label>
+          <select id="calcTerm"><option value="24">24 months</option><option value="36" selected>36 months</option><option value="48">48 months</option><option value="60">60 months</option></select>
+        </div>
+        <div class="calc__result">
+          <span>Estimated monthly</span>
+          <strong id="calcResult">R2 480 pm</strong>
+        </div>
+        <p class="calc__disc">Indicative only, at ~13.5% p.a. excl. fees. Subject to bank approval.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AUCTIONS ============ -->
+  <section class="section section--navy" id="auctions">
+    <div class="container">
+      <div class="section__head section__head--center reveal">
+        <span class="kicker kicker--light">Every weekend</span>
+        <h2 class="section__title section__title--light">Live &amp; online bike auctions</h2>
+        <p class="section__lead">Grab a bargain or move your bike fast. Our supervised auctions run in-branch and online, with bikes going under the hammer at prices you won't find anywhere else.</p>
+      </div>
+      <div class="auction-grid">
+        <div class="auction-card reveal"><span class="auction-card__tag">Live</span><h3>Saturday floor auction</h3><p>Every Saturday from 10:00 at our Wonderboom South branch. Registration from 09:00.</p><a href="#contact" class="link-arrow">Register to bid →</a></div>
+        <div class="auction-card reveal"><span class="auction-card__tag auction-card__tag--online">Online</span><h3>Timed online sales</h3><p>Bid from anywhere. New lots listed midweek, closing Friday evenings. Delivery arranged.</p><a href="#contact" class="link-arrow">See upcoming lots →</a></div>
+        <div class="auction-card reveal"><span class="auction-card__tag auction-card__tag--sell">Consign</span><h3>Sell at auction</h3><p>Let us auction your bike to our buyer network for the best price. Low commission, fast payout.</p><a href="#contact" class="link-arrow">Consign a bike →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS / WHY ============ -->
+  <section class="stats" id="why">
+    <div class="container stats__inner">
+      <div class="stat reveal"><span class="stat__num" data-count="1200" data-suffix="+">0</span><span class="stat__label">Bikes bought &amp; sold</span></div>
+      <div class="stat reveal"><span class="stat__num" data-count="100" data-suffix="%">0</span><span class="stat__label">Customer recommended</span></div>
+      <div class="stat reveal"><span class="stat__num" data-count="66" data-suffix="+">0</span><span class="stat__label">5-star reviews</span></div>
+      <div class="stat reveal"><span class="stat__num" data-count="15" data-suffix="+">0</span><span class="stat__label">Years in Pretoria</span></div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="section section--light" id="reviews">
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="kicker">Don't take our word for it</span>
+        <h2 class="section__title">Riders love dealing with us</h2>
+      </div>
+      <div class="reviews">
+        <figure class="review reveal"><div class="review__stars">★★★★★</div><blockquote>Sold my Duke in under an hour and walked out with cash. Fair price, zero hassle. These guys know bikes.</blockquote><figcaption>— Thabo M., Pretoria</figcaption></figure>
+        <figure class="review reveal"><div class="review__stars">★★★★★</div><blockquote>Bought a quad for the kids and traded in our old scooter. The finance was sorted the same week. Highly recommend.</blockquote><figcaption>— Marié V., Montana</figcaption></figure>
+        <figure class="review reveal"><div class="review__stars">★★★★★</div><blockquote>Picked up an off-road bargain at the Saturday auction. Well organised and honest about condition. Will be back.</blockquote><figcaption>— Sipho D., Wonderboom</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section about" id="about">
+    <div class="container about__inner">
+      <div class="about__media reveal"><div class="about__badge"><strong>15+</strong><span>years riding with Pretoria</span></div></div>
+      <div class="about__copy reveal">
+        <span class="kicker">About De Wet Bikes</span>
+        <h2 class="section__title">Pretoria's trusted name in two wheels</h2>
+        <p>From our branch on Steve Biko Road in Wonderboom South, De Wet Bikes has spent years helping riders buy, sell and auction motorcycles, quads, scooters, off-road bikes, go-karts and trailers — plus the odd car and vehicle too.</p>
+        <p>We stock trusted brands like <strong>KTM, Husqvarna, Honda</strong> and <strong>Kawasaki</strong>, back every deal with honest advice, and make finance and trade-ins simple. It's why our customers keep coming back — and why we're 100% recommended.</p>
+        <div class="about__brands">
+          <span>KTM</span><span>Husqvarna</span><span>Honda</span><span>Kawasaki</span><span>Yamaha</span><span>BMW</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section section--light" id="contact">
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="kicker">Get in touch</span>
+        <h2 class="section__title">Pop in, call, or send us a message</h2>
+      </div>
+      <div class="contact">
+        <div class="contact__info reveal">
+          <div class="contact__row"><span class="i i-pin"></span><div><strong>Visit us</strong><p>971 Steve Biko Rd, Wonderboom South, Pretoria, 0084</p></div></div>
+          <div class="contact__row"><span class="i i-phone"></span><div><strong>Call</strong><p><a href="tel:+27128240071">+27 12 824 0071</a></p></div></div>
+          <div class="contact__row"><span class="i i-chat"></span><div><strong>WhatsApp</strong><p><a href="https://wa.me/27797005732">079 700 5732</a></p></div></div>
+          <div class="contact__row"><span class="i i-clock"></span><div><strong>Trading hours</strong><p>Mon–Fri 08:00–17:00 · Sat 08:00–13:00 · Sun closed</p></div></div>
+          <div class="contact__map" aria-label="Map to De Wet Bikes">
+            <div class="contact__mappin"><span class="i i-pin"></span> Wonderboom South, Pretoria</div>
+          </div>
+        </div>
+        <form class="contact__form reveal" id="contactForm">
+          <div class="vform__row">
+            <div class="field"><label>Name</label><input type="text" required /></div>
+            <div class="field"><label>Phone</label><input type="tel" required /></div>
+          </div>
+          <div class="field"><label>Email</label><input type="email" /></div>
+          <div class="field"><label>I'm interested in</label>
+            <select><option>Buying a bike</option><option>Selling my bike</option><option>Finance</option><option>Auctions</option><option>Something else</option></select>
+          </div>
+          <div class="field"><label>Message</label><textarea rows="4" placeholder="Tell us what you're after…"></textarea></div>
+          <button type="submit" class="btn btn--yellow btn--block">Send message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__col footer__brand">
+        <a href="#home" class="brand brand--footer"><span class="brand__mark">DW</span><span class="brand__text">De Wet <strong>Bikes</strong></span></a>
+        <p>We buy, sell &amp; auction motorcycles, quads, scooters, trailers, vehicles and much more — right here in Pretoria.</p>
+        <div class="footer__social">
+          <a href="#" aria-label="Facebook"><span class="i i-fb"></span></a>
+          <a href="#" aria-label="Instagram"><span class="i i-ig"></span></a>
+          <a href="https://wa.me/27797005732" aria-label="WhatsApp"><span class="i i-chat"></span></a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Explore</h4>
+        <a href="#stock">Buy a bike</a>
+        <a href="#sell">Sell your bike</a>
+        <a href="#finance">Finance</a>
+        <a href="#auctions">Auctions</a>
+      </div>
+      <div class="footer__col">
+        <h4>Company</h4>
+        <a href="#about">About us</a>
+        <a href="#how">How it works</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer__col">
+        <h4>Get in touch</h4>
+        <a href="tel:+27128240071">+27 12 824 0071</a>
+        <a href="https://wa.me/27797005732">WhatsApp 079 700 5732</a>
+        <a href="#contact">971 Steve Biko Rd, Wonderboom South</a>
+      </div>
+    </div>
+    <div class="footer__bar">
+      <div class="container footer__barinner">
+        <span>© <span id="year"></span> De Wet Bikes. All rights reserved.</span>
+        <span>Buy · Sell · Auction · Finance · Trade-ins</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/27797005732" class="fab" aria-label="Chat on WhatsApp"><span class="i i-chat"></span></a>
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
